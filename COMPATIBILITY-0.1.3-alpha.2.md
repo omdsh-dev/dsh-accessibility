@@ -26,6 +26,8 @@ Local environment: macOS, Node `24.3.0`, pnpm `11.7.0`. These results are not a 
 
 These are package/interface and isolated component checks. They do not demonstrate assembled alpha DSH behavior, core accessibility, spoken output, braille, or independent task completion.
 
+The first [CI run](https://github.com/omdsh-dev/dsh-accessibility/actions/runs/34128713003) exposed an additional clean-install issue: pnpm rejected the unreviewed `fs-ext@2.1.1` build script on all six OS/Node validation jobs. The local install had initially used `--ignore-scripts`, so its follow-up install did not expose that clean-runner failure. Review confirmed that alpha.2 JSONL persistence imports this native module for session ownership locks; its install script is `node-gyp configure build`, compiling the shipped `fs-ext.cc` through `binding.gyp`. The explicit build allowlist now includes it. Do not disable build approval checks or classify this initial CI run as passing. The separate assembled preflight failure is intentional while the exact core source remains unavailable.
+
 ## Remaining gates
 
 1. Identify a public, exact alpha.2 source revision with a trustworthy relationship to the npm release.

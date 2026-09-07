@@ -25,6 +25,8 @@
 
 这些只证明已发布接口与独立组件层面的检查，不证明 alpha.2 核心、完整 DSH、读屏语音、盲文或残障用户独立任务完成能力。
 
+[首轮 CI](https://github.com/omdsh-dev/dsh-accessibility/actions/runs/34128713003)还暴露了干净安装问题：六个系统／Node 组合均被未审核的 `fs-ext@2.1.1` 构建脚本阻止。本地最初用过 `--ignore-scripts`，后续增量安装未暴露该问题。核对后确认它由 alpha.2 JSONL 会话持久化导入以实现会话所有权文件锁；安装脚本为 `node-gyp configure build`，通过 `binding.gyp` 编译随包的 `fs-ext.cc`，现已加入明确的构建清单。首轮失败记录保留，不关闭构建审核；核心源码缺失导致的 assembled 前置检查失败是另一项独立阻塞。
+
 ## 后续必须完成
 
 1. 取得能可靠对应 npm alpha.2 的公开、精确源码提交。

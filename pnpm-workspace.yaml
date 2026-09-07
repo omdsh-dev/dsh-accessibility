@@ -5,6 +5,9 @@ allowBuilds:
   '@deepseek-ai/dsh-subprocess-local': true
   '@google/genai': false
   esbuild: true
+  # Reviewed fs-ext 2.1.1: node-gyp configure build; required by alpha.2 JSONL
+  # session ownership locks. Keep the actual artifact pinned in pnpm-lock.yaml.
+  fs-ext: true
   koffi: true
   node-pty: true
   protobufjs: false
