@@ -48,6 +48,10 @@ jobs:
           repository: omdsh-dev/deepseek-harness
           ref: dsh-v0.1.2-rc.1-a11y.5
           path: .assembled/dsh
+      # This draft must stay blocked, not silently validate alpha against rc1.
+      # Replace the core ref only after its exact alpha source and patches exist.
+      - name: Verify assembled baseline before installing or building DSH
+        run: node scripts/verify-assembled-baseline.mjs .assembled/dsh .
       - uses: pnpm/action-setup@v6
         with:
           version: 11.7.0

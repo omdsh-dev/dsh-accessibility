@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Prepare an unpublished, publication-blocked `0.1.1-alpha.0` development probe against the exact npm DSH `0.1.3-alpha.2` graph. Regenerate the lockfile from a clean dependency installation to remove stale rc1 auto-installed peers, and add a whole-DSH-lockfile regression check.
+- Correct the remaining test-only import of the removed `dsh-client-runtime` contract and make the in-app compatibility message explicitly identify this as an unvalidated development target.
+- Add an assembled-baseline preflight that rejects mismatched cores and the explicit development hold before installing/building the core or launching a companion lab. No alpha core, browser, or human-AT evidence is produced; beta.8, npm dist-tags, historical evidence, and the primary campaign remain unchanged. See [migration status](COMPATIBILITY-0.1.3-alpha.2.md).
+
 ## 0.1.0-beta.8 - 2026-09-07
 
 - Advance the exact accessibility-core baseline to `dsh-v0.1.2-rc.1-a11y.5` after refreshing the semantic queue snapshots and making the queued-action dock assertion portable across classic-scrollbar runners.

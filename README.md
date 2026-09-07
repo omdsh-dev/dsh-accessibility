@@ -2,6 +2,8 @@
 
 English | [简体中文](README.zh.md)
 
+> Development branch: the local `0.1.1-alpha.0` manifest probes DSH `0.1.3-alpha.2` and is deliberately `private: true`. It is not an install-ready or published release. Exact upstream source and integrated core validation are blocked; see the [migration status](COMPATIBILITY-0.1.3-alpha.2.md). Unless explicitly stated otherwise, the installation instructions and evidence below describe the released `0.1.0-beta.8` / DSH `0.1.2-rc.1` line, not this alpha branch.
+
 An optional DeepSeek Harness companion for screen-reader guidance, semantic diagnostics, and an experimental user-loaded conversation reading view. It intentionally uses DSH slots and structured projections; it does not patch or observe hashed DOM classes.
 
 This repository is also the public project hub of the [DSH Accessibility Working Group](https://github.com/omdsh-dev/community/blob/main/working-groups/accessibility.md). Its mission is to enable disabled developers to complete DSH's core tasks independently, effectively, and safely; help every developer produce more accessible digital content with DSH; and validate both goals with versioned standards, real assistive technology, and evidence from disabled users.
@@ -32,6 +34,8 @@ pnpm dsh web
 ```
 
 ## Install from a checkout
+
+Use the released `v0.1.0-beta.8` checkout for these commands. Do not install this development branch into a working DSH profile.
 
 ```sh
 pnpm install
