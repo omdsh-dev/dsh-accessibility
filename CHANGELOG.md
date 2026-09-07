@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.1.0-beta.8 - 2026-09-07
+
+- Advance the exact accessibility-core baseline to `dsh-v0.1.2-rc.1-a11y.5` after refreshing the semantic queue snapshots and making the queued-action dock assertion portable across classic-scrollbar runners.
+- Archive and validate a new clean three-engine core-browser report for exact revision `1e7f105934eeb8d93dedcf738c480fab30069109`; retain the beta.7 and earlier evidence as immutable historical records.
+
 ## 0.1.0-beta.7 - 2026-09-07
 
 - Migrate the runtime companion from the removed `dsh-client-runtime` package to the exact DSH `0.1.2-rc.1` `ui-session` and `ui-chat` contracts, including rc1 Markdown labels and the split lifecycle/conversation projections.
