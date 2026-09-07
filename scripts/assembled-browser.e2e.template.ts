@@ -43,7 +43,7 @@ if (evidenceBrowsers.length === 0
 const dshRevision = process.env.DSH_ACCESSIBILITY_DSH_REVISION ?? 'unavailable'
 const pluginRevision = process.env.DSH_ACCESSIBILITY_PLUGIN_REVISION ?? 'unavailable'
 
-const fixturePath = join(process.cwd(), 'apps/web/tests/snapshots/seeded-history/seed.jsonl')
+const fixturePath = join(process.cwd(), 'snapshots/web/seeded-history/session.jsonl')
 const fixture = await readFile(fixturePath, 'utf8')
 const [prompt] = fixtureUserPrompts(fixture)
 if (prompt === undefined || prompt === '') throw new Error('assembled browser fixture has no user prompt')
@@ -81,7 +81,7 @@ describe('external dsh-accessibility Accessible View', () => {
       if (message.type() === 'error') browserErrors.push(message.text())
     })
     page.on('pageerror', error => browserErrors.push(error.message))
-    await page.goto(scaffold.baseUrl, { waitUntil: 'load' })
+    await page.goto(scaffold.authenticatedUrl, { waitUntil: 'load' })
     const requireFromPlugin = createRequire(join(pluginRoot, 'package.json'))
     await page.addScriptTag({ path: requireFromPlugin.resolve('axe-core/axe.min.js') })
   }, 120_000)
@@ -168,7 +168,7 @@ describe('external dsh-accessibility Accessible View', () => {
     process.stdout.write(`${JSON.stringify({
       protocol: 'dsh-accessible-view/1.0.0-draft',
       evidence: 'assembled-browser',
-      dsh: '0.1.1-rc.2',
+      dsh: '0.1.2-rc.1',
       plugin: pluginManifest.version,
       engine: 'chromium',
       idleAxeViolations: idleAxe.violations.length,
@@ -239,7 +239,7 @@ describe('external dsh-accessibility Accessible View', () => {
       process.stdout.write(`${JSON.stringify({
         protocol: 'dsh-accessibility-diagnostic/1.0.0-draft',
         evidence: 'assembled-browser-not-at-or-disabled-user-evidence',
-        dsh: '0.1.1-rc.2',
+        dsh: '0.1.2-rc.1',
         plugin: pluginManifest.version,
         contextualGuidance: true,
         focusInspection: true,
@@ -286,7 +286,7 @@ describe.each(evidenceBrowsers)('external non-AT browser contract: %s', (browser
       if (message.type() === 'error') browserErrors.push(message.text())
     })
     page.on('pageerror', error => browserErrors.push(error.message))
-    await page.goto(scaffold.baseUrl, { waitUntil: 'load' })
+    await page.goto(scaffold.authenticatedUrl, { waitUntil: 'load' })
   }, 180_000)
 
   afterAll(async () => {
@@ -358,7 +358,7 @@ describe.each(evidenceBrowsers)('external non-AT browser contract: %s', (browser
       protocol: NON_AT_BROWSER_PROTOCOL,
       evidence: 'assembled-browser-non-at',
       standards: ['WCAG-2.2:1.4.10', 'WCAG-2.2:2.4.11', 'WCAG-2.2:2.3.3', 'CSS-COLOR-ADJUST-1'],
-      dsh: { version: '0.1.1-rc.2', revision: dshRevision },
+      dsh: { version: '0.1.2-rc.1', revision: dshRevision },
       plugin: { version: pluginManifest.version, revision: pluginRevision },
       environment: {
         os: platform(),

@@ -8,7 +8,7 @@
 
 跟踪：[VoiceOver #2](https://github.com/omdsh-dev/dsh-accessibility/issues/2)、[NVDA #1](https://github.com/omdsh-dev/dsh-accessibility/issues/1)及 [Accessible View #10](https://github.com/omdsh-dev/dsh-accessibility/issues/10)
 
-本规程验证 `0.1.1-rc.2` companion、Accessible View 与诊断反馈闭环。当前 `0.1.2-alpha.2` 核心候选请使用独立的 [DSH 核心 AT 实验室](AT-CORE-LAB.zh.md)。
+本规程验证 `0.1.0-beta.7` companion、Accessible View 与诊断反馈闭环，目标环境为 DSH `0.1.2-rc.1` 加对应无障碍核心候选。[DSH 核心 AT 实验室](AT-CORE-LAB.zh.md)继续作为首轮活动的历史规程，固定到原 alpha.2 精确 revision；其结果不会自动转移到 rc1。
 
 ## 目的与证据边界
 
@@ -25,12 +25,12 @@ git clone https://github.com/omdsh-dev/deepseek-harness.git
 git clone https://github.com/omdsh-dev/dsh-accessibility.git
 
 cd deepseek-harness
-git checkout dsh-v0.1.1-rc.2-a11y.4
+git checkout dsh-v0.1.2-rc.1-a11y.4
 pnpm install
 pnpm run build:official
 
 cd ../dsh-accessibility
-git checkout feat/hermetic-at-lab
+git checkout v0.1.0-beta.7
 pnpm install --frozen-lockfile
 pnpm run build
 ```

@@ -26,8 +26,8 @@ const dshRoot = resolve(invocationCwd, dshArgument)
 const pluginRoot = resolve(invocationCwd, pluginArgument)
 const dshManifest = JSON.parse(await readFile(join(dshRoot, 'package.json'), 'utf8'))
 const pluginManifest = JSON.parse(await readFile(join(pluginRoot, 'package.json'), 'utf8'))
-if (dshManifest.version !== '0.1.1-rc.2') {
-  throw new Error(`AT lab requires DSH 0.1.1-rc.2, received ${String(dshManifest.version)}`)
+if (dshManifest.version !== '0.1.2-rc.1') {
+  throw new Error(`AT lab requires DSH 0.1.2-rc.1, received ${String(dshManifest.version)}`)
 }
 if (pluginManifest.name !== '@oh-my-dsh/dsh-accessibility') {
   throw new Error('AT lab received the wrong companion package')

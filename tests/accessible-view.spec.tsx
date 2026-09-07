@@ -2,7 +2,8 @@
 import axe from 'axe-core'
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import type { ComponentProps } from 'react'
-import type { ConversationSnapshot } from '@deepseek-ai/dsh-client-runtime/client'
+import type { SessionSnapshot } from '@deepseek-ai/dsh-client-ui-session/client'
+import type { ChatSnapshot, LegacyConversationSlice } from '@deepseek-ai/dsh-client-ui-chat/client'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { AccessibleView } from '../src/client/AccessibleView.tsx'
 import { en } from '../src/client/locales.ts'
@@ -55,21 +56,36 @@ const toolNode = {
   subCalls: [],
 } as const
 
-function snapshot(overrides: Partial<ConversationSnapshot> = {}): ConversationSnapshot {
+function conversationSnapshot(overrides: Partial<LegacyConversationSlice> = {}): LegacyConversationSlice {
   return {
     nodes: [userNode, contextNode, assistantNode, toolNode],
-    running: false,
     partial: null,
-    queue: [],
-    pending: [],
     runningCalls: [],
+    turnTimings: new Map(),
+    turnEnds: new Map(),
+    ...overrides,
+  } as unknown as LegacyConversationSlice
+}
+
+function sessionSnapshot(overrides: Partial<SessionSnapshot> = {}): SessionSnapshot {
+  return {
+    sessionId: 'session-1',
+    queue: [],
+    pendingSubmissions: [],
+    running: false,
+    subagent: null,
+    removed: false,
+    openState: 'open',
+    openError: null,
     hasMore: true,
     loadingOlder: false,
-    openState: 'open',
     promptError: null,
-    removed: false,
+    blank: false,
+    lastAgentError: null,
+    promptAttempted: true,
+    awaitingFirstTurn: false,
     ...overrides,
-  } as unknown as ConversationSnapshot
+  } as unknown as SessionSnapshot
 }
 
 function translate(key: keyof typeof en, params?: Record<string, unknown>): string {
@@ -80,16 +96,28 @@ function translate(key: keyof typeof en, params?: Record<string, unknown>): stri
   return result
 }
 
-function viewProps(value: ConversationSnapshot, loadOlder = vi.fn(async () => {})) {
-  const selected: unknown[] = []
-  const useSession = <S,>(selector: (current: ConversationSnapshot) => S): S => {
-    const selection = selector(value)
-    selected.push(selection)
+function viewProps(
+  conversation: LegacyConversationSlice,
+  loadOlder = vi.fn(async () => {}),
+  session = sessionSnapshot(),
+) {
+  const selectedSession: unknown[] = []
+  const selectedChat: unknown[] = []
+  const useSession = <S,>(selector: (current: SessionSnapshot) => S): S => {
+    const selection = selector(session)
+    selectedSession.push(selection)
+    return selection
+  }
+  const chat = { legacy: conversation } as unknown as ChatSnapshot
+  const useChat = <S,>(selector: (current: ChatSnapshot) => S): S => {
+    const selection = selector(chat)
+    selectedChat.push(selection)
     return selection
   }
   return {
-    props: { useSession, loadOlder, t: translate } as unknown as ComponentProps<typeof AccessibleView>,
-    selected,
+    props: { useSession, useChat, loadOlder, t: translate } as unknown as ComponentProps<typeof AccessibleView>,
+    selectedSession,
+    selectedChat,
     loadOlder,
   }
 }
@@ -111,12 +139,13 @@ afterEach(() => {
 
 describe('AccessibleView', () => {
   it('requires explicit loading, preserves semantic content, and restores focus when cleared', async () => {
-    const fixture = viewProps(snapshot())
+    const fixture = viewProps(conversationSnapshot())
     render(<AccessibleView {...fixture.props} />)
 
     expect(screen.queryByText('Visible prompt')).toBeNull()
     expect(screen.queryByText('Private context content')).toBeNull()
-    expect(fixture.selected.at(-1)).toBeNull()
+    expect(fixture.selectedSession.at(-1)).toBeNull()
+    expect(fixture.selectedChat.at(-1)).toBeNull()
 
     const load = screen.getByRole('button', { name: 'Load reading view' })
     fireEvent.click(load)
@@ -139,11 +168,12 @@ describe('AccessibleView', () => {
     const restored = await screen.findByRole('button', { name: 'Load reading view' })
     await waitFor(() => { expect(document.activeElement).toBe(restored) })
     expect(screen.queryByText('Visible prompt')).toBeNull()
-    expect(fixture.selected.at(-1)).toBeNull()
+    expect(fixture.selectedSession.at(-1)).toBeNull()
+    expect(fixture.selectedChat.at(-1)).toBeNull()
   })
 
   it('mounts context, reasoning, tool arguments, and tool output only after separate disclosures', async () => {
-    const fixture = viewProps(snapshot())
+    const fixture = viewProps(conversationSnapshot())
     render(<AccessibleView {...fixture.props} />)
     fireEvent.click(screen.getByRole('button', { name: 'Load reading view' }))
 
@@ -161,7 +191,7 @@ describe('AccessibleView', () => {
   })
 
   it('copies only the addressed visible message and announces clipboard outcomes', async () => {
-    const fixture = viewProps(snapshot())
+    const fixture = viewProps(conversationSnapshot())
     render(<AccessibleView {...fixture.props} />)
     fireEvent.click(screen.getByRole('button', { name: 'Load reading view' }))
 
@@ -177,14 +207,13 @@ describe('AccessibleView', () => {
   })
 
   it('renders the in-progress assistant record at the end without turning the transcript into a live region', async () => {
-    const fixture = viewProps(snapshot({
-      running: true,
+    const fixture = viewProps(conversationSnapshot({
       partial: {
         turn: 2,
         step: 1,
         blocks: [{ kind: 'text', text: 'Streaming answer in progress' }],
       },
-    }))
+    }), undefined, sessionSnapshot({ running: true }))
     render(<AccessibleView {...fixture.props} />)
     fireEvent.click(screen.getByRole('button', { name: 'Load reading view' }))
 
@@ -199,7 +228,7 @@ describe('AccessibleView', () => {
     const loadOlder = vi.fn()
       .mockRejectedValueOnce(new Error('/private/path should not render'))
       .mockResolvedValueOnce(undefined)
-    const fixture = viewProps(snapshot(), loadOlder)
+    const fixture = viewProps(conversationSnapshot(), loadOlder)
     render(<AccessibleView {...fixture.props} />)
     fireEvent.click(screen.getByRole('button', { name: 'Load reading view' }))
 
@@ -216,7 +245,7 @@ describe('AccessibleView', () => {
   it('ignores an older-history result after the reading view is cleared', async () => {
     let finishOlder: (() => void) | undefined
     const loadOlder = vi.fn(() => new Promise<void>((resolve) => { finishOlder = resolve }))
-    const fixture = viewProps(snapshot(), loadOlder)
+    const fixture = viewProps(conversationSnapshot(), loadOlder)
     render(<AccessibleView {...fixture.props} />)
     fireEvent.click(screen.getByRole('button', { name: 'Load reading view' }))
 
@@ -232,7 +261,7 @@ describe('AccessibleView', () => {
   })
 
   it('has no automatically detectable axe violations before or after loading', async () => {
-    const fixture = viewProps(snapshot({ hasMore: false }))
+    const fixture = viewProps(conversationSnapshot(), undefined, sessionSnapshot({ hasMore: false }))
     const { container } = render(<AccessibleView {...fixture.props} />)
     const initial = await axe.run(container, { rules: { 'color-contrast': { enabled: false } } })
     expect(initial.violations, JSON.stringify(initial.violations, null, 2)).toHaveLength(0)

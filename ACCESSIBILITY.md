@@ -6,15 +6,16 @@ This project targets operable, understandable DeepSeek Harness Web and CLI workf
 
 ## Supported core
 
-- Official baseline: `@deepseek-ai/dsh@0.1.1-rc.2`.
-- Complete patched build: [`dsh-v0.1.1-rc.2-a11y.4`](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.1-rc.2-a11y.4).
+- Official baseline: `@deepseek-ai/dsh@0.1.2-rc.1`.
+- Complete candidate build: [`dsh-v0.1.2-rc.1-a11y.4`](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.4).
+- Companion candidate: `@oh-my-dsh/dsh-accessibility@0.1.0-beta.7`.
 - Upstream tracking: [deepseek-ai/deepseek-harness Discussion #4546](https://github.com/deepseek-ai/deepseek-harness/discussions/4546).
 
 Installing this npm package into an unpatched official build adds diagnostics and guidance, but cannot replace missing core focus or composite-widget behavior.
 
-The development branch contains an experimental Accessible View candidate. Its automated component evidence is not yet an assistive-technology support claim and it is not present in the published `0.1.0-beta.6` package. See [RFC-ACCESSIBLE-VIEW.md](RFC-ACCESSIBLE-VIEW.md).
+The beta.7 companion contains an experimental Accessible View candidate migrated to rc1's Session and Chat projections. Its automated component evidence is not an assistive-technology support claim. See [RFC-ACCESSIBLE-VIEW.md](RFC-ACCESSIBLE-VIEW.md).
 
-The DSH `0.1.2-alpha.2` development line also contains a one-shot CLI accessibility candidate. Its low-noise text and versioned JSON output pass a draft process contract, while real terminal, screen-reader, braille, and disabled-developer evidence remain pending. See [CLI-ACCESSIBILITY.md](CLI-ACCESSIBILITY.md).
+The rc1 accessibility core candidate also contains the one-shot CLI accessibility work first developed on alpha.2. Its low-noise text and versioned JSON output are implemented, while the archived alpha.2 process result does not transfer automatically and real terminal, screen-reader, braille, and disabled-developer evidence remain pending. See [CLI-ACCESSIBILITY.md](CLI-ACCESSIBILITY.md).
 
 ## Assistive-technology matrix
 
@@ -76,7 +77,7 @@ For the complete audit/read/approve-or-reject/edit/re-audit flow, use the [autho
 - axe-core regression for the rendered plugin settings surface.
 - Accessible View registration, unloaded-selector, focus lifecycle, delayed-sensitive-content, clipboard-projection, pagination, source-order, and idle/loaded axe-core tests.
 - Versioned `dsh-non-at-browser/1.0.0-draft` assembled evidence for Accessible View in Chromium, Firefox, and WebKit: 640/320 CSS px page reflow, sampled focus visibility/obscuration, reduced motion, and Chromium forced-color participation. Scope and limitations are defined in [RFC-BROWSER-EVIDENCE.md](RFC-BROWSER-EVIDENCE.md).
-- Schema-validated `dsh-core-browser-non-at` evidence on exact clean campaign revision `5803bfcfdd502adac26ae9b8eec12d6aed263ec6`: fourteen required checks cover all nine cataloged static P0 Web tasks in Chromium, Firefox, and WebKit. The [archived report](automated-evidence/core-browser/2026-08-31-dsh-0.1.2-alpha.2-5803bfcfdd.json) remains non-AT and non-user evidence.
+- Schema-validated `dsh-core-browser-non-at` evidence on exact clean rc1 revision `21859d968ce8eed23fba8f781b55300a729cc29b`: fourteen required checks cover all nine cataloged static P0 Web tasks in Chromium, Firefox, and WebKit. The [rc1 report](automated-evidence/core-browser/2026-09-07-dsh-0.1.2-rc.1-21859d968c.json) remains non-AT and non-user evidence. The original [alpha.2 campaign report](automated-evidence/core-browser/2026-08-31-dsh-0.1.2-alpha.2-5803bfcfdd.json) remains bound only to that campaign revision.
 - Versioned `dsh-cli-accessibility/1.0.0-draft` product-entry process conformance for discoverability, fail-closed arguments, low-noise text, one-line JSON, terminal controls, exit status, and success/failure projection. This is explicitly non-AT evidence.
 - `dsh-a11y-human-evidence/0.1.0-draft` schema and repository validator plus the pinned `dsh-a11y-evidence-catalog/0.1.0-draft` for exact scope, known stable tasks, authoritative core/safety/claim classification, consent flags, privacy, assistance, task safety/effectiveness, public review, and evidence freshness. This gate can reject an unsupported claim; it cannot manufacture human evidence.
 - `dsh-a11y-evidence-coverage-policy/0.1.0-draft` and its versioned report aggregate only compatible exact-environment AT records, require disabled-developer task sets to stay within one record, and expose every missing baseline row without turning coverage into release readiness.

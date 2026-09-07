@@ -2,18 +2,18 @@
 
 [简体中文](ROADMAP.zh.md) | English
 
-Updated: 2026-08-31. This roadmap is evidence-driven and may change after upstream compatibility or assistive-technology findings. An item is complete only when its acceptance evidence is linked; implementation alone is not completion.
+Updated: 2026-09-07. This roadmap is evidence-driven and may change after upstream compatibility or assistive-technology findings. An item is complete only when its acceptance evidence is linked; implementation alone is not completion.
 
 ## Current baseline
 
-- Runtime companion release candidate: `@oh-my-dsh/dsh-accessibility@0.1.0-beta.6`.
-- Tested DSH baseline: `@deepseek-ai/dsh@0.1.1-rc.2` plus `dsh-v0.1.1-rc.2-a11y.4`.
-- Upstream development line under review: `0.1.2-alpha.2`.
+- Runtime companion release candidate: `@oh-my-dsh/dsh-accessibility@0.1.0-beta.7`.
+- Tested DSH baseline: `@deepseek-ai/dsh@0.1.2-rc.1` plus `dsh-v0.1.2-rc.1-a11y.4`.
+- Historical maintenance line: companion beta.6 plus DSH `0.1.1-rc.2`; the first human campaign remains pinned to its exact `0.1.2-alpha.2` core and lab revisions.
 - Deterministic companion audit: 17 structural checks.
 - Developer feedback loop candidate: each failed diagnostic has localized repair guidance; a detached one-defect practice creates a stable human-evaluation target; an explicit ephemeral focus tracker exposes approximate name/role/state without selectors; and `dsh-accessibility-diagnostic/1.0.0-draft` requires separate review and copy actions for a strict no-claim report. Three new companion tasks are pinned in evidence catalog revision `dsh-accessibility-core-tasks-2026-08-31-r2`. Automated privacy, schema, UI, and axe evidence pass locally; real AT comprehension and disabled-developer usefulness remain pending.
-- Accessible View MVP: experimental implementation candidate; automated review in progress, real AT and disabled-developer evidence pending.
-- Hermetic AT labs: separate synthetic, disposable launchers cover the `0.1.2-alpha.2` core candidate and the rc.2 companion; they reduce setup/privacy risk but produce no AT evidence without human observation.
-- Core browser evidence: clean campaign revision `5803bfcfdd502adac26ae9b8eec12d6aed263ec6` has a schema-validated `dsh-core-browser-non-at` `pass` across Chromium, Firefox, and WebKit. Fourteen required checks cover all nine cataloged static P0 Web tasks plus menu and safety routes; this is automated non-AT evidence, while live states, real zoom/High Contrast, AT, and disabled-user rows remain pending.
+- Accessible View MVP: migrated to rc1's `ui-session` and `ui-chat` contracts; unit, build, privacy, axe, and assembled Chromium evidence pass, while exact clean three-engine companion evidence, real AT, and disabled-developer evidence remain release tasks.
+- Hermetic AT labs: the companion launcher targets the rc1 candidate; the first-wave core launcher remains pinned to its historical alpha.2 campaign. Both reduce setup/privacy risk but produce no AT evidence without human observation.
+- Core browser evidence: clean rc1 revision `21859d968ce8eed23fba8f781b55300a729cc29b` has a schema-validated `dsh-core-browser-non-at` `pass` across Chromium, Firefox, and WebKit. Fourteen required checks cover all nine cataloged static P0 Web tasks plus menu and safety routes; this is automated non-AT evidence, while live states, real zoom/High Contrast, AT, and disabled-user rows remain pending. The alpha.2 campaign report remains separately archived and does not transfer.
 - Live-announcement lab: six synthetic alpha.2 replay scenarios separate durable Host boundaries from actual AT speech/braille evidence.
 - CLI accessibility candidate: low-noise text and `dsh-headless-result/1.0.0` output are implemented on the alpha.2 branch; draft process conformance is reproducible, while real terminal/screen-reader and disabled-developer evidence remain pending.
 - Accessible authoring foundation: the bilingual RFC and six standalone local packages now cover both provider chains. The literal-loopback path has an installable, default-inert `dsh-a11y-local-preview/0.1.0-draft` DSH composition; the caller-owned path has a non-serializable, separately permissioned `dsh-a11y-caller-page/0.1.0-draft` trusted-host composition for disposable non-authenticated pages. Real product bundle installation and config composition where applicable, published DSH runtime loading, Chromium auditing, privacy, lifecycle, and package evidence pass locally. The `dsh-a11y-authoring-agent-lab/0.1.2-draft` replay gate proves one exact audit/read/edit/re-audit product loop, validates the untrusted-data framing in both persisted audit results, and requires their eleven-row manual author-review plans to remain unresolved. The new `dsh-a11y-authoring-at-lab/0.1.0-draft` makes the same bounded task available through real DSH Web, proves allow-once changes automated findings from two to zero, proves rejection leaves source unchanged, and defines separate human VoiceOver/NVDA records. Both automated modes are product evidence, not AT or disabled-author evidence. Review/publication, any authenticated/cross-origin authority, live-model repair, listener-verified real AT, and disabled-author evidence remain pending.
@@ -23,9 +23,9 @@ Updated: 2026-08-31. This roadmap is evidence-driven and may change after upstre
 
 ## Phase 0 — foundation and upstream compatibility (through 2026-09-12)
 
-- Rebase or port the core candidate to the current `0.1.2-alpha.2` line, auditing overlapping upstream changes instead of mechanically replaying the old patch.
-- Freeze and document the rc.2 maintenance line; narrow package compatibility to versions actually tested.
-- Align npm installation guidance and distribution tags so unqualified installs cannot silently receive an older beta.
+- Port the core candidate to `0.1.2-rc.1`, auditing overlapping upstream changes instead of mechanically replaying the old patch. **Implemented; automated and CI evidence must remain green.**
+- Freeze and document the rc.2 maintenance line, and migrate beta.7 to the exact rc1 client graph. **Implemented.**
+- Align npm installation guidance and distribution tags so unqualified installs cannot silently receive an older beta. **Pending npm publication and dist-tag verification.**
 - Keep the completed static P0 Web route expansion green, extend the versioned browser contract to applicable live and authoring routes, and make failures block the candidate release; retain real zoom, Windows High Contrast, and low-vision checks as separately owned manual rows.
 - Publish the working-group charter, project governance, accessibility statement, research protocol, issue forms, evidence labels, machine-checkable human-evidence review and aggregate-coverage lifecycle, and release gates.
 

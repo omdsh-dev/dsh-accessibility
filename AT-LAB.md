@@ -8,7 +8,7 @@ Protocol: `dsh-at-lab/1.0.0-draft`
 
 Tracking: [VoiceOver #2](https://github.com/omdsh-dev/dsh-accessibility/issues/2), [NVDA #1](https://github.com/omdsh-dev/dsh-accessibility/issues/1), and [Accessible View #10](https://github.com/omdsh-dev/dsh-accessibility/issues/10)
 
-This protocol tests the `0.1.1-rc.2` companion, Accessible View, and the diagnostic feedback loop. Use the separate [DSH core AT lab](AT-CORE-LAB.md) for the current `0.1.2-alpha.2` core candidate.
+This protocol tests the `0.1.0-beta.7` companion, Accessible View, and diagnostic feedback loop on DSH `0.1.2-rc.1` plus the matching accessibility core candidate. The [DSH core AT lab](AT-CORE-LAB.md) remains the historical first-campaign protocol pinned to its exact alpha.2 revisions; results from that campaign do not transfer to rc1.
 
 ## Purpose and evidence boundary
 
@@ -25,12 +25,12 @@ git clone https://github.com/omdsh-dev/deepseek-harness.git
 git clone https://github.com/omdsh-dev/dsh-accessibility.git
 
 cd deepseek-harness
-git checkout dsh-v0.1.1-rc.2-a11y.4
+git checkout dsh-v0.1.2-rc.1-a11y.4
 pnpm install
 pnpm run build:official
 
 cd ../dsh-accessibility
-git checkout feat/hermetic-at-lab
+git checkout v0.1.0-beta.7
 pnpm install --frozen-lockfile
 pnpm run build
 ```
