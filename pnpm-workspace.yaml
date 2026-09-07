@@ -1,2 +1,10 @@
+# pnpm 11 fails closed when a dependency ships an unreviewed lifecycle script.
+# Keep the rc1 development graph explicit: native packages required by the DSH
+# consumer build may run, while optional no-op generators remain disabled.
 allowBuilds:
-  esbuild: false
+  '@deepseek-ai/dsh-subprocess-local': true
+  '@google/genai': false
+  esbuild: true
+  koffi: true
+  node-pty: true
+  protobufjs: false
