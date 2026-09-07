@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## 0.1.0-beta.7 - 2026-09-07
+
+- Migrate the runtime companion from the removed `dsh-client-runtime` package to the exact DSH `0.1.2-rc.1` `ui-session` and `ui-chat` contracts, including rc1 Markdown labels and the split lifecycle/conversation projections.
+- Upgrade the disposable companion AT lab and assembled-browser consumer to `dsh-v0.1.2-rc.1-a11y.2`, including the one-use authenticated Web entry point and current seeded-history fixture.
+- Archive the independent exact-revision rc1 core-browser report while retaining both alpha.2 records and the first human campaign at their historical revisions.
+- Publish the experimental Accessible View in the npm beta line while retaining the explicit-load privacy gate, separate technical disclosures, focused clear return, per-message clipboard boundary, and no stable-support claim.
+
 - Add a versioned, read-only primary-campaign publication preflight that checks exact clean local revisions, matching target remotes, committed handoff files, anonymous public gates, and ordered action readiness without pushing, merging, editing community threads, opening recruitment, or creating human evidence.
 - Add `dsh-a11y-author-review-plan/0.1.0-draft`: eleven stable, always-unresolved author-review rows appended to every model-visible scan; upgrade the real-product authoring lab to `0.1.2-draft` so either persisted scan fails if automation drops or promotes that manual work, and archive one exact-revision passing replay.
 - Archive the independently regenerated three-engine core-browser report for exact primary-campaign DSH revision `5803bfcfdd`, retaining the earlier `33eb2d9e1e` record instead of letting evidence silently carry across commits.

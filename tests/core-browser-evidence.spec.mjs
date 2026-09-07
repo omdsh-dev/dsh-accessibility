@@ -6,11 +6,18 @@ import { describe, expect, it } from 'vitest'
 const reports = [
   {
     file: '2026-08-31-dsh-0.1.2-alpha.2-33eb2d9e1e.json',
+    version: '0.1.2-alpha.2',
     revision: '33eb2d9e1ed6bc44712941f4bf40d4eda154ab9e',
   },
   {
     file: '2026-08-31-dsh-0.1.2-alpha.2-5803bfcfdd.json',
+    version: '0.1.2-alpha.2',
     revision: '5803bfcfdd502adac26ae9b8eec12d6aed263ec6',
+  },
+  {
+    file: '2026-09-07-dsh-0.1.2-rc.1-33546ce7d8.json',
+    version: '0.1.2-rc.1',
+    revision: '33546ce7d896625c313ad3ee0371047bcf8b8ade',
   },
 ]
 
@@ -50,7 +57,7 @@ const expectedChecks = [
 ]
 
 describe('archived core browser evidence', () => {
-  it.each(reports)('validates $file and its exact revision against the public schema', async ({ file, revision }) => {
+  it.each(reports)('validates $file and its exact revision against the public schema', async ({ file, version, revision }) => {
     const [schema, report] = await Promise.all([
       readFile(new URL('../CORE-BROWSER-EVIDENCE.schema.json', import.meta.url), 'utf8').then(JSON.parse),
       readFile(reportUrl(file), 'utf8').then(JSON.parse),
@@ -61,7 +68,7 @@ describe('archived core browser evidence', () => {
     expect(validate(report), JSON.stringify(validate.errors)).toBe(true)
     expect(report.dsh).toEqual({
       package: '@deepseek-ai/dsh-root',
-      version: '0.1.2-alpha.2',
+      version,
       revision,
       dirty: false,
     })

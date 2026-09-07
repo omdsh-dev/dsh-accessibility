@@ -6,7 +6,7 @@ Status: draft for public review
 
 Protocol: `dsh-non-at-browser/1.0.0-draft`
 
-Consumers: Accessible View on DSH `0.1.1-rc.2` plus `dsh-v0.1.1-rc.2-a11y.4`; core P0 Web routes on DSH `0.1.2-alpha.2`
+Consumers: Accessible View and core P0 Web routes on DSH `0.1.2-rc.1` plus `dsh-v0.1.2-rc.1-a11y.2`; historical alpha.2 records remain exact-revision archives
 
 Tracking: [#9](https://github.com/omdsh-dev/dsh-accessibility/issues/9)
 
@@ -57,7 +57,7 @@ The Accessible View runner emits one JSON object per browser. The core runner ag
 - forced-color media state, opt-out count, and computed control samples when supported;
 - fixed limitations that prevent the record from being misread as AT or disabled-user evidence.
 
-A record is valid only when every required test process exits zero, its schema and semantic inventory validate, and the tested commit matches the recorded revision. Logs from a dirty checkout are development diagnostics, not release evidence. The first reviewed core record is archived at [`automated-evidence/core-browser/2026-08-31-dsh-0.1.2-alpha.2-33eb2d9e1e.json`](automated-evidence/core-browser/2026-08-31-dsh-0.1.2-alpha.2-33eb2d9e1e.json). The exact primary-campaign candidate was regenerated independently and is archived at [`automated-evidence/core-browser/2026-08-31-dsh-0.1.2-alpha.2-5803bfcfdd.json`](automated-evidence/core-browser/2026-08-31-dsh-0.1.2-alpha.2-5803bfcfdd.json); the two records must not be treated as interchangeable.
+A record is valid only when every required test process exits zero, its schema and semantic inventory validate, and the tested commit matches the recorded revision. Logs from a dirty checkout are development diagnostics, not release evidence. The first reviewed core record is archived at [`automated-evidence/core-browser/2026-08-31-dsh-0.1.2-alpha.2-33eb2d9e1e.json`](automated-evidence/core-browser/2026-08-31-dsh-0.1.2-alpha.2-33eb2d9e1e.json). The exact primary-campaign candidate was regenerated independently at [`5803bfcfdd`](automated-evidence/core-browser/2026-08-31-dsh-0.1.2-alpha.2-5803bfcfdd.json). The rc1 port was independently regenerated at exact clean revision [`33546ce7d8`](automated-evidence/core-browser/2026-09-07-dsh-0.1.2-rc.1-33546ce7d8.json). None of these records may be carried across revisions or treated as interchangeable.
 
 ## False-positive and exception policy
 

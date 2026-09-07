@@ -10,24 +10,24 @@ Project links: [Accessibility statement](ACCESSIBILITY_STATEMENT.md) · [Roadmap
 
 ## Compatibility
 
-The `0.1.0-beta.6` line targets exactly the `@deepseek-ai/dsh@0.1.1-rc.2` client package line plus the accessibility core patch tracked in [upstream Discussion #4546](https://github.com/deepseek-ai/deepseek-harness/discussions/4546). Compatibility is deliberately version-scoped: a newer DSH release needs a fresh review before the peer range expands. The companion reports missing core semantics; it cannot safely replace focus traps, composite-widget keyboard behavior, landmarks, or live-region policy from outside the owning components.
+`0.1.0-beta.7` targets exactly `@deepseek-ai/dsh@0.1.2-rc.1` plus accessibility core candidate [`dsh-v0.1.2-rc.1-a11y.2`](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.2). The companion was migrated from the removed `dsh-client-runtime` package to rc1's `ui-session` and `ui-chat` projections, and its DSH peers are deliberately exact. `0.1.0-beta.6` remains the maintenance build for DSH `0.1.1-rc.2`. The companion reports missing core semantics; it cannot safely replace focus traps, composite-widget keyboard behavior, landmarks, or live-region policy from outside the owning components.
 
 ## Install from npm
 
 ```sh
-dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.6
+dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.7
 dsh --profile web
 ```
 
-The npm companion does not patch the owning DSH components. Until the changes are included in an official DSH release, use the organization-pinned [DSH accessibility build](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.1-rc.2-a11y.4) for the complete keyboard and screen-reader behavior:
+The npm companion does not patch the owning DSH components. Until the changes are included in an official DSH release, use the organization-pinned [DSH accessibility build](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.2) for the complete candidate behavior:
 
 ```sh
 git clone https://github.com/omdsh-dev/deepseek-harness.git
 cd deepseek-harness
-git checkout dsh-v0.1.1-rc.2-a11y.4
+git checkout dsh-v0.1.2-rc.1-a11y.2
 pnpm install
 pnpm run build:official
-pnpm dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.6
+pnpm dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.7
 pnpm dsh web
 ```
 
@@ -44,13 +44,13 @@ Open Settings → Accessibility to run the current-page diagnostic and read the 
 
 ## Accessible View candidate
 
-The current development branch also registers an experimental Accessible View through DSH's official `conversation.view` slot. It is not part of the published `0.1.0-beta.6` package and is not yet a stable-support claim.
+`0.1.0-beta.7` registers the experimental Accessible View through DSH's official `conversation.view` slot. It remains a beta feature and is not a stable-support claim.
 
 Selecting the tab alone does not retain conversation content. Activate **Load reading view** to admit DSH's structured session snapshot. The view then presents finalized and in-progress records in source order, preserves semantic Markdown and code, offers explicit disclosures for context, reasoning, tool arguments/output, command input, and errors, and supports per-message copy plus older-history loading. **Clear reading view and return** unmounts the content and restores focus to Load.
 
 This MVP remains read-oriented. Return to Chat to send, stop, approve, edit queued work, or use specialized tool controls. See [RFC-ACCESSIBLE-VIEW.md](RFC-ACCESSIBLE-VIEW.md) for the data-flow, threat review, exact limitations, and VoiceOver/NVDA validation procedure.
 
-The assembled development gate also runs the candidate in Chromium, Firefox, and WebKit at 640 and 320 CSS px, samples focused controls against occluding content, audits reduced-motion behavior, and checks Chromium forced-color participation. The core `0.1.2-alpha.2` consumer now binds fourteen required checks and nine cataloged P0 Web tasks to exact clean campaign revision `5803bfcfdd502adac26ae9b8eec12d6aed263ec6`; its schema-validated three-engine report is archived under [`automated-evidence/`](automated-evidence/README.md). These are versioned deterministic results, not real zoom, Windows High Contrast, assistive-technology, or disabled-user evidence. See [RFC-BROWSER-EVIDENCE.md](RFC-BROWSER-EVIDENCE.md).
+The assembled gate runs the candidate in Chromium, Firefox, and WebKit at 640 and 320 CSS px, samples focused controls against occluding content, audits reduced-motion behavior, and checks Chromium forced-color participation. The current rc1 core report binds fourteen required checks and nine cataloged P0 Web tasks to exact clean revision `33546ce7d896625c313ad3ee0371047bcf8b8ade`; earlier alpha.2 reports remain archived for their exact historical revisions and the first human campaign remains pinned to its original alpha.2 candidate. These are versioned deterministic results, not real zoom, Windows High Contrast, assistive-technology, or disabled-user evidence. See the [`automated-evidence/`](automated-evidence/README.md) archive and [RFC-BROWSER-EVIDENCE.md](RFC-BROWSER-EVIDENCE.md).
 
 ## Diagnostics and scope
 
@@ -66,7 +66,7 @@ The first [primary AT campaign](PRIMARY-AT-CAMPAIGN.md) is `open` for VoiceOver/
 
 ## CLI accessibility candidate
 
-The `0.1.2-alpha.2` development line adds an explicit low-noise headless presentation and a versioned final JSON result. This repository owns the draft `dsh-cli-accessibility/1.0.0-draft` conformance protocol plus disposable automated and manual launchers. Automated process output is not screen-reader evidence; the manual launcher still requires a human speech or braille record. See [CLI-ACCESSIBILITY.md](CLI-ACCESSIBILITY.md).
+The rc1 accessibility core candidate retains the explicit low-noise headless presentation and versioned final JSON result first developed on alpha.2. This repository owns the draft `dsh-cli-accessibility/1.0.0-draft` conformance protocol; its archived alpha.2 replay does not automatically transfer to rc1. Automated process output is not screen-reader evidence, and the manual launcher still requires a human speech or braille record. See [CLI-ACCESSIBILITY.md](CLI-ACCESSIBILITY.md).
 
 ## Accessible authoring candidate
 

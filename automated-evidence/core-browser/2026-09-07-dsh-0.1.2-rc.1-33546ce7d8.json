@@ -1,0 +1,312 @@
+{
+  "$schema": "https://raw.githubusercontent.com/omdsh-dev/dsh-accessibility/main/CORE-BROWSER-EVIDENCE.schema.json",
+  "protocol": "dsh-non-at-browser/1.0.0-draft",
+  "evidence": "dsh-core-browser-non-at",
+  "result": "pass",
+  "generatedAt": "2026-09-07T11:39:14.004Z",
+  "standards": [
+    "WCAG-2.2:1.4.10",
+    "WCAG-2.2:2.4.7",
+    "WCAG-2.2:2.4.11",
+    "WCAG-2.2:2.3.3",
+    "CSS-COLOR-ADJUST-1"
+  ],
+  "dsh": {
+    "package": "@deepseek-ai/dsh-root",
+    "version": "0.1.2-rc.1",
+    "revision": "33546ce7d896625c313ad3ee0371047bcf8b8ade",
+    "dirty": false
+  },
+  "environment": {
+    "os": "darwin",
+    "osRelease": "24.5.0",
+    "architecture": "arm64",
+    "node": "v24.3.0"
+  },
+  "scope": {
+    "suite": "dsh-core-p0-web",
+    "viewports": [
+      {
+        "width": 640,
+        "classification": "200%-equivalent"
+      },
+      {
+        "width": 320,
+        "classification": "400%-equivalent"
+      }
+    ],
+    "coreTasks": [
+      {
+        "id": "discover-structure",
+        "checks": [
+          "core.shell-and-splitters"
+        ]
+      },
+      {
+        "id": "navigate-sessions",
+        "checks": [
+          "core.workspace-tree-and-search"
+        ]
+      },
+      {
+        "id": "search-sessions",
+        "checks": [
+          "core.workspace-tree-and-search"
+        ]
+      },
+      {
+        "id": "adjust-layout",
+        "checks": [
+          "core.shell-and-splitters"
+        ]
+      },
+      {
+        "id": "switch-session-view",
+        "checks": [
+          "core.session-view-tabs"
+        ]
+      },
+      {
+        "id": "read-conversation",
+        "checks": [
+          "environment.transcript",
+          "core.file-disclosure"
+        ]
+      },
+      {
+        "id": "inspect-trajectory",
+        "checks": [
+          "core.trajectory-navigation"
+        ]
+      },
+      {
+        "id": "configure-settings",
+        "checks": [
+          "core.settings-focus"
+        ]
+      },
+      {
+        "id": "edit-composer-draft",
+        "checks": [
+          "core.composer-draft"
+        ]
+      }
+    ]
+  },
+  "engines": [
+    {
+      "engine": "chromium",
+      "engineVersion": "149.0.7827.55",
+      "testProcess": {
+        "success": true,
+        "total": 14,
+        "passed": 14,
+        "notRun": 0,
+        "failed": 0
+      },
+      "checks": [
+        {
+          "id": "core.shell-and-splitters",
+          "status": "passed"
+        },
+        {
+          "id": "core.workspace-tree-and-search",
+          "status": "passed"
+        },
+        {
+          "id": "core.session-view-tabs",
+          "status": "passed"
+        },
+        {
+          "id": "core.trajectory-navigation",
+          "status": "passed"
+        },
+        {
+          "id": "core.composer-draft",
+          "status": "passed"
+        },
+        {
+          "id": "core.model-and-command-menus",
+          "status": "passed"
+        },
+        {
+          "id": "core.file-disclosure",
+          "status": "passed"
+        },
+        {
+          "id": "core.settings-focus",
+          "status": "passed"
+        },
+        {
+          "id": "core.full-access-risk",
+          "status": "passed"
+        },
+        {
+          "id": "environment.reflow",
+          "status": "passed"
+        },
+        {
+          "id": "environment.transcript",
+          "status": "passed"
+        },
+        {
+          "id": "environment.focus-not-obscured",
+          "status": "passed"
+        },
+        {
+          "id": "environment.forced-colors",
+          "status": "passed"
+        },
+        {
+          "id": "environment.reduced-motion",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "engine": "firefox",
+      "engineVersion": "151.0",
+      "testProcess": {
+        "success": true,
+        "total": 14,
+        "passed": 13,
+        "notRun": 1,
+        "failed": 0
+      },
+      "checks": [
+        {
+          "id": "core.shell-and-splitters",
+          "status": "passed"
+        },
+        {
+          "id": "core.workspace-tree-and-search",
+          "status": "passed"
+        },
+        {
+          "id": "core.session-view-tabs",
+          "status": "passed"
+        },
+        {
+          "id": "core.trajectory-navigation",
+          "status": "passed"
+        },
+        {
+          "id": "core.composer-draft",
+          "status": "passed"
+        },
+        {
+          "id": "core.model-and-command-menus",
+          "status": "passed"
+        },
+        {
+          "id": "core.file-disclosure",
+          "status": "passed"
+        },
+        {
+          "id": "core.settings-focus",
+          "status": "passed"
+        },
+        {
+          "id": "core.full-access-risk",
+          "status": "passed"
+        },
+        {
+          "id": "environment.reflow",
+          "status": "passed"
+        },
+        {
+          "id": "environment.transcript",
+          "status": "passed"
+        },
+        {
+          "id": "environment.focus-not-obscured",
+          "status": "passed"
+        },
+        {
+          "id": "environment.forced-colors",
+          "status": "not-run"
+        },
+        {
+          "id": "environment.reduced-motion",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "engineVersion": "26.5",
+      "testProcess": {
+        "success": true,
+        "total": 14,
+        "passed": 13,
+        "notRun": 1,
+        "failed": 0
+      },
+      "checks": [
+        {
+          "id": "core.shell-and-splitters",
+          "status": "passed"
+        },
+        {
+          "id": "core.workspace-tree-and-search",
+          "status": "passed"
+        },
+        {
+          "id": "core.session-view-tabs",
+          "status": "passed"
+        },
+        {
+          "id": "core.trajectory-navigation",
+          "status": "passed"
+        },
+        {
+          "id": "core.composer-draft",
+          "status": "passed"
+        },
+        {
+          "id": "core.model-and-command-menus",
+          "status": "passed"
+        },
+        {
+          "id": "core.file-disclosure",
+          "status": "passed"
+        },
+        {
+          "id": "core.settings-focus",
+          "status": "passed"
+        },
+        {
+          "id": "core.full-access-risk",
+          "status": "passed"
+        },
+        {
+          "id": "environment.reflow",
+          "status": "passed"
+        },
+        {
+          "id": "environment.transcript",
+          "status": "passed"
+        },
+        {
+          "id": "environment.focus-not-obscured",
+          "status": "passed"
+        },
+        {
+          "id": "environment.forced-colors",
+          "status": "not-run"
+        },
+        {
+          "id": "environment.reduced-motion",
+          "status": "passed"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "headless browser evidence, not assistive-technology or disabled-user evidence",
+    "320 CSS px is a 400% equivalent, not a real browser-zoom or text-only-zoom observation",
+    "forced colors is Chromium emulation, not a Windows High Contrast observation",
+    "sampled focus stacking does not replace visual focus-indicator contrast or pixel-area review",
+    "synthetic automated task routes do not prove independent, effective, or safe human completion"
+  ]
+}

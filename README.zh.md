@@ -10,24 +10,24 @@
 
 ## 兼容性
 
-`0.1.0-beta.6` 仅面向 `@deepseek-ai/dsh@0.1.1-rc.2` 对应的客户端软件包版本线及 [上游 Discussion #4546](https://github.com/deepseek-ai/deepseek-harness/discussions/4546) 跟踪的无障碍核心补丁。兼容性声明按版本收窄；DSH 发布新版本后，必须重新审查才能扩大 peer 范围。插件能报告核心语义缺失，但无法从外部可靠替代组件本身的焦点陷阱、复合控件键盘操作、页面地标或 live region 策略。
+`0.1.0-beta.7` 仅面向 `@deepseek-ai/dsh@0.1.2-rc.1` 与无障碍核心候选 [`dsh-v0.1.2-rc.1-a11y.2`](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.2)。插件已从被移除的 `dsh-client-runtime` 迁移到 rc1 的 `ui-session` 与 `ui-chat` projection，所有 DSH peer 仍精确固定；`0.1.0-beta.6` 继续作为 DSH `0.1.1-rc.2` 的维护版本。插件能报告核心语义缺失，但无法从外部可靠替代组件本身的焦点陷阱、复合控件键盘操作、页面地标或 live region 策略。
 
 ## 从 npm 安装
 
 ```sh
-dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.6
+dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.7
 dsh --profile web
 ```
 
-npm companion 不会修改 DSH 自有组件。在改动进入官方 DSH 发行版之前，请使用组织固定的 [DSH 无障碍构建](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.1-rc.2-a11y.4)，以获得完整键盘与读屏行为：
+npm companion 不会修改 DSH 自有组件。在改动进入官方 DSH 发行版之前，请使用组织固定的 [DSH 无障碍构建](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.2)，体验完整候选行为：
 
 ```sh
 git clone https://github.com/omdsh-dev/deepseek-harness.git
 cd deepseek-harness
-git checkout dsh-v0.1.1-rc.2-a11y.4
+git checkout dsh-v0.1.2-rc.1-a11y.2
 pnpm install
 pnpm run build:official
-pnpm dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.6
+pnpm dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.7
 pnpm dsh web
 ```
 
@@ -44,13 +44,13 @@ dsh --profile web
 
 ## Accessible View 候选
 
-当前开发分支还会通过 DSH 官方 `conversation.view` slot 注册实验性的“无障碍视图”。它尚未包含在已发布的 `0.1.0-beta.6` 中，也不构成稳定支持声明。
+`0.1.0-beta.7` 会通过 DSH 官方 `conversation.view` slot 注册实验性的“无障碍视图”。它仍是 beta 功能，不构成稳定支持声明。
 
 只选择标签页不会保留对话内容。激活“加载阅读视图”后，DSH 的结构化会话快照才进入组件。随后可以按来源顺序阅读最终和正在生成的记录，保留 Markdown 与代码语义；上下文、推理、工具参数／输出、命令输入和错误详情都要分别主动展开；还可以逐条复制消息和加载更早历史。“清除阅读视图并返回”会卸载内容，并把焦点还给“加载”。
 
 MVP 仍以阅读为主。发送、停止、批准、编辑排队任务或使用专用工具控件时需返回 Chat。数据流、威胁评审、精确限制及 VoiceOver／NVDA 验证方式见 [RFC-ACCESSIBLE-VIEW.zh.md](RFC-ACCESSIBLE-VIEW.zh.md)。
 
-开发期组装门禁还会在 Chromium、Firefox 和 WebKit 中以 640／320 CSS px 运行候选，采样焦点控件是否被遮挡、审计减少动态效果，并检查 Chromium 强制颜色参与情况。核心 `0.1.2-alpha.2` 使用方现已把十四项必需检查和九项已登记 P0 Web 任务固定到干净的活动精确 revision `5803bfcfdd502adac26ae9b8eec12d6aed263ec6`；经过 Schema 校验的三引擎报告归档在 [`automated-evidence/`](automated-evidence/README.zh.md)。这些是版本化确定性结果，不是真实缩放、Windows 高对比度、辅助技术或残障用户证据。详见 [RFC-BROWSER-EVIDENCE.zh.md](RFC-BROWSER-EVIDENCE.zh.md)。
+组装门禁会在 Chromium、Firefox 和 WebKit 中以 640／320 CSS px 运行候选，采样焦点控件是否被遮挡、审计减少动态效果，并检查 Chromium 强制颜色参与情况。当前 rc1 核心报告把十四项必需检查和九项已登记 P0 Web 任务固定到干净的精确 revision `33546ce7d896625c313ad3ee0371047bcf8b8ade`；较早的 alpha.2 报告继续按各自精确 revision 归档，首轮真人活动也继续固定到原 alpha.2 候选。这些是版本化确定性结果，不是真实缩放、Windows 高对比度、辅助技术或残障用户证据。详见 [`automated-evidence/`](automated-evidence/README.zh.md) 与 [RFC-BROWSER-EVIDENCE.zh.md](RFC-BROWSER-EVIDENCE.zh.md)。
 
 ## 自检范围
 
@@ -66,7 +66,7 @@ MVP 仍以阅读为主。发送、停止、批准、编辑排队任务或使用�
 
 ## CLI 无障碍候选
 
-`0.1.2-alpha.2` 开发线增加了显式低噪声 headless 展示与版本化最终 JSON 结果。本仓库负责 draft `dsh-cli-accessibility/1.0.0-draft` 符合性规程，以及一次性自动与人工启动器。自动进程输出不属于读屏证据；人工启动器仍须补充人类实际观察的语音或盲文记录。详见 [CLI-ACCESSIBILITY.zh.md](CLI-ACCESSIBILITY.zh.md)。
+rc1 无障碍核心候选保留了最初在 alpha.2 上开发的显式低噪声 headless 展示与版本化最终 JSON 结果。本仓库负责 draft `dsh-cli-accessibility/1.0.0-draft` 符合性规程；已经归档的 alpha.2 replay 不会自动转移成 rc1 证据。自动进程输出不属于读屏证据，人工启动器仍须补充人类实际观察的语音或盲文记录。详见 [CLI-ACCESSIBILITY.zh.md](CLI-ACCESSIBILITY.zh.md)。
 
 ## 无障碍创作候选
 

@@ -5,8 +5,8 @@
 - 状态：实验性实现，公开评审中
 - 跟踪 Issue：[#10](https://github.com/omdsh-dev/dsh-accessibility/issues/10)
 - 规程标识：`dsh-accessible-view/1.0.0-draft`
-- 兼容目标：仅 DSH 客户端包 `0.1.1-rc.2`
-- 最近评审：2026-08-30
+- 兼容目标：仅 DSH 客户端包 `0.1.2-rc.1`
+- 最近评审：2026-09-07
 
 ## 决策
 
@@ -25,17 +25,17 @@ MVP 以阅读为主。发送、停止、批准、编辑排队任务和完整工�
 实现只使用以下按版本固定的公开契约：
 
 - `@deepseek-ai/dsh-client-ui-conversation` 自有的列表插槽 `conversation.view`；
-- `@deepseek-ai/dsh-client-runtime` 提供的会话标准选择器 `useSession`；
-- `ConversationSnapshot.nodes`，即 rc.2 导出的最终会话记录兼容 projection；
-- `ConversationSnapshot.partial`、状态、排队数量、待处理数量、分页状态和错误状态；
+- `@deepseek-ai/dsh-client-ui-session` 提供的会话标准选择器 `useSession`，用于生命周期、排队数量、分页和错误状态；
+- `@deepseek-ai/dsh-client-ui-chat` 提供的会话标准选择器 `useChat`；
+- `ChatSnapshot.legacy`，即 rc1 导出的最终记录、正在生成的助手内容和运行中工具调用兼容 projection；
 - 会话公开接口的 `loadOlder()` 操作；
 - DSH 的 `MarkdownText` 与 `writeClipboard` 基础组件。
 
-rc.2 明确把 `nodes` 标为兼容 projection，因此这里只在精确 peer 范围内接受它。要支持拆分后的 `0.1.2-alpha.1` conversation/chat 包，必须重新审计 projection，不能从本 RFC 推断兼容性。
+rc1 明确把 `ChatSnapshot.legacy` 标为兼容 projection，因此这里只在精确 peer 范围内接受它。beta.7 不再使用已经移除的 `dsh-client-runtime` 契约或 beta.6 实现；支持后续 DSH 版本前仍须重新完成 projection 与组装浏览器审计。
 
 ## 同意与数据流状态
 
-1. **已选择但空闲。** 标签页只呈现说明和加载按钮。会话选择器返回 `null`，组件不保留会话快照。
+1. **已选择但空闲。** 标签页只呈现说明和加载按钮。Session 与 Chat 两个选择器都返回 `null`，组件不保留生命周期或会话快照。
 2. **已加载。** 激活加载按钮后，当前结构化快照进入组件，焦点移到阅读视图标题；最终记录和正在生成的助手记录按来源顺序呈现。
 3. **已展开细节。** 上下文、推理、工具参数、工具输出、命令输入和原始错误详情，只有各自的展开按钮被激活后才挂载。
 4. **已复制消息。** 消息级按钮只把该条用户消息、追加消息或最终助手消息的普通可见文本写入操作系统剪贴板。结构上排除上下文、推理、工具参数、工具结果、source 对象、用户名、工作区路径及环境元数据。
@@ -104,7 +104,7 @@ rc.2 明确把 `nodes` 标为兼容 projection，因此这里只在精确 peer �
 
 ## 已知限制
 
-- rc.2 projection 没有提供可朗读的作者文字替代，因此图片记录只呈现通用附件提示。
+- 精确 rc1 兼容 projection 没有通过本视图提供可朗读的作者文字替代，因此图片记录只呈现通用附件提示。
 - 不呈现排队消息正文和待处理交互 payload，只播报数量；管理它们需返回 Chat。
 - 运行中工具只统计数量；完整交互式工具控件仍在 Chat。
 - 技术输出使用通用预格式化呈现，不等同于每种工具的专用卡片。

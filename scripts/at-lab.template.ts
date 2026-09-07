@@ -25,7 +25,7 @@ const pluginManifest = JSON.parse(await readFile(join(pluginRoot, 'package.json'
 }
 if (pluginManifest.name !== '@oh-my-dsh/dsh-accessibility') throw new Error('external package identity mismatch')
 
-const fixturePath = join(process.cwd(), 'apps/web/tests/snapshots/seeded-history/seed.jsonl')
+const fixturePath = join(process.cwd(), 'snapshots/web/seeded-history/session.jsonl')
 const fixture = await readFile(fixturePath, 'utf8')
 if (fixtureUserPrompts(fixture).length === 0) throw new Error('AT lab fixture has no synthetic user prompt')
 
@@ -175,8 +175,6 @@ it('boots a disposable synthetic world for human AT observation', async () => {
 
     scaffold = await launchWebScaffold({ extraOverlayPath: overlayPath, harnessHome })
     await seedSession(scaffold, fixture, 'dsh-accessibility-at-lab')
-    // rc.2 predates the process-token URL. Keep that lab usable while newer
-    // DSH candidates use their one-use authenticated entry point.
     const localSignInUrl = (scaffold as WebScaffold & { authenticatedUrl?: string }).authenticatedUrl
       ?? scaffold.baseUrl
     launchedBrowser = await openBrowser(localSignInUrl, temporaryRoot)
@@ -185,7 +183,7 @@ it('boots a disposable synthetic world for human AT observation', async () => {
       protocol,
       evidence: 'lab-ready',
       dsh: {
-        version: '0.1.1-rc.2',
+        version: '0.1.2-rc.1',
         revision: process.env.DSH_ACCESSIBILITY_DSH_REVISION ?? 'unavailable',
       },
       companion: {

@@ -1,11 +1,12 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 import type {
   AssistantBlock, ConversationNode, ToolCallBlock,
-} from '@deepseek-ai/dsh-client-runtime/client'
-import type { ConvViewProps } from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@deepseek-ai/dsh-client-ui-conversation/client'
+import type { SessionSnapshot } from '@deepseek-ai/dsh-api-session-controller/client'
+import type { ChatSnapshot } from '@deepseek-ai/dsh-client-ui-chat/client'
 import { MarkdownText, writeClipboard } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { InjectFace, PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
+import type { MarkdownLabels } from '@deepseek-ai/dsh-client-ui-primitives'
 import { conversationNodeKey, messageClipboardText } from './accessible-conversation.ts'
 import type { AccessibilityKey } from './locales.ts'
 
@@ -13,12 +14,16 @@ export interface AccessibleViewInjected {
   loadOlder: () => Promise<void>
 }
 
-type AccessibleViewProps = ConvViewProps
-  & InjectFace<AccessibleViewInjected>
-  & PropsLocale<'accessibility'>
-
 type Translate = (key: AccessibilityKey, params?: Record<string, unknown>) => string
 type MessageContent = Extract<ConversationNode, { kind: 'user' }>['content']
+
+type SnapshotSelectorHook<Value> = <Selection>(selector: (value: Value) => Selection) => Selection
+
+interface AccessibleViewProps extends AccessibleViewInjected {
+  useSession: SnapshotSelectorHook<SessionSnapshot>
+  useChat: SnapshotSelectorHook<ChatSnapshot>
+  t: Translate
+}
 
 const viewStyle: CSSProperties = {
   boxSizing: 'border-box',
@@ -91,6 +96,21 @@ interface DisclosureProps {
   children: ReactNode
 }
 
+function AccessibleMarkdown({ text, streaming = false, t }: {
+  text: string
+  streaming?: boolean
+  t: Translate
+}) {
+  const labels = useMemo<MarkdownLabels>(() => ({
+    code: {
+      copyLabel: t('view.markdown.code.copy'),
+      copiedLabel: t('view.markdown.code.copied'),
+    },
+    footnotes: t('view.markdown.footnotes'),
+  }), [t])
+  return <MarkdownText text={text} streaming={streaming} labels={labels} />
+}
+
 /** A disclosure that does not even mount sensitive content before activation. */
 function ExplicitDisclosure({ id, show, hide, children }: DisclosureProps) {
   const [expanded, setExpanded] = useState(false)
@@ -132,7 +152,7 @@ function AssistantContent({ blocks, idPrefix, t, streaming = false }: {
     const key = `${block.kind}:${index}`
     switch (block.kind) {
       case 'text':
-        return <MarkdownText key={key} text={block.text} streaming={streaming} />
+        return <AccessibleMarkdown key={key} text={block.text} streaming={streaming} t={t} />
       case 'reasoning':
         return (
           <ExplicitDisclosure
@@ -141,7 +161,7 @@ function AssistantContent({ blocks, idPrefix, t, streaming = false }: {
             show={t('view.reasoning.show')}
             hide={t('view.reasoning.hide')}
           >
-            <MarkdownText text={block.text} streaming={streaming} />
+            <AccessibleMarkdown text={block.text} streaming={streaming} t={t} />
           </ExplicitDisclosure>
         )
       case 'image':
@@ -193,7 +213,7 @@ function MessageContentBlocks({ content, idPrefix, mode, t }: {
       case 'text':
         return mode === 'tool'
           ? <pre key={key} style={preStyle}><code>{block.text}</code></pre>
-          : <MarkdownText key={key} text={block.text} />
+          : <AccessibleMarkdown key={key} text={block.text} t={t} />
       case 'reasoning':
         return (
           <ExplicitDisclosure
@@ -202,7 +222,7 @@ function MessageContentBlocks({ content, idPrefix, mode, t }: {
             show={t('view.reasoning.show')}
             hide={t('view.reasoning.hide')}
           >
-            <MarkdownText text={block.text} />
+            <AccessibleMarkdown text={block.text} t={t} />
           </ExplicitDisclosure>
         )
       case 'image':
@@ -324,7 +344,7 @@ function ConversationEntry({ index, node, idPrefix, t, onCopy }: ConversationEnt
     case 'compaction':
       content = node.summary === null
         ? <p>{t('view.compaction.unavailable')}</p>
-        : <MarkdownText text={node.summary} />
+        : <AccessibleMarkdown text={node.summary} t={t} />
       break
     case 'model-retry':
       content = <p>{t(`view.retry.${node.retryState}`)}</p>
@@ -371,7 +391,7 @@ function ConversationEntry({ index, node, idPrefix, t, onCopy }: ConversationEnt
 }
 
 /** User-loaded semantic reading surface over DSH's supported conversation projection. */
-export function AccessibleView({ useSession, loadOlder, t }: AccessibleViewProps) {
+export function AccessibleView({ useSession, useChat, loadOlder, t }: AccessibleViewProps) {
   const [loaded, setLoaded] = useState(false)
   const [requestingOlder, setRequestingOlder] = useState(false)
   const [feedback, setFeedback] = useState<string | null>(null)
@@ -382,7 +402,8 @@ export function AccessibleView({ useSession, loadOlder, t }: AccessibleViewProps
   const copyAttemptRef = useRef(0)
   const historyAttemptRef = useRef(0)
   const baseId = useId()
-  const snapshot = useSession(value => loaded ? value : null)
+  const session = useSession(value => loaded ? value : null)
+  const conversation = useChat(value => loaded ? value.legacy : null)
 
   useEffect(() => {
     if (loaded && focusOnLoadRef.current) {
@@ -442,14 +463,16 @@ export function AccessibleView({ useSession, loadOlder, t }: AccessibleViewProps
     }
   }
 
-  const recordCount = snapshot === null ? 0 : snapshot.nodes.length + Number(snapshot.partial != null)
-  const summary = snapshot === null
+  const recordCount = conversation === null
+    ? 0
+    : conversation.nodes.length + Number(conversation.partial != null)
+  const summary = session === null || conversation === null
     ? t('view.privacy.idle')
-    : snapshot.removed
+    : session.removed
       ? t('view.session.removed')
-      : snapshot.openState === 'cold' || snapshot.openState === 'loading'
+      : session.openState === 'cold' || session.openState === 'loading'
         ? t('view.history.opening')
-        : snapshot.running
+        : session.running
           ? t('view.summary.running', { count: recordCount })
           : t('view.summary.ready', { count: recordCount })
 
@@ -473,14 +496,14 @@ export function AccessibleView({ useSession, loadOlder, t }: AccessibleViewProps
         </button>
       ) : (
         <div style={controlsStyle} aria-label={t('view.controls')}>
-          {snapshot?.hasMore && (
+          {session?.hasMore && (
             <button
               type="button"
               style={buttonStyle}
-              disabled={snapshot.loadingOlder || requestingOlder}
+              disabled={session.loadingOlder || requestingOlder}
               onClick={() => { void requestOlder() }}
             >
-              {snapshot.loadingOlder || requestingOlder ? t('view.history.loading') : t('view.history.load')}
+              {session.loadingOlder || requestingOlder ? t('view.history.loading') : t('view.history.load')}
             </button>
           )}
           <button type="button" style={buttonStyle} onClick={clear}>{t('view.clear')}</button>
@@ -491,29 +514,31 @@ export function AccessibleView({ useSession, loadOlder, t }: AccessibleViewProps
         {feedback ?? summary}
       </p>
 
-      {snapshot !== null && (
+      {session !== null && conversation !== null && (
         <>
-          {(snapshot.queue.length > 0 || snapshot.pending.length > 0 || snapshot.runningCalls.length > 0) && (
+          {(session.queue.length > 0
+            || session.pendingSubmissions.length > 0
+            || conversation.runningCalls.length > 0) && (
             <p>
               {t('view.activity', {
-                queued: snapshot.queue.length,
-                pending: snapshot.pending.length,
-                tools: snapshot.runningCalls.length,
+                queued: session.queue.length,
+                pending: session.pendingSubmissions.length,
+                tools: conversation.runningCalls.length,
               })}
             </p>
           )}
-          {snapshot.openState === 'error' && <p role="alert">{t('view.history.error')}</p>}
-          {snapshot.promptError != null && <p role="alert">{t('view.prompt.error')}</p>}
-          {snapshot.nodes.length === 0 && snapshot.partial == null ? (
+          {session.openState === 'error' && <p role="alert">{t('view.history.error')}</p>}
+          {session.promptError != null && <p role="alert">{t('view.prompt.error')}</p>}
+          {conversation.nodes.length === 0 && conversation.partial == null ? (
             <p>{t('view.empty')}</p>
           ) : (
             <ol
               style={messageListStyle}
               aria-label={t('view.messages')}
               aria-live="off"
-              aria-busy={snapshot.loadingOlder || requestingOlder}
+              aria-busy={session.loadingOlder || requestingOlder}
             >
-              {snapshot.nodes.map((node, offset) => (
+              {conversation.nodes.map((node, offset) => (
                 <li key={conversationNodeKey(node)}>
                   <ConversationEntry
                     index={offset + 1}
@@ -524,10 +549,10 @@ export function AccessibleView({ useSession, loadOlder, t }: AccessibleViewProps
                   />
                 </li>
               ))}
-              {snapshot.partial != null && (
-                <li key={`partial:${snapshot.partial.turn}:${snapshot.partial.step}`}>
+              {conversation.partial != null && (
+                <li key={`partial:${conversation.partial.turn}:${conversation.partial.step}`}>
                   <LiveAssistantEntry
-                    blocks={snapshot.partial.blocks}
+                    blocks={conversation.partial.blocks}
                     idPrefix={`${baseId}-live-assistant`}
                     t={t}
                   />

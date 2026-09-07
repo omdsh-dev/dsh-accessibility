@@ -5,8 +5,8 @@
 - Status: experimental implementation under public review
 - Tracking issue: [#10](https://github.com/omdsh-dev/dsh-accessibility/issues/10)
 - Protocol identifier: `dsh-accessible-view/1.0.0-draft`
-- Compatibility target: DSH client packages `0.1.1-rc.2` only
-- Last reviewed: 2026-08-30
+- Compatibility target: DSH client packages `0.1.2-rc.1` only
+- Last reviewed: 2026-09-07
 
 ## Decision
 
@@ -25,17 +25,17 @@ The MVP is read-oriented. Sending, stopping, approving, editing queued work, and
 The implementation uses these version-pinned public contracts:
 
 - `conversation.view`, a list slot owned by `@deepseek-ai/dsh-client-ui-conversation`;
-- the session-standard `useSession` selector supplied by `@deepseek-ai/dsh-client-runtime`;
-- `ConversationSnapshot.nodes`, the rc.2 exported compatibility projection of finalized conversation records;
-- `ConversationSnapshot.partial`, status, queue counts, pending counts, pagination state, and error state;
+- the session-standard `useSession` selector supplied by `@deepseek-ai/dsh-client-ui-session` for lifecycle, queue counts, pagination, and error state;
+- the session-standard `useChat` selector supplied by `@deepseek-ai/dsh-client-ui-chat`;
+- `ChatSnapshot.legacy`, the rc1 exported compatibility projection of finalized records, the in-progress assistant, and running Tool calls;
 - the session face's `loadOlder()` action;
 - DSH's `MarkdownText` and `writeClipboard` primitives.
 
-The rc.2 `nodes` field is explicitly a compatibility projection. It is accepted only for this exact peer range. Expanding support to the split `0.1.2-alpha.1` conversation/chat packages requires a fresh projection audit and must not be inferred from this RFC.
+The rc1 `ChatSnapshot.legacy` field is explicitly a compatibility projection. It is accepted only for this exact peer range. The removed `dsh-client-runtime` contract and beta.6 implementation are not used by beta.7, and support for a later DSH line requires a fresh projection and assembled-browser audit.
 
 ## Consent and data-flow states
 
-1. **Selected, idle.** The tab renders instructions and a load button. Its session selector returns `null`; no conversation snapshot is retained by the component.
+1. **Selected, idle.** The tab renders instructions and a load button. Its Session and Chat selectors both return `null`; no lifecycle or conversation snapshot is retained by the component.
 2. **Loaded.** Activating the load button admits the current structured snapshot. Focus moves to the reading-view title. Finalized records and an in-progress assistant record render in source order.
 3. **Detail disclosed.** Context content, reasoning, tool arguments, tool output, command input, and raw error details are not mounted until their own disclosure button is activated.
 4. **Message copied.** A message-level button writes only the ordinary visible text of that user, steering, or finalized assistant record to the operating-system clipboard. It excludes context, reasoning, tool arguments, tool results, source objects, usernames, workspace paths, and environment metadata by construction.
@@ -104,7 +104,7 @@ Before a stable support claim, the current candidate needs listener-verified Voi
 
 ## Known limitations
 
-- Image records expose a generic attachment notice because rc.2 does not supply an authored text alternative through this projection.
+- Image records expose a generic attachment notice because the exact rc1 compatibility projection does not supply an authored text alternative through this view.
 - Queued-message bodies and pending-interaction payloads are not rendered; only counts are announced. The user returns to Chat to manage them.
 - Running tools are counted; full interactive tool controls remain in Chat.
 - Technical output uses a generic preformatted presentation, not every tool's specialized card.

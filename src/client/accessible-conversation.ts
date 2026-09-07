@@ -1,4 +1,4 @@
-import type { ConversationNode } from '@deepseek-ai/dsh-client-runtime/client'
+import type { ConversationNode } from '@deepseek-ai/dsh-client-ui-conversation/client'
 
 type MessageContentBlock = Extract<ConversationNode, { kind: 'user' }>['content'][number]
 
