@@ -19,6 +19,11 @@ const reports = [
     version: '0.1.2-rc.1',
     revision: '21859d968ce8eed23fba8f781b55300a729cc29b',
   },
+  {
+    file: '2026-09-07-dsh-0.1.2-rc.1-1e7f105934.json',
+    version: '0.1.2-rc.1',
+    revision: '1e7f105934eeb8d93dedcf738c480fab30069109',
+  },
 ]
 
 function reportUrl(file) {

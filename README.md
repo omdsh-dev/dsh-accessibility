@@ -10,24 +10,24 @@ Project links: [Accessibility statement](ACCESSIBILITY_STATEMENT.md) · [Roadmap
 
 ## Compatibility
 
-`0.1.0-beta.7` targets exactly `@deepseek-ai/dsh@0.1.2-rc.1` plus accessibility core candidate [`dsh-v0.1.2-rc.1-a11y.4`](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.4). The companion was migrated from the removed `dsh-client-runtime` package to rc1's `ui-session` and `ui-chat` projections, and its DSH peers are deliberately exact. `0.1.0-beta.6` remains the maintenance build for DSH `0.1.1-rc.2`. The companion reports missing core semantics; it cannot safely replace focus traps, composite-widget keyboard behavior, landmarks, or live-region policy from outside the owning components.
+`0.1.0-beta.8` targets exactly `@deepseek-ai/dsh@0.1.2-rc.1` plus accessibility core candidate [`dsh-v0.1.2-rc.1-a11y.5`](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.5). The companion was migrated from the removed `dsh-client-runtime` package to rc1's `ui-session` and `ui-chat` projections, and its DSH peers are deliberately exact. `0.1.0-beta.6` remains the maintenance build for DSH `0.1.1-rc.2`. The companion reports missing core semantics; it cannot safely replace focus traps, composite-widget keyboard behavior, landmarks, or live-region policy from outside the owning components.
 
 ## Install from npm
 
 ```sh
-dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.7
+dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.8
 dsh --profile web
 ```
 
-The npm companion does not patch the owning DSH components. Until the changes are included in an official DSH release, use the organization-pinned [DSH accessibility build](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.4) for the complete candidate behavior:
+The npm companion does not patch the owning DSH components. Until the changes are included in an official DSH release, use the organization-pinned [DSH accessibility build](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.5) for the complete candidate behavior:
 
 ```sh
 git clone https://github.com/omdsh-dev/deepseek-harness.git
 cd deepseek-harness
-git checkout dsh-v0.1.2-rc.1-a11y.4
+git checkout dsh-v0.1.2-rc.1-a11y.5
 pnpm install
 pnpm run build:official
-pnpm dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.7
+pnpm dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.8
 pnpm dsh web
 ```
 
@@ -44,13 +44,13 @@ Open Settings → Accessibility to run the current-page diagnostic and read the 
 
 ## Accessible View candidate
 
-`0.1.0-beta.7` registers the experimental Accessible View through DSH's official `conversation.view` slot. It remains a beta feature and is not a stable-support claim.
+`0.1.0-beta.8` registers the experimental Accessible View through DSH's official `conversation.view` slot. It remains a beta feature and is not a stable-support claim.
 
 Selecting the tab alone does not retain conversation content. Activate **Load reading view** to admit DSH's structured session snapshot. The view then presents finalized and in-progress records in source order, preserves semantic Markdown and code, offers explicit disclosures for context, reasoning, tool arguments/output, command input, and errors, and supports per-message copy plus older-history loading. **Clear reading view and return** unmounts the content and restores focus to Load.
 
 This MVP remains read-oriented. Return to Chat to send, stop, approve, edit queued work, or use specialized tool controls. See [RFC-ACCESSIBLE-VIEW.md](RFC-ACCESSIBLE-VIEW.md) for the data-flow, threat review, exact limitations, and VoiceOver/NVDA validation procedure.
 
-The assembled gate runs the candidate in Chromium, Firefox, and WebKit at 640 and 320 CSS px, samples focused controls against occluding content, audits reduced-motion behavior, and checks Chromium forced-color participation. The current rc1 core report binds fourteen required checks and nine cataloged P0 Web tasks to exact clean revision `21859d968ce8eed23fba8f781b55300a729cc29b`; earlier alpha.2 reports remain archived for their exact historical revisions and the first human campaign remains pinned to its original alpha.2 candidate. These are versioned deterministic results, not real zoom, Windows High Contrast, assistive-technology, or disabled-user evidence. See the [`automated-evidence/`](automated-evidence/README.md) archive and [RFC-BROWSER-EVIDENCE.md](RFC-BROWSER-EVIDENCE.md).
+The assembled gate runs the candidate in Chromium, Firefox, and WebKit at 640 and 320 CSS px, samples focused controls against occluding content, audits reduced-motion behavior, and checks Chromium forced-color participation. The current rc1 core report binds fourteen required checks and nine cataloged P0 Web tasks to exact clean revision `1e7f105934eeb8d93dedcf738c480fab30069109`; earlier rc1 and alpha.2 reports remain archived for their exact historical revisions and the first human campaign remains pinned to its original alpha.2 candidate. These are versioned deterministic results, not real zoom, Windows High Contrast, assistive-technology, or disabled-user evidence. See the [`automated-evidence/`](automated-evidence/README.md) archive and [RFC-BROWSER-EVIDENCE.md](RFC-BROWSER-EVIDENCE.md).
 
 ## Diagnostics and scope
 

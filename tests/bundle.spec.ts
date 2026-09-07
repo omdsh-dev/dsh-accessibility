@@ -41,7 +41,7 @@ describe('browser bundle registration', () => {
       dsh?: { client?: { inject?: string[] } }
     }
 
-    expect(manifest.version).toBe('0.1.0-beta.7')
+    expect(manifest.version).toBe('0.1.0-beta.8')
     expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-runtime']).toBeUndefined()
     expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-chat']).toBe('0.1.2-rc.1')
     expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-session']).toBe('0.1.2-rc.1')
