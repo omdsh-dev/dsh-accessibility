@@ -15,9 +15,9 @@ const reports = [
     revision: '5803bfcfdd502adac26ae9b8eec12d6aed263ec6',
   },
   {
-    file: '2026-09-07-dsh-0.1.2-rc.1-33546ce7d8.json',
+    file: '2026-09-07-dsh-0.1.2-rc.1-f298fa7105.json',
     version: '0.1.2-rc.1',
-    revision: '33546ce7d896625c313ad3ee0371047bcf8b8ade',
+    revision: 'f298fa710585947317664e5d75c4069b209202de',
   },
 ]
 

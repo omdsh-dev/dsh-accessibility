@@ -25,7 +25,7 @@ git clone https://github.com/omdsh-dev/deepseek-harness.git
 git clone https://github.com/omdsh-dev/dsh-accessibility.git
 
 cd deepseek-harness
-git checkout dsh-v0.1.2-rc.1-a11y.2
+git checkout dsh-v0.1.2-rc.1-a11y.3
 pnpm install
 pnpm run build:official
 

@@ -5,7 +5,7 @@
 ## 0.1.0-beta.7 - 2026-09-07
 
 - Migrate the runtime companion from the removed `dsh-client-runtime` package to the exact DSH `0.1.2-rc.1` `ui-session` and `ui-chat` contracts, including rc1 Markdown labels and the split lifecycle/conversation projections.
-- Upgrade the disposable companion AT lab and assembled-browser consumer to `dsh-v0.1.2-rc.1-a11y.2`, including the one-use authenticated Web entry point and current seeded-history fixture.
+- Upgrade the disposable companion AT lab and assembled-browser consumer to `dsh-v0.1.2-rc.1-a11y.3`, including the one-use authenticated Web entry point and current seeded-history fixture.
 - Archive the independent exact-revision rc1 core-browser report while retaining both alpha.2 records and the first human campaign at their historical revisions.
 - Publish the experimental Accessible View in the npm beta line while retaining the explicit-load privacy gate, separate technical disclosures, focused clear return, per-message clipboard boundary, and no stable-support claim.
 

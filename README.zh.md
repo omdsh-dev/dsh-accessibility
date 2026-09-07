@@ -10,7 +10,7 @@
 
 ## 兼容性
 
-`0.1.0-beta.7` 仅面向 `@deepseek-ai/dsh@0.1.2-rc.1` 与无障碍核心候选 [`dsh-v0.1.2-rc.1-a11y.2`](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.2)。插件已从被移除的 `dsh-client-runtime` 迁移到 rc1 的 `ui-session` 与 `ui-chat` projection，所有 DSH peer 仍精确固定；`0.1.0-beta.6` 继续作为 DSH `0.1.1-rc.2` 的维护版本。插件能报告核心语义缺失，但无法从外部可靠替代组件本身的焦点陷阱、复合控件键盘操作、页面地标或 live region 策略。
+`0.1.0-beta.7` 仅面向 `@deepseek-ai/dsh@0.1.2-rc.1` 与无障碍核心候选 [`dsh-v0.1.2-rc.1-a11y.3`](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.3)。插件已从被移除的 `dsh-client-runtime` 迁移到 rc1 的 `ui-session` 与 `ui-chat` projection，所有 DSH peer 仍精确固定；`0.1.0-beta.6` 继续作为 DSH `0.1.1-rc.2` 的维护版本。插件能报告核心语义缺失，但无法从外部可靠替代组件本身的焦点陷阱、复合控件键盘操作、页面地标或 live region 策略。
 
 ## 从 npm 安装
 
@@ -19,12 +19,12 @@ dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.7
 dsh --profile web
 ```
 
-npm companion 不会修改 DSH 自有组件。在改动进入官方 DSH 发行版之前，请使用组织固定的 [DSH 无障碍构建](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.2)，体验完整候选行为：
+npm companion 不会修改 DSH 自有组件。在改动进入官方 DSH 发行版之前，请使用组织固定的 [DSH 无障碍构建](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.3)，体验完整候选行为：
 
 ```sh
 git clone https://github.com/omdsh-dev/deepseek-harness.git
 cd deepseek-harness
-git checkout dsh-v0.1.2-rc.1-a11y.2
+git checkout dsh-v0.1.2-rc.1-a11y.3
 pnpm install
 pnpm run build:official
 pnpm dsh plugin --profile web add @oh-my-dsh/dsh-accessibility@0.1.0-beta.7
@@ -50,7 +50,7 @@ dsh --profile web
 
 MVP 仍以阅读为主。发送、停止、批准、编辑排队任务或使用专用工具控件时需返回 Chat。数据流、威胁评审、精确限制及 VoiceOver／NVDA 验证方式见 [RFC-ACCESSIBLE-VIEW.zh.md](RFC-ACCESSIBLE-VIEW.zh.md)。
 
-组装门禁会在 Chromium、Firefox 和 WebKit 中以 640／320 CSS px 运行候选，采样焦点控件是否被遮挡、审计减少动态效果，并检查 Chromium 强制颜色参与情况。当前 rc1 核心报告把十四项必需检查和九项已登记 P0 Web 任务固定到干净的精确 revision `33546ce7d896625c313ad3ee0371047bcf8b8ade`；较早的 alpha.2 报告继续按各自精确 revision 归档，首轮真人活动也继续固定到原 alpha.2 候选。这些是版本化确定性结果，不是真实缩放、Windows 高对比度、辅助技术或残障用户证据。详见 [`automated-evidence/`](automated-evidence/README.zh.md) 与 [RFC-BROWSER-EVIDENCE.zh.md](RFC-BROWSER-EVIDENCE.zh.md)。
+组装门禁会在 Chromium、Firefox 和 WebKit 中以 640／320 CSS px 运行候选，采样焦点控件是否被遮挡、审计减少动态效果，并检查 Chromium 强制颜色参与情况。当前 rc1 核心报告把十四项必需检查和九项已登记 P0 Web 任务固定到干净的精确 revision `f298fa710585947317664e5d75c4069b209202de`；较早的 alpha.2 报告继续按各自精确 revision 归档，首轮真人活动也继续固定到原 alpha.2 候选。这些是版本化确定性结果，不是真实缩放、Windows 高对比度、辅助技术或残障用户证据。详见 [`automated-evidence/`](automated-evidence/README.zh.md) 与 [RFC-BROWSER-EVIDENCE.zh.md](RFC-BROWSER-EVIDENCE.zh.md)。
 
 ## 自检范围
 
