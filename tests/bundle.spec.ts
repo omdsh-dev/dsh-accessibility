@@ -33,25 +33,36 @@ describe('browser bundle registration', () => {
     expect(manifest.scripts?.['lab:cli']).toBe('node scripts/run-cli-conformance.mjs')
   })
 
-  it('pins the exact DSH 0.1.2-rc.1 client graph and excludes the retired runtime package', () => {
+  it('pins the DSH 0.1.3-alpha.2 development graph without enabling publication', () => {
     const manifestPath = fileURLToPath(new URL('../package.json', import.meta.url))
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as {
       version?: string
+      private?: boolean
       peerDependencies?: Record<string, string>
       dsh?: { client?: { inject?: string[] } }
     }
 
-    expect(manifest.version).toBe('0.1.0-beta.8')
+    expect(manifest.version).toBe('0.1.1-alpha.0')
+    expect(manifest.private).toBe(true)
     expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-runtime']).toBeUndefined()
-    expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-chat']).toBe('0.1.2-rc.1')
-    expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-session']).toBe('0.1.2-rc.1')
+    expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-chat']).toBe('0.1.3-alpha.2')
+    expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-session']).toBe('0.1.3-alpha.2')
     expect(Object.entries(manifest.peerDependencies ?? {})
       .filter(([name]) => name.startsWith('@deepseek-ai/dsh-client-'))
-      .every(([, version]) => version === '0.1.2-rc.1')).toBe(true)
+      .every(([, version]) => version === '0.1.3-alpha.2')).toBe(true)
     expect(manifest.dsh?.client?.inject).not.toContain('@deepseek-ai/dsh-client-runtime')
     expect(manifest.dsh?.client?.inject).toEqual(expect.arrayContaining([
       '@deepseek-ai/dsh-client-ui-chat',
       '@deepseek-ai/dsh-client-ui-session',
     ]))
+  })
+
+  it('does not silently retain rc1 auto-installed peers in the alpha lockfile', () => {
+    const lockfile = readFileSync(new URL('../pnpm-lock.yaml', import.meta.url), 'utf8')
+    const packages = lockfile.split('\nsnapshots:')[0]
+    const versions = [...packages.matchAll(/^  '@deepseek-ai\/dsh(?:-[^@']+)?@([^']+)':/gm)]
+      .map(match => match[1])
+    expect(versions.length).toBeGreaterThan(200)
+    expect(new Set(versions)).toEqual(new Set(['0.1.3-alpha.2']))
   })
 })

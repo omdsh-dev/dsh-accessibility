@@ -2,6 +2,8 @@
 
 [English](README.md) | 简体中文
 
+> 开发分支提示：本地 `0.1.1-alpha.0` 仅用于预检 DSH `0.1.3-alpha.2`，已设置 `private: true` 阻止 npm 发布；它不是可供安装使用的已发布版本。对应上游源码和核心整体验证仍受阻，详见[迁移状态](COMPATIBILITY-0.1.3-alpha.2.zh.md)。除非另行注明，下方安装说明与证据均属于已发布的 `0.1.0-beta.8` / DSH `0.1.2-rc.1`，不代表本 alpha 分支通过验证。
+
 这是 DeepSeek Harness 的可选无障碍 companion 插件：提供读屏操作说明、语义自检和实验性的用户主动加载会话阅读视图。它只使用 DSH 官方 slot 与结构化 projection，不修改或监听易变化的哈希 CSS 类名。
 
 本仓库也是 [DSH 无障碍工作组](https://github.com/omdsh-dev/community/blob/main/working-groups/accessibility.zh-CN.md)的公开项目中心。项目使命是：让残障开发者能够独立、有效、安全地完成 DSH 的核心任务；让 DSH 帮助所有开发者产出更无障碍的数字内容；并用版本化标准、真实辅助技术和残障用户证据持续验证。
@@ -32,6 +34,8 @@ pnpm dsh web
 ```
 
 ## 从本地 checkout 安装
+
+以下命令仅用于已发布的 `v0.1.0-beta.8` checkout。请勿把本开发分支安装进日常使用的 DSH profile。
 
 ```sh
 pnpm install
