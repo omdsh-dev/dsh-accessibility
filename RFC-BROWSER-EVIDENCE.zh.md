@@ -6,7 +6,7 @@
 
 协议：`dsh-non-at-browser/1.0.0-draft`
 
-使用方：DSH `0.1.2-rc.1` 加 `dsh-v0.1.2-rc.1-a11y.3` 上的 Accessible View 与核心 P0 Web 路由；历史 alpha.2 记录继续作为精确 revision 归档
+使用方：DSH `0.1.2-rc.1` 加 `dsh-v0.1.2-rc.1-a11y.4` 上的 Accessible View 与核心 P0 Web 路由；历史 alpha.2 记录继续作为精确 revision 归档
 
 跟踪：[Issue #9](https://github.com/omdsh-dev/dsh-accessibility/issues/9)
 
@@ -57,7 +57,7 @@ Accessible View 运行器为每个浏览器输出一份 JSON 对象；核心运�
 - 支持时的强制颜色媒体状态、退出强制颜色数量和控件计算样本；
 - 防止把记录误解成辅助技术或残障用户证据的固定限制。
 
-只有每个必需测试进程以零退出、Schema 与语义清单校验通过，并且受测 commit 与记录 revision 相符时，记录才有效。脏工作树日志只能用于开发诊断，不能作为发布证据。第一份经过评审的核心记录归档于 [`33eb2d9e1e`](automated-evidence/core-browser/2026-08-31-dsh-0.1.2-alpha.2-33eb2d9e1e.json)；首轮活动精确候选另行生成于 [`5803bfcfdd`](automated-evidence/core-browser/2026-08-31-dsh-0.1.2-alpha.2-5803bfcfdd.json)；rc1 移植版又在精确干净 revision [`f298fa7105`](automated-evidence/core-browser/2026-09-07-dsh-0.1.2-rc.1-f298fa7105.json) 上独立重新生成。三份记录都不得跨 revision 继承或互换使用。
+只有每个必需测试进程以零退出、Schema 与语义清单校验通过，并且受测 commit 与记录 revision 相符时，记录才有效。脏工作树日志只能用于开发诊断，不能作为发布证据。第一份经过评审的核心记录归档于 [`33eb2d9e1e`](automated-evidence/core-browser/2026-08-31-dsh-0.1.2-alpha.2-33eb2d9e1e.json)；首轮活动精确候选另行生成于 [`5803bfcfdd`](automated-evidence/core-browser/2026-08-31-dsh-0.1.2-alpha.2-5803bfcfdd.json)；rc1 移植版又在精确干净 revision [`21859d968c`](automated-evidence/core-browser/2026-09-07-dsh-0.1.2-rc.1-21859d968c.json) 上独立重新生成。三份记录都不得跨 revision 继承或互换使用。
 
 ## 误报与例外策略
 

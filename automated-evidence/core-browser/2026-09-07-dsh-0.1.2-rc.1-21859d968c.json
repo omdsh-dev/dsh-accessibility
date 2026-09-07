@@ -3,7 +3,7 @@
   "protocol": "dsh-non-at-browser/1.0.0-draft",
   "evidence": "dsh-core-browser-non-at",
   "result": "pass",
-  "generatedAt": "2026-09-07T11:52:00.393Z",
+  "generatedAt": "2026-09-07T12:01:50.754Z",
   "standards": [
     "WCAG-2.2:1.4.10",
     "WCAG-2.2:2.4.7",
@@ -14,7 +14,7 @@
   "dsh": {
     "package": "@deepseek-ai/dsh-root",
     "version": "0.1.2-rc.1",
-    "revision": "f298fa710585947317664e5d75c4069b209202de",
+    "revision": "21859d968ce8eed23fba8f781b55300a729cc29b",
     "dirty": false
   },
   "environment": {
