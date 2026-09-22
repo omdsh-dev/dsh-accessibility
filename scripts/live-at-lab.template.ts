@@ -6,7 +6,7 @@ import { join } from 'node:path'
 import { it } from 'vitest'
 import type { SessionEvent } from '@deepseek-ai/dsh-session'
 import {
-  fixtureUserPrompts, launchWebScaffold, type WebScaffold,
+  fixtureUserPrompts, launchWebScaffold, selectedSessionFixture, type WebScaffold,
 } from './scaffold.ts'
 
 const protocol = 'dsh-live-at-lab/1.0.0-draft'
@@ -33,7 +33,7 @@ if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 0 || timeoutMs > 86_400_000)
 
 const selectedScenario = scenario as Scenario
 const fixtureName = scenarios[selectedScenario]
-const fixturePath = join(process.cwd(), 'snapshots/web', fixtureName, 'session.jsonl')
+const fixturePath = await selectedSessionFixture(join(process.cwd(), 'snapshots/web', fixtureName, 'session.jsonl'))
 const fixture = await readFile(fixturePath, 'utf8')
 const recordedPrompts = fixtureUserPrompts(fixture)
 if (recordedPrompts.length !== 1 || recordedPrompts[0] === undefined) {
