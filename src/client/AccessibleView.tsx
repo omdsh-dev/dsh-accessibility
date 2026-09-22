@@ -3,8 +3,7 @@ import type { CSSProperties, ReactNode } from 'react'
 import type {
   AssistantBlock, ConversationNode, ToolCallBlock,
 } from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { SessionSnapshot } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { ChatSnapshot } from '@deepseek-ai/dsh-client-ui-chat/client'
+import type { PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import { MarkdownText, writeClipboard } from '@deepseek-ai/dsh-client-ui-primitives'
 import type { MarkdownLabels } from '@deepseek-ai/dsh-client-ui-primitives'
 import { conversationNodeKey, messageClipboardText } from './accessible-conversation.ts'
@@ -17,11 +16,8 @@ export interface AccessibleViewInjected {
 type Translate = (key: AccessibilityKey, params?: Record<string, unknown>) => string
 type MessageContent = Extract<ConversationNode, { kind: 'user' }>['content']
 
-type SnapshotSelectorHook<Value> = <Selection>(selector: (value: Value) => Selection) => Selection
-
-interface AccessibleViewProps extends AccessibleViewInjected {
-  useSession: SnapshotSelectorHook<SessionSnapshot>
-  useChat: SnapshotSelectorHook<ChatSnapshot>
+interface AccessibleViewProps extends AccessibleViewInjected,
+  Pick<PropsRuntime<'conversation.view'>, 'useSession' | 'useChat' | 'useInput'> {
   t: Translate
 }
 
@@ -229,22 +225,6 @@ function MessageContentBlocks({ content, idPrefix, mode, t }: {
         return <p key={key}>{t('view.image.unavailable')}</p>
       case 'tool-call':
         return <p key={key}>{t('view.tool.requested', { name: block.name || t('view.tool.unknown') })}</p>
-      case 'tool-result':
-        return (
-          <ExplicitDisclosure
-            key={key}
-            id={`${idPrefix}-nested-tool-result-${index}`}
-            show={t('view.tool.output.show')}
-            hide={t('view.tool.output.hide')}
-          >
-            <MessageContentBlocks
-              content={block.content}
-              idPrefix={`${idPrefix}-nested-${index}`}
-              mode="tool"
-              t={t}
-            />
-          </ExplicitDisclosure>
-        )
       default:
         return <p key={key}>{t('view.content.unsupported')}</p>
     }
@@ -391,7 +371,7 @@ function ConversationEntry({ index, node, idPrefix, t, onCopy }: ConversationEnt
 }
 
 /** User-loaded semantic reading surface over DSH's supported conversation projection. */
-export function AccessibleView({ useSession, useChat, loadOlder, t }: AccessibleViewProps) {
+export function AccessibleView({ useSession, useChat, useInput, loadOlder, t }: AccessibleViewProps) {
   const [loaded, setLoaded] = useState(false)
   const [requestingOlder, setRequestingOlder] = useState(false)
   const [feedback, setFeedback] = useState<string | null>(null)
@@ -404,6 +384,7 @@ export function AccessibleView({ useSession, useChat, loadOlder, t }: Accessible
   const baseId = useId()
   const session = useSession(value => loaded ? value : null)
   const conversation = useChat(value => loaded ? value.legacy : null)
+  const queuedCount = useInput(value => loaded ? value.queue.length : 0)
 
   useEffect(() => {
     if (loaded && focusOnLoadRef.current) {
@@ -516,12 +497,12 @@ export function AccessibleView({ useSession, useChat, loadOlder, t }: Accessible
 
       {session !== null && conversation !== null && (
         <>
-          {(session.queue.length > 0
+          {(queuedCount > 0
             || session.pendingSubmissions.length > 0
             || conversation.runningCalls.length > 0) && (
             <p>
               {t('view.activity', {
-                queued: session.queue.length,
+                queued: queuedCount,
                 pending: session.pendingSubmissions.length,
                 tools: conversation.runningCalls.length,
               })}

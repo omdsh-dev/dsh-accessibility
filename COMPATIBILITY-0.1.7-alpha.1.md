@@ -2,7 +2,13 @@
 
 English | [简体中文](COMPATIBILITY-0.1.7-alpha.1.zh.md)
 
-Status: planned migration, **not tested or supported yet**. Checked 2026-09-22.
+Status: migration in progress; **assembled-core compatibility is not established and this candidate is not published**. Checked 2026-09-22.
+
+## Local companion checks
+
+The candidate `0.1.2-alpha.1` pins every DSH dependency to `0.1.7-alpha.1`. Host/client type checks, the build, and 231 tests across 28 files passed locally. The tests include the complete locked DSH graph, input-owned queue counts, explicit content loading, independent simultaneous reading-view occurrences, unique IDs, and focus restoration. These are component tests, not real screen-reader observations or an assembled DSH acceptance run.
+
+The core migration remains in progress on `feat/a11y-core-0.1.7-alpha.1`. Browser integration, clean-revision evidence, release packaging, and real VoiceOver/NVDA/user observations remain pending. No alpha npm publication is authorized by these local pass counts alone.
 
 ## Exact upstream target
 

@@ -183,7 +183,7 @@ it('boots a disposable synthetic world for human AT observation', async () => {
       protocol,
       evidence: 'lab-ready',
       dsh: {
-        version: '0.1.5-rc.2',
+        version: '0.1.7-alpha.1',
         revision: process.env.DSH_ACCESSIBILITY_DSH_REVISION ?? 'unavailable',
       },
       companion: {

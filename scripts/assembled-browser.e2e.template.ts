@@ -168,7 +168,7 @@ describe('external dsh-accessibility Accessible View', () => {
     process.stdout.write(`${JSON.stringify({
       protocol: 'dsh-accessible-view/1.0.0-draft',
       evidence: 'assembled-browser',
-      dsh: '0.1.5-rc.2',
+      dsh: '0.1.7-alpha.1',
       plugin: pluginManifest.version,
       engine: 'chromium',
       idleAxeViolations: idleAxe.violations.length,
@@ -239,7 +239,7 @@ describe('external dsh-accessibility Accessible View', () => {
       process.stdout.write(`${JSON.stringify({
         protocol: 'dsh-accessibility-diagnostic/1.0.0-draft',
         evidence: 'assembled-browser-not-at-or-disabled-user-evidence',
-        dsh: '0.1.5-rc.2',
+        dsh: '0.1.7-alpha.1',
         plugin: pluginManifest.version,
         contextualGuidance: true,
         focusInspection: true,
@@ -358,7 +358,7 @@ describe.each(evidenceBrowsers)('external non-AT browser contract: %s', (browser
       protocol: NON_AT_BROWSER_PROTOCOL,
       evidence: 'assembled-browser-non-at',
       standards: ['WCAG-2.2:1.4.10', 'WCAG-2.2:2.4.11', 'WCAG-2.2:2.3.3', 'CSS-COLOR-ADJUST-1'],
-      dsh: { version: '0.1.5-rc.2', revision: dshRevision },
+      dsh: { version: '0.1.7-alpha.1', revision: dshRevision },
       plugin: { version: pluginManifest.version, revision: pluginRevision },
       environment: {
         os: platform(),
