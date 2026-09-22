@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import axe from 'axe-core'
-import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import type { ComponentProps } from 'react'
 import type { SessionSnapshot } from '@deepseek-ai/dsh-client-ui-session/client'
 import type { ChatSnapshot, LegacyConversationSlice } from '@deepseek-ai/dsh-client-ui-chat/client'
@@ -25,7 +25,7 @@ const contextNode = {
   time: Date.UTC(2026, 7, 30, 1, 2, 4),
   content: [{ type: 'text', text: 'Private context content' }],
   source: { env: 'SECRET_ENV' },
-  provenance: { role: 'system', producer: 'fixture' },
+  producer: { role: 'inject', label: 'fixture' },
   form: null,
 } as const
 
@@ -70,7 +70,6 @@ function conversationSnapshot(overrides: Partial<LegacyConversationSlice> = {}):
 function sessionSnapshot(overrides: Partial<SessionSnapshot> = {}): SessionSnapshot {
   return {
     sessionId: 'session-1',
-    queue: [],
     pendingSubmissions: [],
     running: false,
     subagent: null,
@@ -100,6 +99,7 @@ function viewProps(
   conversation: LegacyConversationSlice,
   loadOlder = vi.fn(async () => {}),
   session = sessionSnapshot(),
+  queueCount = 0,
 ) {
   const selectedSession: unknown[] = []
   const selectedChat: unknown[] = []
@@ -115,7 +115,7 @@ function viewProps(
     return selection
   }
   return {
-    props: { useSession, useChat, loadOlder, t: translate } as unknown as ComponentProps<typeof AccessibleView>,
+    props: { useSession, useChat, useInput: (selector: (value: { queue: unknown[] }) => unknown) => selector({ queue: Array.from({ length: queueCount }, () => ({})) }), loadOlder, t: translate } as unknown as ComponentProps<typeof AccessibleView>,
     selectedSession,
     selectedChat,
     loadOlder,
@@ -138,6 +138,35 @@ afterEach(() => {
 })
 
 describe('AccessibleView', () => {
+  it('reads queued activity from the current input projection only after explicit loading', () => {
+    const fixture = viewProps(conversationSnapshot(), undefined, sessionSnapshot(), 2)
+    render(<AccessibleView {...fixture.props} />)
+    expect(screen.queryByText(/2 queued messages/)).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Load reading view' }))
+    expect(screen.getByText('Current activity: 2 queued messages, 0 pending interactions, and 0 running tools.')).toBeTruthy()
+    fireEvent.click(screen.getByRole('button', { name: 'Clear reading view and return' }))
+    expect(screen.queryByText(/2 queued messages/)).toBeNull()
+  })
+
+  it('isolates disclosure, content, identifiers, and focus across simultaneous occurrences', () => {
+    const first = viewProps(conversationSnapshot())
+    const second = viewProps(conversationSnapshot({ nodes: [] }))
+    render(<><div data-testid="first"><AccessibleView {...first.props} /></div><div data-testid="second"><AccessibleView {...second.props} /></div></>)
+    const left = within(screen.getByTestId('first'))
+    const right = within(screen.getByTestId('second'))
+    fireEvent.click(left.getByRole('button', { name: 'Load reading view' }))
+    expect(left.getByText('Visible prompt')).toBeTruthy()
+    expect(right.queryByText('Visible prompt')).toBeNull()
+    expect(right.getByRole('button', { name: 'Load reading view' })).toBeTruthy()
+    fireEvent.click(right.getByRole('button', { name: 'Load reading view' }))
+    expect(document.activeElement).toBe(right.getByRole('heading', { name: 'Accessible reading view' }))
+    const ids = [...document.querySelectorAll('[id]')].map(node => node.id)
+    expect(new Set(ids).size).toBe(ids.length)
+    fireEvent.click(left.getByRole('button', { name: 'Clear reading view and return' }))
+    expect(document.activeElement).toBe(left.getByRole('button', { name: 'Load reading view' }))
+    expect(right.getByRole('button', { name: 'Clear reading view and return' })).toBeTruthy()
+  })
+
   it('requires explicit loading, preserves semantic content, and restores focus when cleared', async () => {
     const fixture = viewProps(conversationSnapshot())
     render(<AccessibleView {...fixture.props} />)

@@ -10,11 +10,13 @@ Tracking: [alpha.2 core migration #22](https://github.com/omdsh-dev/dsh-accessib
 
 ## Purpose and evidence boundary
 
-This lab gives a human tester six deterministic, keyless DSH `0.1.2-alpha.2` replay scenarios: completed response, stopped response, failed response, question, plan review, and tool approval. Each run creates one disposable DSH home, Workspace, and blank Session and prints the exact synthetic input. Chrome mode also creates a disposable browser profile; system and Safari modes do not guarantee browser-profile isolation.
+This lab gives a human tester six deterministic, keyless DSH `0.1.7-alpha.1` replay scenarios: completed response, stopped response, failed response, question, plan review, and tool approval. Each run creates one disposable DSH home, Workspace, and blank Session and prints the exact synthetic input. Chrome mode also creates a disposable browser profile; system and Safari modes do not guarantee browser-profile isolation.
 
 The lab exists to observe real speech or braille and focus behavior from DSH's polite live region. A Host `turn/end` line proves only the durable product boundary; it does not prove that a screen reader announced it, announced it once, used understandable wording, or left the tester able to continue. Lab readiness, DOM text, an accessibility-tree dump, and visible captions are not AT passes. Disabled-user evidence additionally requires informed consent and a de-identified task record.
 
 ## Exact setup
+
+The launcher checks the companion manifest's exact DSH target. Existing campaign records stay bound to their original revisions; do not attach a new-version observation to an older campaign row.
 
 Build the current candidate and install this tooling as described in [the Core AT Lab](AT-CORE-LAB.md). Then run one scenario at a time from the companion checkout:
 

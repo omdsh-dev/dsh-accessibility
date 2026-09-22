@@ -3,6 +3,7 @@ import { readFile, rm, writeFile } from 'node:fs/promises'
 import { spawn } from 'node:child_process'
 import { join, resolve } from 'node:path'
 import { exactGitRevision } from './lab-source-state.mjs'
+import { assertCompanionBaseline } from './verify-assembled-baseline.mjs'
 
 const [dshArgument, pluginArgument = '.', browserArgument = 'none', timeoutArgument = '0'] = process.argv.slice(2)
 if (dshArgument === undefined) {
@@ -26,12 +27,7 @@ const dshRoot = resolve(invocationCwd, dshArgument)
 const pluginRoot = resolve(invocationCwd, pluginArgument)
 const dshManifest = JSON.parse(await readFile(join(dshRoot, 'package.json'), 'utf8'))
 const pluginManifest = JSON.parse(await readFile(join(pluginRoot, 'package.json'), 'utf8'))
-if (dshManifest.version !== '0.1.2-rc.1') {
-  throw new Error(`AT lab requires DSH 0.1.2-rc.1, received ${String(dshManifest.version)}`)
-}
-if (pluginManifest.name !== '@oh-my-dsh/dsh-accessibility') {
-  throw new Error('AT lab received the wrong companion package')
-}
+assertCompanionBaseline(dshManifest, pluginManifest)
 await readFile(join(pluginRoot, 'lib/client.js'), 'utf8')
 const dshRevision = exactGitRevision(dshRoot, 'DSH checkout')
 const pluginRevision = exactGitRevision(pluginRoot, 'Accessibility companion checkout')

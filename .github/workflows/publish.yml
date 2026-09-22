@@ -46,8 +46,11 @@ jobs:
         shell: bash
         run: |
           version="$(node -p "require('./package.json').version")"
-          if [[ "$version" == *-* ]]; then
-            npx --yes npm@11.19.0 publish --access public --provenance --tag beta
-          else
-            npx --yes npm@11.19.0 publish --access public --provenance
-          fi
+          case "$version" in
+            *-alpha.*) channel=alpha ;;
+            *-beta.*) channel=beta ;;
+            *-rc.*) channel=next ;;
+            *-*) echo "Unsupported prerelease channel: $version" >&2; exit 1 ;;
+            *) channel=latest ;;
+          esac
+          npx --yes npm@11.19.0 publish --access public --provenance --tag "$channel"

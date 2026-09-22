@@ -5,7 +5,7 @@ import { arch, platform, release, tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { it } from 'vitest'
 import {
-  fixtureUserPrompts, launchWebScaffold, seedSession, type WebScaffold,
+  fixtureUserPrompts, launchWebScaffold, seedSession, selectedSessionFixture, type WebScaffold,
 } from './scaffold.ts'
 
 const protocol = 'dsh-core-at-lab/1.0.0-draft'
@@ -17,7 +17,7 @@ const timeoutMs = Number(process.env.DSH_ACCESSIBILITY_AT_LAB_TIMEOUT_MS ?? '0')
 if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 0 || timeoutMs > 86_400_000) {
   throw new Error(`invalid DSH_ACCESSIBILITY_AT_LAB_TIMEOUT_MS: ${String(timeoutMs)}`)
 }
-const fixturePath = join(process.cwd(), 'snapshots/web/seeded-history/session.jsonl')
+const fixturePath = await selectedSessionFixture(join(process.cwd(), 'snapshots/web/seeded-history/session.jsonl'))
 const fixture = await readFile(fixturePath, 'utf8')
 if (fixtureUserPrompts(fixture).length === 0) throw new Error('Core AT lab fixture has no synthetic user prompt')
 
