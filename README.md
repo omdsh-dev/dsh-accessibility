@@ -10,6 +10,8 @@ Project links: [Accessibility statement](ACCESSIBILITY_STATEMENT.md) · [Roadmap
 
 ## Compatibility
 
+This branch contains the unpublished `0.1.2-alpha.1` candidate for **DSH `0.1.7-alpha.1`**. Follow the [migration and validation record](COMPATIBILITY-0.1.7-alpha.1.md); the installation instructions below still describe the previous published baseline, not this candidate. Real VoiceOver/NVDA and disabled-user validation remain pending.
+
 `0.1.0-beta.8` targets exactly `@deepseek-ai/dsh@0.1.2-rc.1` plus accessibility core candidate [`dsh-v0.1.2-rc.1-a11y.5`](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.5). The companion was migrated from the removed `dsh-client-runtime` package to rc1's `ui-session` and `ui-chat` projections, and its DSH peers are deliberately exact. `0.1.0-beta.6` remains the maintenance build for DSH `0.1.1-rc.2`. The companion reports missing core semantics; it cannot safely replace focus traps, composite-widget keyboard behavior, landmarks, or live-region policy from outside the owning components.
 
 ## Install from npm
