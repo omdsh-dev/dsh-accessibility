@@ -10,11 +10,13 @@
 
 ## 目的与证据边界
 
-本实验室为人工测试者提供六个确定、无密钥的 DSH `0.1.2-alpha.2` replay 场景：回答完成、回答停止、回答失败、问题、计划评审和工具审批。每次运行都会创建一次性 DSH home、Workspace 与空白 Session，并打印精确合成输入。Chrome 模式还会创建一次性浏览器 profile；system 与 Safari 模式不保证浏览器 profile 隔离。
+本实验室为人工测试者提供六个确定、无密钥的 DSH `0.1.7-alpha.1` replay 场景：回答完成、回答停止、回答失败、问题、计划评审和工具审批。每次运行都会创建一次性 DSH home、Workspace 与空白 Session，并打印精确合成输入。Chrome 模式还会创建一次性浏览器 profile；system 与 Safari 模式不保证浏览器 profile 隔离。
 
 实验室用于观察 DSH polite live region 在真实语音或盲文中的表现，以及播报前后的焦点行为。Host `turn/end` 行只能证明产品持久终态，不能证明读屏已经播报、只播报一次、措辞可理解或测试者仍能继续任务。实验室就绪、DOM 文本、无障碍树转储和可见字幕都不算 AT 通过。残障用户证据还需要知情同意和去标识化任务记录。
 
 ## 精确配置
+
+启动器检查插件清单固定的精确 DSH 目标。已有活动记录仍绑定原始修订；不要把新版本观察填入旧活动的证据行。
 
 按照[核心 AT 实验室](AT-CORE-LAB.zh.md)构建当前候选并安装本工具，然后在 companion checkout 中一次运行一个场景：
 

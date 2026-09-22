@@ -10,23 +10,25 @@
 
 ## 目的与证据边界
 
-本实验室用 DSH 自带的合成 seeded-history Session 启动精确的 DSH `0.1.2-alpha.2` 核心候选，并放入两份 Session 以便验证树导航。它使用一次性的 DSH home、持久化根目录和工作区，不需要 API key 或 companion 插件。覆盖范围包括应用外壳、Workspace 树、Session 视图、Chat 历史、Trajectory、Settings 对话框、菜单、展开控件和可调分隔条。
+本实验室用 DSH 自带的合成 seeded-history Session 启动精确的 DSH `0.1.7-alpha.1` 核心候选，并放入两份 Session 以便验证树导航。它使用一次性的 DSH home、持久化根目录和工作区，不需要 API key 或 companion 插件。覆盖范围包括应用外壳、Workspace 树、Session 视图、Chat 历史、Trajectory、Settings 对话框、菜单、展开控件和可调分隔条。
 
 实验室成功就绪、无障碍树转储或可见的读屏字幕都不算辅助技术通过。有效结果必须由人实际观察语音或盲文、焦点或光标行为、独立任务完成、错误和变通方式。残障用户证据还需要知情同意和去标识化任务记录。本实验室使用静态 fixture，不验证实时回答、工具、审批、问题或计划评审播报；这些证据行使用独立的[实时播报实验室](AT-LIVE-LAB.zh.md)验证。
 
 ## 精确候选配置
+
+本 checkout 以插件清单固定的版本为目标。已有首轮 AT 活动仍固定到原始修订；在本候选上运行属于独立观察，不能填入旧活动的证据行。
 
 ```sh
 git clone https://github.com/omdsh-dev/deepseek-harness.git
 git clone https://github.com/omdsh-dev/dsh-accessibility.git
 
 cd deepseek-harness
-git checkout feat/a11y-core-0.1.2-alpha.2
+git checkout feat/a11y-core-0.1.7-alpha.1
 pnpm install
 pnpm run build
 
 cd ../dsh-accessibility
-git checkout feat/hermetic-at-lab
+git checkout feat/compat-0.1.7-alpha.1
 pnpm install --frozen-lockfile
 ```
 

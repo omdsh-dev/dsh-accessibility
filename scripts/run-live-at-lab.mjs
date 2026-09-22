@@ -3,6 +3,7 @@ import { readFile, rm, writeFile } from 'node:fs/promises'
 import { spawn } from 'node:child_process'
 import { join, resolve } from 'node:path'
 import { exactGitRevision } from './lab-source-state.mjs'
+import { assertCompanionBaseline } from './verify-assembled-baseline.mjs'
 
 const [dshArgument, scenarioArgument = 'complete', browserArgument = 'none', timeoutArgument = '0']
   = process.argv.slice(2)
@@ -30,9 +31,7 @@ const invocationCwd = process.cwd()
 const dshRoot = resolve(invocationCwd, dshArgument)
 const dshManifest = JSON.parse(await readFile(join(dshRoot, 'package.json'), 'utf8'))
 const labManifest = JSON.parse(await readFile(join(invocationCwd, 'package.json'), 'utf8'))
-if (dshManifest.version !== '0.1.2-alpha.2') {
-  throw new Error(`Live AT lab requires DSH 0.1.2-alpha.2, received ${String(dshManifest.version)}`)
-}
+assertCompanionBaseline(dshManifest, labManifest)
 if (labManifest.name !== '@oh-my-dsh/dsh-accessibility') {
   throw new Error('Live AT lab must run from the @oh-my-dsh/dsh-accessibility checkout')
 }

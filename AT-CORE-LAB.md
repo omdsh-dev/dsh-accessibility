@@ -10,23 +10,25 @@ Tracking: [alpha.2 core migration #22](https://github.com/omdsh-dev/dsh-accessib
 
 ## Purpose and evidence boundary
 
-This lab launches the exact DSH `0.1.2-alpha.2` core candidate with two copies of DSH's committed synthetic seeded-history Session. It uses a disposable DSH home, persistence root, and workspace, and needs no API key or companion plugin. It covers the core shell, Workspace tree, Session views, Chat history, Trajectory, Settings dialog, menus, disclosures, and adjustable separators.
+This lab launches the exact DSH `0.1.7-alpha.1` core candidate with two copies of DSH's committed synthetic seeded-history Session. It uses a disposable DSH home, persistence root, and workspace, and needs no API key or companion plugin. It covers the core shell, Workspace tree, Session views, Chat history, Trajectory, Settings dialog, menus, disclosures, and adjustable separators.
 
 Lab readiness, an accessibility-tree dump, or a visible screen-reader caption is not an assistive-technology pass. A valid result needs a person to observe actual speech or braille, focus or cursor behavior, independent task completion, errors, and workarounds. Disabled-user evidence additionally requires informed consent and a de-identified task record. This static fixture does not test live response, tool, approval, question, or plan-review announcements; use the separate [live-announcement lab](AT-LIVE-LAB.md) for those evidence rows.
 
 ## Exact candidate setup
+
+This checkout targets the version pinned by the companion manifest. The existing primary AT campaign remains frozen to its original revisions; a run on this candidate is a separate observation and must not fill an older campaign row.
 
 ```sh
 git clone https://github.com/omdsh-dev/deepseek-harness.git
 git clone https://github.com/omdsh-dev/dsh-accessibility.git
 
 cd deepseek-harness
-git checkout feat/a11y-core-0.1.2-alpha.2
+git checkout feat/a11y-core-0.1.7-alpha.1
 pnpm install
 pnpm run build
 
 cd ../dsh-accessibility
-git checkout feat/hermetic-at-lab
+git checkout feat/compat-0.1.7-alpha.1
 pnpm install --frozen-lockfile
 ```
 
