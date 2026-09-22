@@ -1,4 +1,4 @@
-import type { ConversationNode } from '@deepseek-ai/dsh-client-runtime/client'
+import type { ConversationNode } from '@deepseek-ai/dsh-client-ui-conversation/client'
 import { describe, expect, it } from 'vitest'
 import { conversationNodeKey, messageClipboardText } from '../src/client/accessible-conversation.ts'
 
