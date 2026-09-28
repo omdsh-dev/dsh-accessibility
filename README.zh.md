@@ -10,7 +10,7 @@
 
 ## 兼容性
 
-本分支为适配 **DSH `0.1.7-alpha.1`** 的未发布候选版本 `0.1.2-alpha.1`。当前状态见[迁移与验证记录](COMPATIBILITY-0.1.7-alpha.1.zh.md)；下方安装说明仍对应上一已发布基线，不是本候选版本。真实 VoiceOver/NVDA 和残障用户验证仍待完成。
+本分支为适配 **DSH `0.1.7-rc.2`** 的未发布迁移候选版本 `0.1.2-rc.1`，本地包级、核心与三浏览器集成检查已完成，待评审及 CI。精确提交和测试限制详见[迁移与验证记录](COMPATIBILITY-0.1.7-rc.2.zh.md)。DSH `0.2.0-rc.1` 是独立预览验证目标，不属于本候选的已支持版本。下方安装说明仍对应上一已发布基线。真实 VoiceOver/NVDA 和残障用户验证仍待完成。
 
 `0.1.0-beta.8` 仅面向 `@deepseek-ai/dsh@0.1.2-rc.1` 与无障碍核心候选 [`dsh-v0.1.2-rc.1-a11y.5`](https://github.com/omdsh-dev/deepseek-harness/releases/tag/dsh-v0.1.2-rc.1-a11y.5)。插件已从被移除的 `dsh-client-runtime` 迁移到 rc1 的 `ui-session` 与 `ui-chat` projection，所有 DSH peer 仍精确固定；`0.1.0-beta.6` 继续作为 DSH `0.1.1-rc.2` 的维护版本。插件能报告核心语义缺失，但无法从外部可靠替代组件本身的焦点陷阱、复合控件键盘操作、页面地标或 live region 策略。
 

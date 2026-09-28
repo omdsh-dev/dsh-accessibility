@@ -28,6 +28,7 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm run check:peers
       - if: matrix.os == 'ubuntu-latest' && matrix.node == '24.x'
         run: pnpm run evidence:validate
       - run: pnpm run typecheck
@@ -46,7 +47,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: omdsh-dev/deepseek-harness
-          ref: dsh-v0.1.7-alpha.1-a11y.4
+          ref: 1e53eedb532a7965aee4d4c294c2ee313cf15906
           path: .assembled/dsh
       - uses: pnpm/action-setup@v6
         with:
