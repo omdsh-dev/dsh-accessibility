@@ -6,7 +6,7 @@ Status: migration in progress, unpublished. Real VoiceOver/NVDA and disabled-dev
 
 ## Exact targets
 
-The official npm registry reports `latest=0.1.7-rc.2` and `next=0.2.0-rc.1` on 2026-09-28. This branch targets `0.1.7-rc.2`; the preview requires a separate result and is not covered by this branch's exact peer dependencies.
+The official npm registry reports `latest=0.1.7-rc.2` and `next=0.2.0-rc.1`, rechecked on 2026-09-29 (Asia/Shanghai). This branch targets `0.1.7-rc.2`; the preview requires a separate result and is not covered by this branch's exact peer dependencies.
 
 - Primary upstream: `dsh-v0.1.7-rc.2`, commit `477b4f420553e8a52c2fbccc464d7561b239c443`.
 - Separate preview: `dsh-v0.2.0-rc.1`, commit `4878cdabd87d4041bdaff61d04c966883b9fd07a`.
@@ -25,6 +25,21 @@ On 2026-09-28, the unpublished working tree passed these checks against the offi
 - Evidence schema validation. The real human-evidence ledger remains empty.
 
 Vite reported missing source maps in upstream npm packages during unit tests; the tests themselves passed. These checks do not yet establish migrated-core or three-browser assembled compatibility. The exact clean revisions and final browser results must be recorded after those checks complete.
+
+## Core integration checks in progress
+
+The core merge is committed as `1e53eedb532a7965aee4d4c294c2ee313cf15906`, based on the exact upstream rc.2 commit above. The following local checks covered that implementation; clean-revision assembled browser validation is still required:
+
+- Build, all 18 hygiene gates, all 20 quick documentation gates, and all 42 full documentation synchronization gates passed. The final full lint found only one overlong function declaration; a formatting-only wrap and the owning-file lint cleared it.
+- The core accessibility browser lane passed 40 checks across Chromium, Firefox, and WebKit. Two forced-colors checks were explicitly skipped outside Chromium; these are automated browser checks, not assistive-technology observations.
+- All 17 headless expected-output tests passed after the configured-agent fixtures explicitly waited for Session persistence. The built CLI help/usage and keyless headless smoke cases also passed.
+- The steering replay passed all seven tests after merging the upstream accessible-name changes into the ARIA goldens. Turn-tail presentation passed nine tests with one record-only skip after correcting the Compact-mode selector. Those Session recordings were not refreshed. Separately, the goal-action fixture owner refreshed the current v4 header's `startsSeries: true` field and passed replay; no older Session generation was rewritten.
+- Settings and desktop-locale checks passed all 16 tests after updating the upstream labels and default choices while retaining contextual accessible names and focus assertions.
+- The companion/core assembled lane passed all five tests across Chromium, Firefox, and WebKit. These are working-tree browser observations, not clean-revision release evidence or real screen-reader results.
+- The final full GUI run passed all 590 files: 9,274 tests passed and one was explicitly skipped. An earlier aggregate run had a Markdown-registration timeout; the final run passed without concurrent heavy jobs, retries, or timeout changes. The earlier failure is not counted as a pass, and its cause is not established.
+- General Web replay was checked in partitions, not a single final all-green aggregate. The remaining 144-file run initially had 21 failing files; repairs were verified in their owning files, with the final three-file partition passing all 12 tests. Reviewed changes cover upstream labels/defaults, keyboard/focus behavior, independent Fetch links, tooltip capture scope, and ARIA goldens. No blanket golden update or timeout relaxation was used.
+
+The companion CI pins the exact rc.2 core commit above, rather than a moving branch or historical tag. User-perceivable core UI changes require designer or product review before merge. The candidate remains unpublished.
 
 ## Separate preview investigation
 
