@@ -4,13 +4,19 @@ import { describe, expect, it } from 'vitest'
 import configs from '../tsdown.config.ts'
 
 describe('browser bundle registration', () => {
-  it('resolves the entire DSH lockfile graph to the alpha target', () => {
+  it('resolves the entire DSH lockfile graph to the exact target', () => {
     const lockfile = readFileSync(new URL('../pnpm-lock.yaml', import.meta.url), 'utf8')
     const packages = lockfile.split('\nsnapshots:')[0]!
     const versions = [...packages.matchAll(/^  '@deepseek-ai\/dsh(?:-[^@']+)?@([^']+)':/gm)]
       .map(match => match[1])
     expect(versions.length).toBeGreaterThan(200)
-    expect(new Set(versions)).toEqual(new Set(['0.1.7-alpha.1']))
+    expect(new Set(versions)).toEqual(new Set(['0.1.7-rc.2']))
+    const cordisVersions = [...packages.matchAll(/^  '@deepseek-ai\/cordis@([^']+)':/gm)]
+      .map(match => match[1])
+    expect(new Set(cordisVersions)).toEqual(new Set(['4.0.4']))
+    const groupVersions = [...packages.matchAll(/^  '@deepseek-ai\/cordis-plugin-group@([^']+)':/gm)]
+      .map(match => match[1])
+    expect(new Set(groupVersions)).toEqual(new Set(['1.0.4']))
   })
 
   it('registers the scoped npm package id expected by the DSH module loader', () => {
@@ -30,6 +36,10 @@ describe('browser bundle registration', () => {
       expect.arrayContaining([
         'CLI-ACCESSIBILITY.md',
         'CLI-ACCESSIBILITY.zh.md',
+        'COMPATIBILITY-0.1.7-alpha.1.md',
+        'COMPATIBILITY-0.1.7-alpha.1.zh.md',
+        'COMPATIBILITY-0.1.7-rc.2.md',
+        'COMPATIBILITY-0.1.7-rc.2.zh.md',
         'RFC-A11Y-AUTHORING.md',
         'RFC-A11Y-AUTHORING.zh.md',
         'DIAGNOSTIC-REPORT.md',
@@ -42,7 +52,7 @@ describe('browser bundle registration', () => {
     expect(manifest.scripts?.['lab:cli']).toBe('node scripts/run-cli-conformance.mjs')
   })
 
-  it('pins the exact DSH 0.1.7-alpha.1 client graph and excludes the retired runtime package', () => {
+  it('pins the exact DSH 0.1.7-rc.2 client graph and excludes the retired runtime package', () => {
     const manifestPath = fileURLToPath(new URL('../package.json', import.meta.url))
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as {
       version?: string
@@ -50,13 +60,14 @@ describe('browser bundle registration', () => {
       dsh?: { client?: { inject?: string[] } }
     }
 
-    expect(manifest.version).toBe('0.1.2-alpha.1')
+    expect(manifest.version).toBe('0.1.2-rc.1')
+    expect(manifest.peerDependencies?.['@deepseek-ai/cordis']).toBe('~4.0.4')
     expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-runtime']).toBeUndefined()
-    expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-chat']).toBe('0.1.7-alpha.1')
-    expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-session']).toBe('0.1.7-alpha.1')
+    expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-chat']).toBe('0.1.7-rc.2')
+    expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-session']).toBe('0.1.7-rc.2')
     expect(Object.entries(manifest.peerDependencies ?? {})
       .filter(([name]) => name.startsWith('@deepseek-ai/dsh-client-'))
-      .every(([, version]) => version === '0.1.7-alpha.1')).toBe(true)
+      .every(([, version]) => version === '0.1.7-rc.2')).toBe(true)
     expect(manifest.dsh?.client?.inject).not.toContain('@deepseek-ai/dsh-client-runtime')
     expect(manifest.dsh?.client?.inject).toEqual(expect.arrayContaining([
       '@deepseek-ai/dsh-client-ui-chat',

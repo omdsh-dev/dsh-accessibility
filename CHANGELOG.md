@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Prepare the unpublished `0.1.2-rc.1` companion candidate for exact DSH `0.1.7-rc.2`; keep the `0.2.0-rc.1` preview investigation separate from supported peer dependencies and preserve historical evidence at its original revisions.
+- Align the development runtime with Cordis `4.0.4` and `cordis-plugin-group` `1.0.4`, and require the peer-dependency check in CI alongside the exact DSH lockfile regression.
+- Record the migration's local checks without claiming migrated-core browser or real assistive-technology validation before those checks are complete.
+
 ## 0.1.0-beta.8 - 2026-09-07
 
 - Advance the exact accessibility-core baseline to `dsh-v0.1.2-rc.1-a11y.5` after refreshing the semantic queue snapshots and making the queued-action dock assertion portable across classic-scrollbar runners.
