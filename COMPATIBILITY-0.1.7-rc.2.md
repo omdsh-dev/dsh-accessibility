@@ -2,7 +2,7 @@
 
 English | [简体中文](COMPATIBILITY-0.1.7-rc.2.zh.md)
 
-Status: migration in progress, unpublished. Real VoiceOver/NVDA and disabled-developer validation remain pending.
+Status: local migration checks complete; unpublished and awaiting review/CI. Real VoiceOver/NVDA and disabled-developer validation remain pending.
 
 ## Exact targets
 
@@ -24,18 +24,19 @@ On 2026-09-28, the unpublished working tree passed these checks against the offi
 - Local tarball installation through the real DSH CLI into a disposable `DSH_HOME`, followed by a boot-free Web profile configuration dump. The companion was composed successfully with no version exemptions. No model request or user-profile migration was performed by this isolated smoke test.
 - Evidence schema validation. The real human-evidence ledger remains empty.
 
-Vite reported missing source maps in upstream npm packages during unit tests; the tests themselves passed. These checks do not yet establish migrated-core or three-browser assembled compatibility. The exact clean revisions and final browser results must be recorded after those checks complete.
+Vite reported missing source maps in upstream npm packages during unit tests; the tests themselves passed. The package checks alone do not establish migrated-core or assembled compatibility; the separate checks below cover that integration.
 
-## Core integration checks in progress
+## Core integration checks
 
-The core merge is committed as `1e53eedb532a7965aee4d4c294c2ee313cf15906`, based on the exact upstream rc.2 commit above. The following local checks covered that implementation; clean-revision assembled browser validation is still required:
+The core merge is committed as `1e53eedb532a7965aee4d4c294c2ee313cf15906`, based on the exact upstream rc.2 commit above. The following local checks covered that implementation:
 
 - Build, all 18 hygiene gates, all 20 quick documentation gates, and all 42 full documentation synchronization gates passed. The final full lint found only one overlong function declaration; a formatting-only wrap and the owning-file lint cleared it.
 - The core accessibility browser lane passed 40 checks across Chromium, Firefox, and WebKit. Two forced-colors checks were explicitly skipped outside Chromium; these are automated browser checks, not assistive-technology observations.
 - All 17 headless expected-output tests passed after the configured-agent fixtures explicitly waited for Session persistence. The built CLI help/usage and keyless headless smoke cases also passed.
 - The steering replay passed all seven tests after merging the upstream accessible-name changes into the ARIA goldens. Turn-tail presentation passed nine tests with one record-only skip after correcting the Compact-mode selector. Those Session recordings were not refreshed. Separately, the goal-action fixture owner refreshed the current v4 header's `startsSeries: true` field and passed replay; no older Session generation was rewritten.
 - Settings and desktop-locale checks passed all 16 tests after updating the upstream labels and default choices while retaining contextual accessible names and focus assertions.
-- The companion/core assembled lane passed all five tests across Chromium, Firefox, and WebKit. These are working-tree browser observations, not clean-revision release evidence or real screen-reader results.
+- On 2026-09-29 (Asia/Shanghai), the companion/core assembled lane passed all five tests across Chromium, Firefox, and WebKit with clean core `1e53eedb532a7965aee4d4c294c2ee313cf15906` and companion `20b3b151858d9b9e6cb986501c00faf6960eb1b6`. The browser records identify both revisions. This paragraph and later documentation-only updates were not part of that tested companion revision.
+- On the same clean revisions, the core AT lab (`none 1000`), companion AT lab (`none 500`), and live-announcement lab (`complete none 500`) each passed startup and cleanup. These smoke runs did not launch a screen reader or exercise human tasks; the live lab smoke did not consume a replay.
 - The final full GUI run passed all 590 files: 9,274 tests passed and one was explicitly skipped. An earlier aggregate run had a Markdown-registration timeout; the final run passed without concurrent heavy jobs, retries, or timeout changes. The earlier failure is not counted as a pass, and its cause is not established.
 - General Web replay was checked in partitions, not a single final all-green aggregate. The remaining 144-file run initially had 21 failing files; repairs were verified in their owning files, with the final three-file partition passing all 12 tests. Reviewed changes cover upstream labels/defaults, keyboard/focus behavior, independent Fetch links, tooltip capture scope, and ARIA goldens. No blanket golden update or timeout relaxation was used.
 
