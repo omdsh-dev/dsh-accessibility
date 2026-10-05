@@ -22,7 +22,7 @@ readiness JSON、Host 终端输出、字幕、DOM 文本、截图和自动 Chrom
 
 ## 前置条件
 
-- 已安装依赖的 DSH `0.1.2-alpha.2` 与 `@oh-my-dsh/dsh-a11y-local-preview@0.1.0-alpha.0` 本地 checkout；
+- 已安装依赖的 DSH `0.2.0-rc.2` 与 `@oh-my-dsh/dsh-a11y-local-preview@0.1.0-alpha.1` 本地 checkout；
 - DSH checkout 已生成 Web 构建产物（在其中运行 `pnpm run build`）；
 - local-preview checkout 已构建（在其中运行 `pnpm run build`）；
 - local-preview 所需的 Playwright Chromium；
@@ -37,9 +37,9 @@ launcher 会在启动子进程前移除 `DEEPSEEK_API_KEY`。本场景使用固�
 当三个 checkout 互为同级目录时，在本仓库运行：
 
 ```sh
-pnpm run lab:at:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview verify 0
-pnpm run lab:at:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview verify-reject 0
-pnpm run lab:at:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview none 1000
+pnpm run lab:at:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview verify 0
+pnpm run lab:at:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview verify-reject 0
+pnpm run lab:at:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview none 1000
 ```
 
 这三条命令是开发门禁，不是真人证据。`verify` 必须报告 `allowed-once`、`exactRepair: true` 和精确四工具序列。`verify-reject` 必须报告 `rejected`、`exactRepair: false`、`sourceUnchanged: true` 以及失败的 edit。一秒 `none` 运行只证明有界启动和清理，不挂载真人驱动的 replay。
@@ -49,13 +49,13 @@ pnpm run lab:at:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-previe
 macOS 上的 VoiceOver + Safari：
 
 ```sh
-pnpm run lab:at:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview safari 0
+pnpm run lab:at:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview safari 0
 ```
 
 macOS、Windows 或 Linux 上，使用隔离 Chrome／Chromium profile 的 VoiceOver／NVDA／JAWS／Narrator／Orca：
 
 ```sh
-pnpm run lab:at:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview chrome 0
+pnpm run lab:at:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview chrome 0
 ```
 
 跨平台 Chrome 模式会寻找已安装的 Chrome／Chromium，创建全新临时 profile、禁用后台联网、阻断非 loopback 主机解析，并在退出时关闭隔离浏览器和删除 profile。Windows 上的 NVDA／JAWS／Narrator 与 Linux 上的 Orca 应优先使用此路线。Safari 可能复用既有浏览器上下文，因此只能使用专门的干净 profile；出现个人界面就立即停止。只有找不到可隔离的 Chrome／Chromium 时才使用 `none 0`，把另行打印的一次性登录 URL 复制到专门的干净浏览器 profile，且绝不能公开。默认浏览器就是被测浏览器且已经使用专门干净 profile 时，也可使用 `system 0`。
@@ -128,3 +128,7 @@ readiness JSON 包含 DSH、实验室与组合的版本和 revision、精确 tar
 - 即使 VoiceOver 与 NVDA 记录通过，在残障开发者能独立、有效、安全地完成代表性创作任务之前，项目目标仍未完成。
 
 同意、去标识化、严重程度、协助和残障用户研究规则见 [RESEARCH.zh.md](RESEARCH.zh.md)；权限与提供方架构见 [RFC-A11Y-AUTHORING.zh.md](RFC-A11Y-AUTHORING.zh.md)。
+
+## 历史证据与当前候选版
+
+旧版 `0.1.2-alpha.2` 的证据与原 schema 保持不变，不证明本候选版通过。当前 launcher 固定要求 DSH `0.2.0-rc.2`、local-preview `0.1.0-alpha.1` 与实验室 `0.1.3-rc.1`，并拒绝旧版本组合。发布元数据不是创建公开仓库或公共 npm 包的授权；发布须满足当前可见性授权和全部门禁。

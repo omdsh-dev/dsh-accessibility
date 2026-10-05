@@ -130,7 +130,9 @@
     "scripts/validate-human-evidence.mjs",
     "SECURITY.md",
     "LICENSE",
-    "scripts/verify-assembled-baseline.mjs"
+    "scripts/verify-assembled-baseline.mjs",
+    "AUTHORING-AGENT-LAB-0.2.0.schema.json",
+    "scripts/authoring-baseline.mjs"
   ],
   "dsh": {
     "bundle": {

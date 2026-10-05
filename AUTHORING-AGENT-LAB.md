@@ -2,7 +2,7 @@
 
 [简体中文](AUTHORING-AGENT-LAB.zh.md) | English
 
-Protocol: `dsh-a11y-authoring-agent-lab/0.1.2-draft`. Machine-readable contract: [AUTHORING-AGENT-LAB.schema.json](AUTHORING-AGENT-LAB.schema.json).
+Protocol: `dsh-a11y-authoring-agent-lab/0.1.2-draft`. Machine-readable contract: [AUTHORING-AGENT-LAB-0.2.0.schema.json](AUTHORING-AGENT-LAB-0.2.0.schema.json).
 
 This disposable lab verifies one bounded DSH authoring task: inspect a rendered local preview, read its source, repair a missing image alternative and empty button name through DSH's existing filesystem tools, and audit the repaired page. It exercises the installed product composition instead of importing its adapter directly.
 
@@ -10,7 +10,7 @@ This disposable lab verifies one bounded DSH authoring task: inspect a rendered 
 
 A passing replay run proves all of the following for the exact revisions in its output:
 
-- the real DSH `0.1.2-alpha.2` product entry and plugin manager load a freshly packed `@oh-my-dsh/dsh-a11y-local-preview@0.1.0-alpha.0` tarball whose complete six-package internal graph also resolves from fresh tarballs;
+- the real DSH `0.2.0-rc.2` product entry and plugin manager load a freshly packed `@oh-my-dsh/dsh-a11y-local-preview@0.1.0-alpha.1` tarball whose complete six-package internal graph also resolves from fresh tarballs;
 - a real literal-loopback HTTP page is audited in a fresh real Chromium context;
 - the real DSH agent loop executes exactly `a11y_check → read → edit → a11y_check`;
 - every durable tool call has one matching successful result, both audits remain scoped to `main` and the approved opaque handle, and filesystem access remains limited to `index.html`;
@@ -38,14 +38,14 @@ Never promote a replay result into model evidence, or either automated mode into
 Prerequisites:
 
 - Node.js and pnpm versions accepted by the repositories;
-- local checkouts of DSH `0.1.2-alpha.2` and `dsh-a11y-local-preview@0.1.0-alpha.0` with their dependencies installed;
+- local checkouts of DSH `0.2.0-rc.2` and `dsh-a11y-local-preview@0.1.0-alpha.1` with their dependencies installed;
 - the Playwright Chromium binary required by the local-preview package; and
 - npm access when the replay plugin is not already cached.
 
 From this repository, with the three checkouts as siblings:
 
 ```sh
-pnpm run lab:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview replay
+pnpm run lab:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview replay
 ```
 
 Replay mode is keyless. The runner builds DSH host libraries and the composition, creates a disposable page and DSH home, freshly packs the exact six-package authoring graph, installs it through the real `dsh plugin` command with profile-local tarball overrides, runs the task, validates the durable session, emits one JSON evidence object, and cleans up.
@@ -55,7 +55,7 @@ Before creating any disposable state, the runner requires clean DSH, composition
 For a live-model run, place `DEEPSEEK_API_KEY` in the process environment through the operator's normal secret-management mechanism, then run:
 
 ```sh
-pnpm run lab:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview live
+pnpm run lab:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview live
 ```
 
 Do not use real product data or a normal authenticated preview in live mode. The task, tool descriptions, page findings and tool results may be sent to the configured model provider. The runner refuses live mode without the key, removes the key from build and plugin-install subprocesses, supplies it only to the final DSH agent process, and never prints or stores it in evidence.
@@ -77,3 +77,7 @@ The next evidence tier must use the complete interactive DSH surface, not this h
 - Alternative-text quality is known by fixture construction here. Real content still requires author judgment.
 - Chromium and axe-core results do not expose platform accessibility APIs or screen-reader speech/braille.
 - The local-preview composition and its dependencies have public-alpha package metadata but no active remote repositories or npm releases; this lab is pre-release evidence only.
+
+## Historical evidence and current candidate
+
+Historical `0.1.2-alpha.2` evidence and its original schema are preserved; they do not prove this candidate passes. Current launchers require DSH `0.2.0-rc.2`, local-preview `0.1.0-alpha.1`, and lab `0.1.3-rc.1`, rejecting old combinations. Publication metadata is not authorization to create public repositories or npm packages; publication must satisfy current visibility authorization and all release gates.

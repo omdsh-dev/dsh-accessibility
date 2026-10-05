@@ -1,3 +1,4 @@
+import { AUTHORING_DSH_VERSION } from './authoring-baseline.mjs'
 import { execFile as execFileCallback } from 'node:child_process'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { basename, resolve } from 'node:path'
@@ -76,9 +77,9 @@ export async function installAuthoringPackageConsumer(packed, consumerRoot) {
     type: 'module',
     packageManager: 'pnpm@11.7.0',
     dependencies: {
-      '@deepseek-ai/cordis': '4.0.2',
-      '@deepseek-ai/dsh-system-prompt': '0.1.2-alpha.2',
-      '@deepseek-ai/dsh-tools': '0.1.2-alpha.2',
+      '@deepseek-ai/cordis': '4.0.4',
+      '@deepseek-ai/dsh-system-prompt': AUTHORING_DSH_VERSION,
+      '@deepseek-ai/dsh-tools': AUTHORING_DSH_VERSION,
       playwright: '1.61.1',
       ...Object.fromEntries(packed.map(item => [item.name, item.version]))
     }

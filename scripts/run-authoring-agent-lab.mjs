@@ -13,6 +13,7 @@ import {
   validateAuthoringToolTrace,
   validateModelVisibleA11yReports,
 } from './authoring-agent-lab-lib.mjs'
+import { assertAuthoringBaseline, AUTHORING_DSH_VERSION } from './authoring-baseline.mjs'
 import { exactGitRevision } from './lab-source-state.mjs'
 import { packAuthoringPackages, pnpmTarballOverrides } from './authoring-package-install-lib.mjs'
 
@@ -39,12 +40,7 @@ const labRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const dshManifest = JSON.parse(await readFile(join(dshRoot, 'package.json'), 'utf8'))
 const localPreviewManifest = JSON.parse(await readFile(join(localPreviewRoot, 'package.json'), 'utf8'))
 const labManifest = JSON.parse(await readFile(join(labRoot, 'package.json'), 'utf8'))
-if (dshManifest.version !== '0.1.2-alpha.2') {
-  throw new Error(`authoring agent lab requires DSH 0.1.2-alpha.2, received ${String(dshManifest.version)}`)
-}
-if (localPreviewManifest.version !== '0.1.0-alpha.0') {
-  throw new Error(`authoring agent lab requires local-preview 0.1.0-alpha.0, received ${String(localPreviewManifest.version)}`)
-}
+assertAuthoringBaseline(dshManifest, localPreviewManifest, labManifest)
 const [dshRevision, compositionRevision, labRevision] = await Promise.all([
   exactGitRevision(dshRoot, 'DSH authoring source'),
   exactGitRevision(localPreviewRoot, 'DSH accessibility authoring composition source'),
@@ -276,7 +272,7 @@ try {
     env: commonEnvironment,
   })
   if (modeArgument === 'replay') {
-    await run(process.execPath, [bin, 'plugin', '--profile', 'headless', 'add', '@deepseek-ai/dsh-llm-replay@0.1.2-alpha.2'], {
+    await run(process.execPath, [bin, 'plugin', '--profile', 'headless', 'add', `@deepseek-ai/dsh-llm-replay@${AUTHORING_DSH_VERSION}`], {
       cwd: dshRoot,
       env: commonEnvironment,
     })
