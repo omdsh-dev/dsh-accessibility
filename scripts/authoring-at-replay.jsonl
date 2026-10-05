@@ -1,21 +1,33 @@
 {"type":"session","version":0,"id":"{{session:1}}","createdAt":1788134400000,"cwd":"{{cwd}}","delegationDepth":0}
+{"type":"turn/start","data":{"turn":1}}
+{"type":"step/start","data":{"turn":1,"step":1}}
 {"type":"assistant/chunk","data":{"turn":1,"step":1,"chunk":{"type":"block-start","index":0,"blockType":"tool-call"}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":1,"chunk":{"type":"block-end","index":0,"block":{"type":"tool-call","id":"authoring-at-audit-before","name":"a11y_check","arguments":"{\"target\":\"preview.authoring\",\"contextSelector\":\"main\"}"}}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":1,"chunk":{"type":"usage","usage":{"inputTokens":10,"outputTokens":5}}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":1,"chunk":{"type":"finish","reason":{"kind":"tool-calls"}}}}
+{"type":"step/end","data":{"turn":1,"step":1}}
+{"type":"step/start","data":{"turn":1,"step":2}}
 {"type":"assistant/chunk","data":{"turn":1,"step":2,"chunk":{"type":"block-start","index":0,"blockType":"tool-call"}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":2,"chunk":{"type":"block-end","index":0,"block":{"type":"tool-call","id":"authoring-at-read-source","name":"read","arguments":"{\"file_path\":\"index.html\"}"}}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":2,"chunk":{"type":"usage","usage":{"inputTokens":10,"outputTokens":5}}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":2,"chunk":{"type":"finish","reason":{"kind":"tool-calls"}}}}
+{"type":"step/end","data":{"turn":1,"step":2}}
+{"type":"step/start","data":{"turn":1,"step":3}}
 {"type":"assistant/chunk","data":{"turn":1,"step":3,"chunk":{"type":"block-start","index":0,"blockType":"tool-call"}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":3,"chunk":{"type":"block-end","index":0,"block":{"type":"tool-call","id":"authoring-at-edit-source","name":"edit","arguments":"{\"file_path\":\"index.html\",\"old_string\":\"    <img src=\\\"/product.svg\\\">\\n    <button type=\\\"button\\\"></button>\",\"new_string\":\"    <img src=\\\"/product.svg\\\" alt=\\\"Blue hiking backpack\\\">\\n    <button type=\\\"button\\\">Add to cart</button>\",\"sandbox_permissions\":\"workspace-write\",\"justification\":\"This exact repair needs one-time permission to update index.html in the disposable workspace.\"}"}}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":3,"chunk":{"type":"usage","usage":{"inputTokens":10,"outputTokens":5}}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":3,"chunk":{"type":"finish","reason":{"kind":"tool-calls"}}}}
+{"type":"step/end","data":{"turn":1,"step":3}}
+{"type":"step/start","data":{"turn":1,"step":4}}
 {"type":"assistant/chunk","data":{"turn":1,"step":4,"chunk":{"type":"block-start","index":0,"blockType":"tool-call"}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":4,"chunk":{"type":"block-end","index":0,"block":{"type":"tool-call","id":"authoring-at-audit-after","name":"a11y_check","arguments":"{\"target\":\"preview.authoring\",\"contextSelector\":\"main\"}"}}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":4,"chunk":{"type":"usage","usage":{"inputTokens":10,"outputTokens":5}}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":4,"chunk":{"type":"finish","reason":{"kind":"tool-calls"}}}}
+{"type":"step/end","data":{"turn":1,"step":4}}
+{"type":"step/start","data":{"turn":1,"step":5}}
 {"type":"assistant/chunk","data":{"turn":1,"step":5,"chunk":{"type":"block-start","index":0,"blockType":"text"}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":5,"chunk":{"type":"block-end","index":0,"block":{"type":"text","text":"The bounded repair flow finished; review the tool and audit results."}}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":5,"chunk":{"type":"usage","usage":{"inputTokens":10,"outputTokens":5}}}}
 {"type":"assistant/chunk","data":{"turn":1,"step":5,"chunk":{"type":"finish","reason":{"kind":"stop"}}}}
+{"type":"step/end","data":{"turn":1,"step":5}}
+{"type":"turn/end","data":{"turn":1,"reason":{"kind":"completed"}}}

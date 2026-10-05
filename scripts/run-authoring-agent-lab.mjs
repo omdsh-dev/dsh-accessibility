@@ -63,6 +63,7 @@ function throwIfInterrupted() {
 }
 
 function run(command, args, options = {}) {
+  const stage = options.stage ?? 'child command'
   if (forwardedSignal !== undefined) return Promise.reject(new Error(`authoring lab received ${forwardedSignal}`))
   return new Promise((resolveRun, reject) => {
     const child = spawn(command, args, {
@@ -105,7 +106,7 @@ function run(command, args, options = {}) {
       else if (exceededOutputLimit) reject(new Error('authoring lab command exceeded its output limit'))
       else if (timedOut) reject(new Error('authoring lab command timed out'))
       else if (signal !== null) reject(new Error('authoring lab command was interrupted'))
-      else if (code !== 0) reject(new Error(`authoring lab command exited ${String(code ?? 1)}`))
+      else if (code !== 0) reject(new Error(`authoring lab ${stage} exited ${String(code ?? 1)}`))
       else resolveRun({ code: 0, stdout, stderr })
     }))
   })
@@ -191,8 +192,8 @@ let temporaryRoot
 let previewServer
 let runFailure
 try {
-  await run('pnpm', ['run', 'build:lib:host'], { cwd: dshRoot, env: nonModelEnvironment })
-  await run('pnpm', ['run', 'build'], { cwd: localPreviewRoot, env: nonModelEnvironment })
+  await run('pnpm', ['run', 'build:lib:host'], { cwd: dshRoot, env: nonModelEnvironment, stage: 'DSH host build' })
+  await run('pnpm', ['run', 'build'], { cwd: localPreviewRoot, env: nonModelEnvironment, stage: 'local-preview build' })
   temporaryRoot = await mkdtemp(join(tmpdir(), 'dsh-a11y-authoring-agent-'))
   const authoringTarballRoot = join(temporaryRoot, 'authoring-tarballs')
   const workspace = join(temporaryRoot, 'workspace')
@@ -260,6 +261,7 @@ try {
   const compositionTarball = packedAuthoringPackages.find(item => item.name === localPreviewManifest.name)
   if (compositionTarball === undefined) throw new Error('authoring package graph did not produce the local-preview tarball')
   await run(process.execPath, [bin, 'plugin', '--profile', 'headless', 'install', '--lockfile-only', '--ignore-scripts'], {
+    stage: 'headless profile initialization',
     cwd: dshRoot,
     env: commonEnvironment,
   })
@@ -268,11 +270,13 @@ try {
     `\n${pnpmTarballOverrides(packedAuthoringPackages)}`,
   )
   await run(process.execPath, [bin, 'plugin', '--profile', 'headless', 'add', compositionTarball.tarballPath], {
+    stage: 'local-preview profile installation',
     cwd: dshRoot,
     env: commonEnvironment,
   })
   if (modeArgument === 'replay') {
     await run(process.execPath, [bin, 'plugin', '--profile', 'headless', 'add', `@deepseek-ai/dsh-llm-replay@${AUTHORING_DSH_VERSION}`], {
+      stage: 'replay profile installation',
       cwd: dshRoot,
       env: commonEnvironment,
     })
@@ -319,6 +323,7 @@ ${replayPatch}`)
     '--output-format', 'json',
     task,
   ], {
+    stage: 'bounded headless repair',
     cwd: workspace,
     env: liveApiKey === undefined
       ? commonEnvironment
