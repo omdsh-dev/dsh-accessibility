@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.3-rc.1 (unpublished)
+
+- Migrate exact DSH dependencies and current browser/CLI labs to `0.2.0-rc.2`; reject older releases and the separate `0.2.1-alpha.1` preview at preflight.
+- Preserve historical compatibility reports, npm installation guidance, and the first human campaign at their original revisions. Current migration and verification status is recorded separately.
+
 ## Unreleased
 
 - Prepare the unpublished `0.1.2-rc.1` companion candidate for exact DSH `0.1.7-rc.2`; keep the `0.2.0-rc.1` preview investigation separate from supported peer dependencies and preserve historical evidence at its original revisions.
