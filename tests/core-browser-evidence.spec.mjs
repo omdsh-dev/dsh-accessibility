@@ -39,6 +39,16 @@ const reports = [
     version: '0.2.0-rc.2',
     revision: '1001be8032d1ba0d6c9c3fb7a8ef65f28151d9d6',
   },
+  {
+    file: '2026-10-06-dsh-0.2.0-rc.2-19ea4ee861.json',
+    version: '0.2.0-rc.2',
+    revision: '19ea4ee861327dfb5f195925f04564b96ecec764',
+  },
+  {
+    file: '2026-10-06-dsh-0.2.0-rc.2-1d321f2053.json',
+    version: '0.2.0-rc.2',
+    revision: '1d321f2053c547d353c0ab033444e0dd148f68ae',
+  },
 ]
 
 function reportUrl(file) {
@@ -47,7 +57,7 @@ function reportUrl(file) {
 
 // Keep the first campaign bound to its original revision; the new candidate
 // must satisfy the same contracts independently, without replacing that record.
-const contractReports = [reports[3], reports[4], reports[5], reports[6]]
+const contractReports = [reports[3], reports[4], reports[5], reports[6], reports[7], reports[8]]
 
 const expectedTasks = [
   'discover-structure',

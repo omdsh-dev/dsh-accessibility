@@ -12,6 +12,11 @@ function companion(privateBuild = false) {
 }
 
 describe('assembled baseline preflight', () => {
+  it('pins assembled CI to the exact patched rc.2 core revision', () => {
+    const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')
+    expect(workflow).toContain('repository: omdsh-dev/deepseek-harness\n          ref: 1d321f2053c547d353c0ab033444e0dd148f68ae')
+    expect(workflow).not.toContain('ref: feat/a11y-core-0.2.0-rc.2')
+  })
   it.each(['run-at-lab.mjs', 'run-core-at-lab.mjs', 'run-live-at-lab.mjs', 'run-cli-conformance.mjs', 'run-assembled-browser.mjs'])('%s checks the exact companion target before creating state', (launcher) => {
     const source = readFileSync(new URL(`../scripts/${launcher}`, import.meta.url), 'utf8')
     expect(source).toContain('assertCompanionBaseline(dshManifest,')
