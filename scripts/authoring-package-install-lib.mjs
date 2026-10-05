@@ -1,6 +1,7 @@
 import { AUTHORING_DSH_VERSION } from './authoring-baseline.mjs'
 import { execFile as execFileCallback } from 'node:child_process'
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { constants } from 'node:fs'
+import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { basename, resolve } from 'node:path'
 import { promisify } from 'node:util'
 import { evaluateAuthoringPackageDependencyGraph } from './authoring-package-readiness-lib.mjs'
@@ -25,6 +26,15 @@ export function parseNpmPackOutput(stdout) {
   return value[0]
 }
 
+/** Keep pnpm's path-derived store filenames below the filesystem component limit. */
+export async function stageTarballForPnpm(tarballRoot, filename, ordinal) {
+  const source = resolve(tarballRoot, basename(filename))
+  const destination = resolve(tarballRoot, `p${String(ordinal)}.tgz`)
+  // Preserve npm's original artifact and metadata; only the local install path changes.
+  await copyFile(source, destination, constants.COPYFILE_EXCL)
+  return destination
+}
+
 export async function packAuthoringPackages(policy, workspaceRoot, tarballRoot) {
   const packed = []
   for (const spec of policy.packages) {
@@ -44,13 +54,14 @@ export async function packAuthoringPackages(policy, workspaceRoot, tarballRoot) 
     if (result?.name !== spec.name || result?.version !== spec.version || typeof result?.filename !== 'string') {
       throw new Error(`${spec.name} produced an unexpected npm pack result`)
     }
+    const tarballPath = await stageTarballForPnpm(tarballRoot, result.filename, packed.length)
     packed.push({
       name: spec.name,
       version: spec.version,
       revision,
       integrity: result.integrity,
       filename: basename(result.filename),
-      tarballPath: resolve(tarballRoot, result.filename)
+      tarballPath
     })
   }
   return packed
