@@ -57,9 +57,12 @@ describe('archived authoring agent evidence', () => {
   })
 })
 
-describe('archived DSH 0.2.0 authoring agent evidence', () => {
+describe.each([
+  { core: '19ea4ee861327dfb5f195925f04564b96ecec764', lab: 'e0161fca0e7b1f7553bd3e4c9150c66dd778ad67' },
+  { core: '1d321f2053c547d353c0ab033444e0dd148f68ae', lab: 'd2c2e2f753c56ed292e9804b43b258b097ef17c4' },
+])('archived DSH 0.2.0 authoring agent evidence on $core / $lab', ({ core, lab }) => {
   const currentEvidenceUrl = new URL(
-    '../automated-evidence/authoring-agent/2026-10-06-dsh-0.2.0-rc.2-19ea4ee861-lab-e0161fca0e.json',
+    `../automated-evidence/authoring-agent/2026-10-06-dsh-0.2.0-rc.2-${core.slice(0, 10)}-lab-${lab.slice(0, 10)}.json`,
     import.meta.url,
   )
 
@@ -82,12 +85,12 @@ describe('archived DSH 0.2.0 authoring agent evidence', () => {
     const evidence = await readCurrentEvidence()
     expect(evidence.dsh).toEqual({
       version: '0.2.0-rc.2',
-      revision: '19ea4ee861327dfb5f195925f04564b96ecec764',
+      revision: core,
     })
     expect(evidence.lab).toEqual({
       package: '@oh-my-dsh/dsh-accessibility',
       version: '0.1.3-rc.1',
-      revision: 'e0161fca0e7b1f7553bd3e4c9150c66dd778ad67',
+      revision: lab,
     })
     expect(evidence.composition).toMatchObject({
       version: '0.1.0-alpha.1',

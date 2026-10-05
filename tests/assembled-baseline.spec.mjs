@@ -11,11 +11,21 @@ function companion(privateBuild = false) {
   }
 }
 
+function expectPinnedCoreRevision(workflow) {
+  const normalized = workflow.replaceAll('\r\n', '\n')
+  expect(normalized).toContain('repository: omdsh-dev/deepseek-harness\n          ref: 1d321f2053c547d353c0ab033444e0dd148f68ae')
+  expect(normalized).not.toContain('ref: feat/a11y-core-0.2.0-rc.2')
+}
+
 describe('assembled baseline preflight', () => {
-  it('pins assembled CI to the exact patched rc.2 core revision', () => {
+  it.each(['\n', '\r\n'])('pins assembled CI to the exact patched rc.2 core revision with %j line endings', (lineEnding) => {
     const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')
-    expect(workflow).toContain('repository: omdsh-dev/deepseek-harness\n          ref: 1d321f2053c547d353c0ab033444e0dd148f68ae')
-    expect(workflow).not.toContain('ref: feat/a11y-core-0.2.0-rc.2')
+    expectPinnedCoreRevision(workflow.replaceAll('\r\n', '\n').replaceAll('\n', lineEnding))
+  })
+  it.each(['0'.repeat(40), 'feat/a11y-core-0.2.0-rc.2'])('still rejects a wrong or moving CI core ref %s', (ref) => {
+    const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')
+      .replaceAll('1d321f2053c547d353c0ab033444e0dd148f68ae', ref)
+    expect(() => expectPinnedCoreRevision(workflow)).toThrow()
   })
   it.each(['run-at-lab.mjs', 'run-core-at-lab.mjs', 'run-live-at-lab.mjs', 'run-cli-conformance.mjs', 'run-assembled-browser.mjs'])('%s checks the exact companion target before creating state', (launcher) => {
     const source = readFileSync(new URL(`../scripts/${launcher}`, import.meta.url), 'utf8')

@@ -1,0 +1,82 @@
+{
+  "protocol": "dsh-a11y-authoring-agent-lab/0.1.2-draft",
+  "generatedAt": "2026-10-05T19:12:18.446Z",
+  "evidence": "keyless-replay-product-loop-not-model-or-at-evidence",
+  "mode": "replay",
+  "environment": {
+    "os": "darwin",
+    "osRelease": "25.3.0",
+    "architecture": "arm64"
+  },
+  "dsh": {
+    "version": "0.2.0-rc.2",
+    "revision": "1d321f2053c547d353c0ab033444e0dd148f68ae"
+  },
+  "lab": {
+    "package": "@oh-my-dsh/dsh-accessibility",
+    "version": "0.1.3-rc.1",
+    "revision": "d2c2e2f753c56ed292e9804b43b258b097ef17c4"
+  },
+  "composition": {
+    "package": "@oh-my-dsh/dsh-a11y-local-preview",
+    "version": "0.1.0-alpha.1",
+    "revision": "9c32ecce4a593eb5cb5214a7980e5c35f3f6666c",
+    "protocol": "dsh-a11y-local-preview/0.1.0-draft",
+    "installation": {
+      "kind": "fresh-local-tarball",
+      "integrity": "sha512-bTEiVebUXtbu3yh/XwJoO+VqJhrU6VH58Ka61eq4Q0hTRjlI9HYT2zDXtTxvTOIaSbnYlIGA0FtvpQptpN/AXg==",
+      "dependencyPackageCount": 6
+    }
+  },
+  "task": {
+    "id": "repair-image-alt-and-button-name",
+    "outcome": "completed",
+    "fileChanged": true,
+    "toolSequence": [
+      "a11y_check",
+      "read",
+      "edit",
+      "a11y_check"
+    ],
+    "untrustedReportFraming": {
+      "auditResultsValidated": 2,
+      "boundaryWarningPresent": true,
+      "subjectDataQuoted": true
+    },
+    "authorReviewPlan": {
+      "auditResultsValidated": 2,
+      "protocol": "dsh-a11y-author-review-plan/0.1.0-draft",
+      "claim": "none",
+      "status": "unresolved",
+      "unresolvedRows": 11
+    },
+    "headlessResult": {
+      "schemaVersion": "1.0.0",
+      "reason": "completed"
+    }
+  },
+  "before": {
+    "engine": {
+      "name": "axe-core",
+      "version": "4.13.0"
+    },
+    "failed": 2,
+    "ruleIds": [
+      "button-name",
+      "image-alt"
+    ]
+  },
+  "after": {
+    "engine": {
+      "name": "axe-core",
+      "version": "4.13.0"
+    },
+    "failed": 0,
+    "ruleIds": []
+  },
+  "limitations": [
+    "The fixed replay proves the real DSH product loop and tools, not model reasoning or autonomy.",
+    "No assistive technology or disabled person participated in this run.",
+    "A clean automated report is not a WCAG conformance claim."
+  ]
+}
