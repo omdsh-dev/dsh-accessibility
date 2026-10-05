@@ -71,14 +71,25 @@ function toolResultText(event, expectedCallId) {
   const data = object(event.data, 'tool result data is invalid')
   const message = object(data.message, 'tool result message is invalid')
   if (!Array.isArray(message.content)) throw new Error('tool result message content is invalid')
-  const toolResultBlocks = message.content.filter(block => block?.type === 'tool-result')
-  if (toolResultBlocks.length !== 1) throw new Error('tool result message must contain one tool-result block')
-  const block = object(toolResultBlocks[0], 'tool result block is invalid')
-  if (block.toolCallId !== expectedCallId) throw new Error('tool result block call id is invalid')
-  if (!Array.isArray(block.content) || block.content.length !== 1) {
+  let renderedContent
+  if (message.role === 'tool') {
+    // DSH session format V4 promotes the tool-result wrapper into the message.
+    if (message.toolCallId !== expectedCallId) throw new Error('tool result message call id is invalid')
+    if (message.isError !== false) throw new Error('accessibility result must explicitly report success')
+    renderedContent = message.content
+  } else {
+    // Retain the historical V3 envelope for validation of archived evidence.
+    if (message.content.length !== 1 || message.content[0]?.type !== 'tool-result') {
+      throw new Error('tool result message must contain one tool-result block')
+    }
+    const block = object(message.content[0], 'tool result block is invalid')
+    if (block.toolCallId !== expectedCallId) throw new Error('tool result block call id is invalid')
+    renderedContent = block.content
+  }
+  if (!Array.isArray(renderedContent) || renderedContent.length !== 1) {
     throw new Error('accessibility result must contain one rendered content block')
   }
-  const content = object(block.content[0], 'accessibility result content is invalid')
+  const content = object(renderedContent[0], 'accessibility result content is invalid')
   if (content.type !== 'text' || typeof content.text !== 'string') {
     throw new Error('accessibility result must contain rendered text')
   }

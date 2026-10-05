@@ -24,13 +24,45 @@ const reports = [
     version: '0.1.2-rc.1',
     revision: '1e7f105934eeb8d93dedcf738c480fab30069109',
   },
+  {
+    file: '2026-10-05-dsh-0.2.0-rc.2-ecef752eb2.json',
+    version: '0.2.0-rc.2',
+    revision: 'ecef752eb2b95f8a8f3c7863ed633a466355115a',
+  },
+  {
+    file: '2026-10-05-dsh-0.2.0-rc.2-7042120c03.json',
+    version: '0.2.0-rc.2',
+    revision: '7042120c039a874499ce8754de7975b4ef05cb41',
+  },
+  {
+    file: '2026-10-05-dsh-0.2.0-rc.2-1001be8032.json',
+    version: '0.2.0-rc.2',
+    revision: '1001be8032d1ba0d6c9c3fb7a8ef65f28151d9d6',
+  },
+  {
+    file: '2026-10-06-dsh-0.2.0-rc.2-19ea4ee861.json',
+    version: '0.2.0-rc.2',
+    revision: '19ea4ee861327dfb5f195925f04564b96ecec764',
+  },
+  {
+    file: '2026-10-06-dsh-0.2.0-rc.2-1d321f2053.json',
+    version: '0.2.0-rc.2',
+    revision: '1d321f2053c547d353c0ab033444e0dd148f68ae',
+  },
+  {
+    file: '2026-10-06-dsh-0.2.0-rc.2-9efb400069.json',
+    version: '0.2.0-rc.2',
+    revision: '9efb40006952158d75fbdce459a0c4958f4e02be',
+  },
 ]
 
 function reportUrl(file) {
   return new URL(`../automated-evidence/core-browser/${file}`, import.meta.url)
 }
 
-const currentReportUrl = reportUrl(reports.at(-1).file)
+// Keep the first campaign bound to its original revision; the new candidate
+// must satisfy the same contracts independently, without replacing that record.
+const contractReports = [reports[3], reports[4], reports[5], reports[6], reports[7], reports[8], reports[9]]
 
 const expectedTasks = [
   'discover-structure',
@@ -80,8 +112,8 @@ describe('archived core browser evidence', () => {
     expect(file).toContain(revision.slice(0, 10))
   })
 
-  it('requires all three engines, every stable check, and the nine catalog tasks on the campaign revision', async () => {
-    const report = JSON.parse(await readFile(currentReportUrl, 'utf8'))
+  it.each(contractReports)('requires all engines, checks, and tasks independently for $revision', async ({ file }) => {
+    const report = JSON.parse(await readFile(reportUrl(file), 'utf8'))
     expect(report.result).toBe('pass')
     expect(report.engines.map(item => item.engine)).toEqual(['chromium', 'firefox', 'webkit'])
     expect(report.scope.coreTasks.map(item => item.id)).toEqual(expectedTasks)
@@ -95,8 +127,8 @@ describe('archived core browser evidence', () => {
     }
   })
 
-  it('retains the non-AT and non-user evidence boundaries', async () => {
-    const report = JSON.parse(await readFile(currentReportUrl, 'utf8'))
+  it.each(contractReports)('retains non-AT and non-user evidence boundaries for $revision', async ({ file }) => {
+    const report = JSON.parse(await readFile(reportUrl(file), 'utf8'))
     const limitations = report.limitations.join(' ')
     expect(limitations).toMatch(/not assistive-technology/iu)
     expect(limitations).toMatch(/not a real browser-zoom/iu)

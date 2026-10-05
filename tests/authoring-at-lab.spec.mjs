@@ -50,6 +50,16 @@ describe('authoring assistive-technology lab', () => {
     expect(template).not.toContain('evidence: \'at-pass\'')
   })
 
+  it('checks native V4 result flags for every matching call rather than old content wrappers', () => {
+    const template = readFileSync(templatePath, 'utf8')
+    expect(template).toContain('return event.data.message.isError')
+    expect(template).not.toContain('event.data.message.content.some(content => content.isError)')
+    expect(template).toContain('expect(results).toHaveLength(calls.length)')
+    expect(template).toContain('result.data.message.toolCallId === call.data.callId')
+    expect(template).toContain('expect(matching).toHaveLength(1)')
+    expect(template).toContain("decision === 'reject' && call.data.name === 'edit'")
+  })
+
   it('keeps the one-use URL out of readiness JSON and secrets out of the child', () => {
     const template = readFileSync(templatePath, 'utf8')
     const readinessStart = template.indexOf("evidence: 'lab-ready-not-at-evidence'")

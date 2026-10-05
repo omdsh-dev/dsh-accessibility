@@ -4,7 +4,7 @@
 
 规程：`dsh-cli-accessibility/1.0.0-draft`
 
-本规程定义 DSH 一次性 headless CLI 的稳定进程输出，以及必须由人完成的辅助技术证据。它适用于 DSH `0.1.2-alpha.2` 候选版本。自动检查通过只是必要的进程证据，不证明某一款读屏软件、终端或残障开发者已经能用该工作流。
+本规程定义 DSH 一次性 headless CLI 的稳定进程输出，以及必须由人完成的辅助技术证据。当前启动器精确面向 DSH `0.2.0-rc.2`；已归档的 alpha.2 结果仍只对应原始提交。自动检查通过只是必要的进程证据，不证明某一款读屏软件、终端或残障开发者已经能用该工作流。
 
 ## 规范性进程契约
 
@@ -34,7 +34,7 @@
 在本仓库执行：
 
 ```console
-pnpm run lab:cli -- ../deepseek-harness-alpha2 automated
+pnpm run lab:cli -- ../deepseek-harness-alpha17 automated
 ```
 
 启动器首先会拒绝 DSH 或无障碍实验室 checkout 中任何 tracked、staged 或 untracked 改动；随后核对精确 DSH 包版本、构建本地产品、向 DSH checkout 临时注入一个产品入口 E2E 测试、执行后删除。结果记录完整 DSH 与实验室 Git revision，并检查帮助发现、参数闭合失败、成功的无障碍文本与 JSON，以及失败的无障碍文本与 JSON。
@@ -48,7 +48,7 @@ pnpm run lab:cli -- ../deepseek-harness-alpha2 automated
 执行：
 
 ```console
-pnpm run lab:cli -- ../deepseek-harness-alpha2 manual
+pnpm run lab:cli -- ../deepseek-harness-alpha17 manual
 ```
 
 启动器构建同一个本地 DSH revision，创建一次性 DSH home，并启动本地合成模型服务；不使用真实 API key 或个人工作区。两个命令通过当前终端直接输入输出；反引号名称是稳定的证据目录任务 ID：

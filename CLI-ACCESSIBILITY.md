@@ -4,7 +4,7 @@
 
 Protocol: `dsh-cli-accessibility/1.0.0-draft`
 
-This protocol defines the stable process output and the human assistive-technology evidence required for the DSH one-shot headless CLI. It applies to DSH `0.1.2-alpha.2` candidates. Passing its automated checks is necessary process evidence, not proof that a named screen reader, terminal, or disabled developer can use the workflow.
+This protocol defines the stable process output and the human assistive-technology evidence required for the DSH one-shot headless CLI. The current launcher targets DSH `0.2.0-rc.2` exactly; archived alpha.2 results remain scoped to their original revisions. Passing its automated checks is necessary process evidence, not proof that a named screen reader, terminal, or disabled developer can use the workflow.
 
 ## Normative process contract
 
@@ -34,7 +34,7 @@ A missing task or unsupported output format must fail before a model request. De
 From this repository, run:
 
 ```console
-pnpm run lab:cli -- ../deepseek-harness-alpha2 automated
+pnpm run lab:cli -- ../deepseek-harness-alpha17 automated
 ```
 
 The launcher first refuses tracked, staged, or untracked changes in either the DSH or accessibility-lab checkout. It then verifies the exact DSH package version, builds the local product, injects one disposable product-entry E2E test into the DSH checkout, runs it, and removes it. The result records the full DSH and lab Git revisions and checks help discovery, fail-closed argument handling, successful accessible text and JSON, and failed accessible text and JSON.
@@ -48,7 +48,7 @@ Run this check locally before a release candidate and in CI when the CLI output 
 Run:
 
 ```console
-pnpm run lab:cli -- ../deepseek-harness-alpha2 manual
+pnpm run lab:cli -- ../deepseek-harness-alpha17 manual
 ```
 
 The launcher builds the same local DSH revision, creates a disposable DSH home, and starts local synthetic model servers. It uses no real API key or personal workspace. Two commands run with inherited terminal I/O. The backticked names are stable evidence-catalog task IDs:

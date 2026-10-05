@@ -2,7 +2,7 @@
 
 简体中文 | [English](AUTHORING-AGENT-LAB.md)
 
-规程：`dsh-a11y-authoring-agent-lab/0.1.2-draft`。机器可读契约：[AUTHORING-AGENT-LAB.schema.json](AUTHORING-AGENT-LAB.schema.json)。
+规程：`dsh-a11y-authoring-agent-lab/0.1.2-draft`。机器可读契约：[AUTHORING-AGENT-LAB-0.2.0.schema.json](AUTHORING-AGENT-LAB-0.2.0.schema.json)。
 
 这个一次性实验室验证一项受限 DSH 创作任务：检查渲染后的本地预览，读取源码，通过 DSH 既有文件系统工具修复缺失的图片替代文本与空按钮名称，再审计修复后的页面。它会安装并运行产品组合，而不是直接 import 适配器来绕过产品生命周期。
 
@@ -10,7 +10,7 @@
 
 Replay 运行通过后，可针对输出中的精确修订证明：
 
-- 真实 DSH `0.1.2-alpha.2` 产品入口和插件管理器能够加载 freshly packed 的 `@oh-my-dsh/dsh-a11y-local-preview@0.1.0-alpha.0` tarball，完整六包内部依赖图也全部从新打出的 tarball 解析；
+- 真实 DSH `0.2.0-rc.2` 产品入口和插件管理器能够加载 freshly packed 的 `@oh-my-dsh/dsh-a11y-local-preview@0.1.0-alpha.1` tarball，完整六包内部依赖图也全部从新打出的 tarball 解析；
 - 真实字面量 loopback HTTP 页面在全新真实 Chromium context 中接受审计；
 - 真实 DSH agent loop 精确执行 `a11y_check → read → edit → a11y_check`；
 - 每个持久化工具调用都只有一个匹配的成功结果，两次审计都限制在 `main` 与已批准不透明句柄，文件系统访问仅限 `index.html`；
@@ -38,14 +38,14 @@ Runner 始终删除临时工作区与 DSH home，也不会使用测试者日常�
 前置条件：
 
 - 各仓库接受的 Node.js 与 pnpm 版本；
-- 已安装依赖的 DSH `0.1.2-alpha.2` 和 `dsh-a11y-local-preview@0.1.0-alpha.0` 本地 checkout；
+- 已安装依赖的 DSH `0.2.0-rc.2` 和 `dsh-a11y-local-preview@0.1.0-alpha.1` 本地 checkout；
 - local-preview 包需要的 Playwright Chromium 二进制；
 - replay 插件尚未缓存时可以访问 npm。
 
 当三个 checkout 位于同级目录时，在本仓库运行：
 
 ```sh
-pnpm run lab:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview replay
+pnpm run lab:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview replay
 ```
 
 Replay 模式无需密钥。Runner 会构建 DSH host 库与产品组合，创建一次性页面和 DSH home，重新打包精确六包创作依赖图，通过带 profile-local tarball override 的真实 `dsh plugin` 命令安装组合，执行任务，校验持久化 session，输出一个 JSON 证据对象，然后清理全部临时状态。
@@ -55,7 +55,7 @@ Replay 模式无需密钥。Runner 会构建 DSH host 库与产品组合，创�
 Live 模式需要通过操作者平时使用的密钥管理方式，把 `DEEPSEEK_API_KEY` 放入进程环境，然后运行：
 
 ```sh
-pnpm run lab:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview live
+pnpm run lab:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview live
 ```
 
 Live 模式不得使用真实产品数据或日常鉴权预览。任务、工具说明、页面 finding 与工具结果可能发送给配置的模型提供方。Runner 在没有密钥时会拒绝 live 模式；它会从构建和插件安装子进程中移除密钥，只把密钥传给最终 DSH agent 进程，并且绝不会在证据中打印或保存密钥。
@@ -77,3 +77,7 @@ Live 模式不得使用真实产品数据或日常鉴权预览。任务、工具
 - 本 fixture 的替代文本质量由构造时已知；真实内容仍须作者判断。
 - Chromium 与 axe-core 结果不能证明平台无障碍 API 或读屏语音／盲文表现。
 - local-preview 产品组合及其依赖已经具有公开 alpha 包元数据，但远端仓库和 npm 发布尚未启用；本实验室仅提供预发布证据。
+
+## 历史证据与当前候选版
+
+旧版 `0.1.2-alpha.2` 的证据与原 schema 保持不变，不证明本候选版通过。当前 launcher 固定要求 DSH `0.2.0-rc.2`、local-preview `0.1.0-alpha.1` 与实验室 `0.1.3-rc.1`，并拒绝旧版本组合。发布元数据不是创建公开仓库或公共 npm 包的授权；发布须满足当前可见性授权和全部门禁。

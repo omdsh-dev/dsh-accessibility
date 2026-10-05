@@ -56,3 +56,74 @@ describe('archived authoring agent evidence', () => {
     expect(evidence.limitations.join(' ')).toMatch(/not model reasoning.*No assistive technology.*not a WCAG/iu)
   })
 })
+
+describe.each([
+  { core: '19ea4ee861327dfb5f195925f04564b96ecec764', lab: 'e0161fca0e7b1f7553bd3e4c9150c66dd778ad67' },
+  { core: '1d321f2053c547d353c0ab033444e0dd148f68ae', lab: 'd2c2e2f753c56ed292e9804b43b258b097ef17c4' },
+])('archived DSH 0.2.0 authoring agent evidence on $core / $lab', ({ core, lab }) => {
+  const currentEvidenceUrl = new URL(
+    `../automated-evidence/authoring-agent/2026-10-06-dsh-0.2.0-rc.2-${core.slice(0, 10)}-lab-${lab.slice(0, 10)}.json`,
+    import.meta.url,
+  )
+
+  async function readCurrentEvidence() {
+    return JSON.parse(await readFile(currentEvidenceUrl, 'utf8'))
+  }
+
+  it('validates against the current exact versioned schema without replacing the historical record', async () => {
+    const [schema, evidence] = await Promise.all([
+      readFile(new URL('../AUTHORING-AGENT-LAB-0.2.0.schema.json', import.meta.url), 'utf8').then(JSON.parse),
+      readCurrentEvidence(),
+    ])
+    const ajv = new Ajv2020({ allErrors: true, strict: true })
+    addFormats(ajv)
+    const validate = ajv.compile(schema)
+    expect(validate(evidence), JSON.stringify(validate.errors)).toBe(true)
+  })
+
+  it('binds native V4 tool results and the six installed packages to exact source revisions', async () => {
+    const evidence = await readCurrentEvidence()
+    expect(evidence.dsh).toEqual({
+      version: '0.2.0-rc.2',
+      revision: core,
+    })
+    expect(evidence.lab).toEqual({
+      package: '@oh-my-dsh/dsh-accessibility',
+      version: '0.1.3-rc.1',
+      revision: lab,
+    })
+    expect(evidence.composition).toMatchObject({
+      version: '0.1.0-alpha.1',
+      revision: '9c32ecce4a593eb5cb5214a7980e5c35f3f6666c',
+      installation: {
+        kind: 'fresh-local-tarball',
+        integrity: 'sha512-bTEiVebUXtbu3yh/XwJoO+VqJhrU6VH58Ka61eq4Q0hTRjlI9HYT2zDXtTxvTOIaSbnYlIGA0FtvpQptpN/AXg==',
+        dependencyPackageCount: 6,
+      },
+    })
+    expect(evidence.task).toMatchObject({
+      outcome: 'completed',
+      fileChanged: true,
+      toolSequence: ['a11y_check', 'read', 'edit', 'a11y_check'],
+      untrustedReportFraming: {
+        auditResultsValidated: 2,
+        boundaryWarningPresent: true,
+        subjectDataQuoted: true,
+      },
+      authorReviewPlan: {
+        auditResultsValidated: 2,
+        claim: 'none',
+        status: 'unresolved',
+        unresolvedRows: 11,
+      },
+    })
+  })
+
+  it('does not promote automated repair into model, AT, or WCAG evidence', async () => {
+    const evidence = await readCurrentEvidence()
+    expect(evidence.evidence).toBe('keyless-replay-product-loop-not-model-or-at-evidence')
+    expect(evidence.before).toMatchObject({ failed: 2, ruleIds: ['button-name', 'image-alt'] })
+    expect(evidence.after).toMatchObject({ failed: 0, ruleIds: [] })
+    expect(evidence.limitations.join(' ')).toMatch(/not model reasoning.*No assistive technology.*not a WCAG/iu)
+  })
+})
