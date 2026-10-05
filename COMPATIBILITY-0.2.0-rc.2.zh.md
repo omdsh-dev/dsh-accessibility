@@ -9,7 +9,7 @@
 2026-10-05（Asia/Shanghai）已核验 npm 注册表与官方源码：`latest` 和 `next` 均指向 `0.2.0-rc.2`；`alpha` 指向 `0.2.1-alpha.1`。本候选仅面向 `0.2.0-rc.2`。
 
 - 官方源码：`dsh-v0.2.0-rc.2`，提交 `639ed015397290b3745d163aafe02ffee4aa3f84`。
-- 核心分支：`feat/a11y-core-0.2.0-rc.2`，候选提交 `1d321f2053c547d353c0ab033444e0dd148f68ae`。较早的 `ecef752eb2`、`7042120c03`、`1001be8032`、`19ea4ee861` 和 `6b879fc9ff` 结果继续绑定各自原提交。插件组装 CI 固定到新的精确核心 SHA，不使用移动分支。
+- 核心分支：`feat/a11y-core-0.2.0-rc.2`，候选提交 `9efb40006952158d75fbdce459a0c4958f4e02be`。较早的 `ecef752eb2`、`7042120c03`、`1001be8032`、`19ea4ee861`、`6b879fc9ff` 和 `1d321f2053` 结果继续绑定各自原提交。插件组装 CI 固定到新的精确核心 SHA，不使用移动分支。
 - 插件分支：`feat/compat-0.2.0-rc.2`，版本 `0.1.3-rc.1`。
 - 所有 DSH 开发依赖与 peer 均精确固定到 `0.2.0-rc.2`。Cordis 保持 `~4.0.4`，开发运行时为 `4.0.4`，group 插件为 `1.0.4`。
 
@@ -35,6 +35,10 @@
 - 核心 `1d321f2053` 与实验室 `d2c2e2f753` 的真实交付 profile／loader 闭环随后通过；精确修复、两份不可信数据报告与十一项未解决人工复核行全部保留。[逐字节归档](automated-evidence/authoring-agent/2026-10-06-dsh-0.2.0-rc.2-1d321f2053-lab-d2c2e2f753.json) SHA-256 为 `041f2bc2b513817dcce3d215c106e6480d1604029329974e2cabaf28ded0e3cc`。相同提交的组装浏览器允许一次／拒绝两种流程分别通过；拒绝仍保留源文件逐字节不变，仅编辑工具失败。这些结果不继承到后续提交，也不属于 AT 或真人验证。
 - 插件 `594fc0da53` 的远端 Windows Node 22.19.0／24.x 检查各有一项失败：CI 固定提交的静态测试将 LF 字符串与 Git checkout 的 CRLF 文本直接比较。新增测试仅规范化换行，仍要求同一个精确 SHA 和仓库；LF／CRLF 正向及错误 SHA／移动分支负向检查保留该防护。该失败不同于核心 Windows ACL 失败，本地检查不替代后续原生 Windows CI 结果。
 - 上述归档／换行防护更新后的完整插件检查有 30 个文件、281 项通过；移除换行规范化的负向对照使 CRLF 用例按预期失败。host/client 类型、peer 检查与逐字节归档比较也通过。
+- 核心 `1d321f2053` 远端 snapshots/artifacts 在类型感知 lint 阶段失败：测试夹具返回了 `Promise.allSettled` 的 `any` 拒绝原因，之后六道 gate 未执行。核心 `9efb400069` 只将该测试回调的返回类型显式设为 `unknown`，没有 cast、规则豁免或行为变化。修复前的定向复现失败；修复后的两文件 owner 检查有 198 项通过，全量类型感知 lint／重复检测两道 gate 也通过；正常提交和推送 hook 通过。新 CI 与独立再生成记录不继承历史 `1d321f2053` 的结果。
+- 干净的 `9efb400069` 三引擎无障碍检查独立完成 40 项通过、2 项不支持的 forced-colors 模拟跳过。[逐字节记录](automated-evidence/core-browser/2026-10-06-dsh-0.2.0-rc.2-9efb400069.json) 的 SHA-256 为 `7a58ab88367138b349ae3b2f711f2efc1238e55705893e2a973d60070c9291a2`，非 AT／非真人证据局限不变。
+- 插件 `8bef25ab93` 与核心 `1d321f2053` 的五项组装浏览器检查、六项 CLI 场景通过。其实际 139 条目 npm tarball 以精确 peer 图正常安装，导出可调用 host `apply` 及 `name`；integrity 为 `sha512-7El4KVoGtm5Rbp/PQDnYbvxdoKwk/kC5qy88WykYMdoCfKAmQY88ZSz0wG6NzG8t09bZ5UbvGDX5Yu0vbRRX6Q==`。这是精确历史 host 消费者结果，不代表发布或当前 installed-client 验证。
+- 固定 CI 到 `9efb400069` 并加入独立归档后，插件 30 文件、284 项测试以及 host/client 类型和 peer 检查通过。此前精确插件 `8bef25ab93` 的 Linux/macOS/Windows × Node 22.19.0/24.x 六个验证 job 均在 [CI 37362054998](https://github.com/omdsh-dev/dsh-accessibility/actions/runs/37362054998) 通过；核验时组装 job 仍排队。后续提交和核心 Windows ACL coverage 不继承该矩阵结果。
 
 上述均为自动化产品与打包检查，不是模型自主性、真实 AT、残障作者或 WCAG 符合性证据。浏览器内容创作检查采用固定的双问题夹具，不能证明任意动态、多模态或多文件创作覆盖。核心整仓测试、Windows ACL 夹具、省略可选依赖的原生安装门禁、产品评审及真人证据仍分别属于验收条件。
 

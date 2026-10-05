@@ -47,7 +47,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: omdsh-dev/deepseek-harness
-          ref: 1d321f2053c547d353c0ab033444e0dd148f68ae
+          ref: 9efb40006952158d75fbdce459a0c4958f4e02be
           path: .assembled/dsh
       - uses: pnpm/action-setup@v6
         with:
