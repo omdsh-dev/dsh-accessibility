@@ -9,7 +9,7 @@ Status: migration and verification in progress; unpublished. Real VoiceOver/NVDA
 The npm registry and official source were checked on 2026-10-05 (Asia/Shanghai): `latest` and `next` point to `0.2.0-rc.2`; `alpha` points to `0.2.1-alpha.1`. This candidate targets only `0.2.0-rc.2`.
 
 - Official source: `dsh-v0.2.0-rc.2`, commit `639ed015397290b3745d163aafe02ffee4aa3f84`.
-- Core integration is merged into `baseline/dsh-v0.2.0-rc.2`; the Windows-fixture follow-up branch is `fix/rc2-windows-acl-fixtures`, commit `54fec68d0e141fba0d7451f33acad78d388674d0`. Earlier results, including `9efb400069`, remain tied to their original commits. Assembled CI pins the exact follow-up SHA, not a moving branch.
+- Core integration is merged into `baseline/dsh-v0.2.0-rc.2`; the Windows-fixture follow-up branch is `fix/rc2-windows-acl-fixtures`, commit `bc345ae4124f35560276b3666130d7e6dd6ee19a`. Earlier results, including `9efb400069`, remain tied to their original commits. Assembled CI pins the exact follow-up SHA, not a moving branch.
 - Companion integration is merged into `main`; final-pair verification branch: `fix/rc2-final-core-pair`, version `0.1.3-rc.1`.
 - Every DSH development and peer dependency is pinned exactly to `0.2.0-rc.2`. Cordis remains `~4.0.4`, with development runtime `4.0.4` and group plugin `1.0.4`.
 
@@ -28,6 +28,10 @@ Clean core `54fec68d0e141fba0d7451f33acad78d388674d0` / companion `8a3d42fe4298a
 The companion follow-up also passed all 284 unit tests in 30 files, host/client type checks, and peer validation. The 26-requirement human coverage policy remains unsatisfied with zero human records; schema-valid templates are not evidence. npm dependency sourcemap warnings were present in the unit log and did not fail the suite.
 
 The latest-alpha port is separate. An uncommitted trial merge of official `dsh-v0.2.1-alpha.5` (`1517a4dbca0a2789ff1d41ba439600f8547d23fa`) encountered 104 conflicts and was aborted cleanly. No alpha.5 compatibility is claimed or admitted by this rc.2-only launcher. The human ledger remains empty, and the macOS optional-dependency packaging limitation recorded below is not waived.
+
+### Native Windows follow-up, 2026-10-17
+
+The first independent native Windows run on core `54fec68d0e141fba0d7451f33acad78d388674d0` / companion `cdfcd9f8c05454e10ef03a39885366c5d8c62863` passed 30 of 31 ACL tests; all eight original fixture failures were repaired. The remaining failure was an exact ACE comparison retaining the path prefix when `icacls` moved an inherit-only ACE to the first display line. Core `bc345ae4124f35560276b3666130d7e6dd6ee19a` normalizes both sides, retaining exact rights and a negative control for changed rights. Local focused checks passed 47 with 31 Windows skips; a new native run is required. In [run 38933803644](https://github.com/omdsh-dev/dsh-accessibility/actions/runs/38933803644), all six companion matrix jobs and assembled browsers passed, while the native ACL job and aggregate correctly failed. Those results do not transfer to the new pair.
 
 ### Current authoring-family migration, 2026-10-06
 

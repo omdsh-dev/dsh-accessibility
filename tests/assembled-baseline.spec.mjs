@@ -13,7 +13,7 @@ function companion(privateBuild = false) {
 
 function expectPinnedCoreRevision(workflow) {
   const normalized = workflow.replaceAll('\r\n', '\n')
-  expect(normalized).toContain('repository: omdsh-dev/deepseek-harness\n          ref: 54fec68d0e141fba0d7451f33acad78d388674d0')
+  expect(normalized).toContain('repository: omdsh-dev/deepseek-harness\n          ref: bc345ae4124f35560276b3666130d7e6dd6ee19a')
   expect(normalized).not.toContain('ref: feat/a11y-core-0.2.0-rc.2')
 }
 
@@ -22,7 +22,7 @@ function expectNativeWindowsGate(workflow) {
   const nativeJob = normalized.split('\n  core-windows-acl:\n')[1]?.split('\n  ci:\n')[0]
   expect(nativeJob).toBeDefined()
   expect(nativeJob).toContain('runs-on: windows-latest')
-  expect(nativeJob).toContain('repository: omdsh-dev/deepseek-harness\n          ref: 54fec68d0e141fba0d7451f33acad78d388674d0')
+  expect(nativeJob).toContain('repository: omdsh-dev/deepseek-harness\n          ref: bc345ae4124f35560276b3666130d7e6dd6ee19a')
   expect(nativeJob).toContain('pnpm exec vitest run packages/sandbox/sandbox-windows-acl/tests/diagnose-script.spec.ts --maxWorkers=2')
   expect(normalized).toContain('needs: [validate, assembled-browser, core-windows-acl]')
   expect(normalized).toContain('WINDOWS_ACL_RESULT: ${{ needs.core-windows-acl.result }}')
@@ -48,7 +48,7 @@ describe('assembled baseline preflight', () => {
   })
   it.each(['0'.repeat(40), 'feat/a11y-core-0.2.0-rc.2'])('still rejects a wrong or moving CI core ref %s', (ref) => {
     const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')
-      .replaceAll('54fec68d0e141fba0d7451f33acad78d388674d0', ref)
+      .replaceAll('bc345ae4124f35560276b3666130d7e6dd6ee19a', ref)
     expect(() => expectPinnedCoreRevision(workflow)).toThrow()
   })
   it.each(['run-at-lab.mjs', 'run-core-at-lab.mjs', 'run-live-at-lab.mjs', 'run-cli-conformance.mjs', 'run-assembled-browser.mjs'])('%s checks the exact companion target before creating state', (launcher) => {
