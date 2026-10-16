@@ -13,7 +13,7 @@ function companion(privateBuild = false) {
 
 function expectPinnedCoreRevision(workflow) {
   const normalized = workflow.replaceAll('\r\n', '\n')
-  expect(normalized).toContain('repository: omdsh-dev/deepseek-harness\n          ref: 9efb40006952158d75fbdce459a0c4958f4e02be')
+  expect(normalized).toContain('repository: omdsh-dev/deepseek-harness\n          ref: 54fec68d0e141fba0d7451f33acad78d388674d0')
   expect(normalized).not.toContain('ref: feat/a11y-core-0.2.0-rc.2')
 }
 
@@ -24,7 +24,7 @@ describe('assembled baseline preflight', () => {
   })
   it.each(['0'.repeat(40), 'feat/a11y-core-0.2.0-rc.2'])('still rejects a wrong or moving CI core ref %s', (ref) => {
     const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')
-      .replaceAll('9efb40006952158d75fbdce459a0c4958f4e02be', ref)
+      .replaceAll('54fec68d0e141fba0d7451f33acad78d388674d0', ref)
     expect(() => expectPinnedCoreRevision(workflow)).toThrow()
   })
   it.each(['run-at-lab.mjs', 'run-core-at-lab.mjs', 'run-live-at-lab.mjs', 'run-cli-conformance.mjs', 'run-assembled-browser.mjs'])('%s checks the exact companion target before creating state', (launcher) => {
