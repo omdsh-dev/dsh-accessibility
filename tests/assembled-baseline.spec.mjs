@@ -13,18 +13,42 @@ function companion(privateBuild = false) {
 
 function expectPinnedCoreRevision(workflow) {
   const normalized = workflow.replaceAll('\r\n', '\n')
-  expect(normalized).toContain('repository: omdsh-dev/deepseek-harness\n          ref: 9efb40006952158d75fbdce459a0c4958f4e02be')
+  expect(normalized).toContain('repository: omdsh-dev/deepseek-harness\n          ref: bc345ae4124f35560276b3666130d7e6dd6ee19a')
   expect(normalized).not.toContain('ref: feat/a11y-core-0.2.0-rc.2')
 }
 
+function expectNativeWindowsGate(workflow) {
+  const normalized = workflow.replaceAll('\r\n', '\n')
+  const nativeJob = normalized.split('\n  core-windows-acl:\n')[1]?.split('\n  ci:\n')[0]
+  expect(nativeJob).toBeDefined()
+  expect(nativeJob).toContain('runs-on: windows-latest')
+  expect(nativeJob).toContain('repository: omdsh-dev/deepseek-harness\n          ref: bc345ae4124f35560276b3666130d7e6dd6ee19a')
+  expect(nativeJob).toContain('pnpm exec vitest run packages/sandbox/sandbox-windows-acl/tests/diagnose-script.spec.ts --maxWorkers=2')
+  expect(normalized).toContain('needs: [validate, assembled-browser, core-windows-acl]')
+  expect(normalized).toContain('WINDOWS_ACL_RESULT: ${{ needs.core-windows-acl.result }}')
+  expect(normalized).toContain('test "$WINDOWS_ACL_RESULT" = success')
+}
+
 describe('assembled baseline preflight', () => {
+  it.each(['\n', '\r\n'])('requires an independent native Windows fixture verdict with %j line endings', (lineEnding) => {
+    const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')
+    expectNativeWindowsGate(workflow.replaceAll('\r\n', '\n').replaceAll('\n', lineEnding))
+  })
+  it.each([
+    ['runs-on: windows-latest', 'runs-on: ubuntu-latest'],
+    ['needs: [validate, assembled-browser, core-windows-acl]', 'needs: [validate, assembled-browser]'],
+    ['test "$WINDOWS_ACL_RESULT" = success', 'true'],
+  ])('rejects a missing native Windows gate guarantee %s', (source, replacement) => {
+    const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8').replaceAll(source, replacement)
+    expect(() => expectNativeWindowsGate(workflow)).toThrow()
+  })
   it.each(['\n', '\r\n'])('pins assembled CI to the exact patched rc.2 core revision with %j line endings', (lineEnding) => {
     const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')
     expectPinnedCoreRevision(workflow.replaceAll('\r\n', '\n').replaceAll('\n', lineEnding))
   })
   it.each(['0'.repeat(40), 'feat/a11y-core-0.2.0-rc.2'])('still rejects a wrong or moving CI core ref %s', (ref) => {
     const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')
-      .replaceAll('9efb40006952158d75fbdce459a0c4958f4e02be', ref)
+      .replaceAll('bc345ae4124f35560276b3666130d7e6dd6ee19a', ref)
     expect(() => expectPinnedCoreRevision(workflow)).toThrow()
   })
   it.each(['run-at-lab.mjs', 'run-core-at-lab.mjs', 'run-live-at-lab.mjs', 'run-cli-conformance.mjs', 'run-assembled-browser.mjs'])('%s checks the exact companion target before creating state', (launcher) => {
