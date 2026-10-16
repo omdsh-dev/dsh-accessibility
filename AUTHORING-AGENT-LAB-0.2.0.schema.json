@@ -1,0 +1,331 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/omdsh-dev/dsh-accessibility/blob/main/AUTHORING-AGENT-LAB-0.2.0.schema.json",
+  "title": "DSH accessibility authoring agent lab evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol",
+    "generatedAt",
+    "evidence",
+    "mode",
+    "environment",
+    "dsh",
+    "lab",
+    "composition",
+    "task",
+    "before",
+    "after",
+    "limitations"
+  ],
+  "properties": {
+    "protocol": {
+      "const": "dsh-a11y-authoring-agent-lab/0.1.2-draft"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "evidence": {
+      "enum": [
+        "keyless-replay-product-loop-not-model-or-at-evidence",
+        "live-model-product-loop-not-at-or-disabled-user-evidence"
+      ]
+    },
+    "mode": {
+      "enum": [
+        "replay",
+        "live"
+      ]
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "os",
+        "osRelease",
+        "architecture"
+      ],
+      "properties": {
+        "os": {
+          "type": "string",
+          "minLength": 1
+        },
+        "osRelease": {
+          "type": "string",
+          "minLength": 1
+        },
+        "architecture": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "dsh": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "revision"
+      ],
+      "properties": {
+        "version": {
+          "const": "0.2.0-rc.2"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      }
+    },
+    "lab": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "package",
+        "version",
+        "revision"
+      ],
+      "properties": {
+        "package": {
+          "const": "@oh-my-dsh/dsh-accessibility"
+        },
+        "version": {
+          "const": "0.1.3-rc.1"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      }
+    },
+    "composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "package",
+        "version",
+        "revision",
+        "protocol",
+        "installation"
+      ],
+      "properties": {
+        "package": {
+          "const": "@oh-my-dsh/dsh-a11y-local-preview"
+        },
+        "version": {
+          "const": "0.1.0-alpha.1"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "protocol": {
+          "const": "dsh-a11y-local-preview/0.1.0-draft"
+        },
+        "installation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "integrity",
+            "dependencyPackageCount"
+          ],
+          "properties": {
+            "kind": {
+              "const": "fresh-local-tarball"
+            },
+            "integrity": {
+              "type": "string",
+              "pattern": "^sha512-[A-Za-z0-9+/]+={0,2}$"
+            },
+            "dependencyPackageCount": {
+              "const": 6
+            }
+          }
+        }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "outcome",
+        "fileChanged",
+        "toolSequence",
+        "untrustedReportFraming",
+        "authorReviewPlan",
+        "headlessResult"
+      ],
+      "properties": {
+        "id": {
+          "const": "repair-image-alt-and-button-name"
+        },
+        "outcome": {
+          "const": "completed"
+        },
+        "fileChanged": {
+          "const": true
+        },
+        "toolSequence": {
+          "const": [
+            "a11y_check",
+            "read",
+            "edit",
+            "a11y_check"
+          ]
+        },
+        "untrustedReportFraming": {
+          "const": {
+            "auditResultsValidated": 2,
+            "boundaryWarningPresent": true,
+            "subjectDataQuoted": true
+          }
+        },
+        "authorReviewPlan": {
+          "const": {
+            "auditResultsValidated": 2,
+            "protocol": "dsh-a11y-author-review-plan/0.1.0-draft",
+            "claim": "none",
+            "status": "unresolved",
+            "unresolvedRows": 11
+          }
+        },
+        "headlessResult": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schemaVersion",
+            "reason"
+          ],
+          "properties": {
+            "schemaVersion": {
+              "const": "1.0.0"
+            },
+            "reason": {
+              "const": "completed"
+            }
+          }
+        }
+      }
+    },
+    "before": {
+      "$ref": "#/$defs/beforeAudit"
+    },
+    "after": {
+      "$ref": "#/$defs/afterAudit"
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "replay"
+          }
+        },
+        "required": [
+          "mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "evidence": {
+            "const": "keyless-replay-product-loop-not-model-or-at-evidence"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "live"
+          }
+        },
+        "required": [
+          "mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "evidence": {
+            "const": "live-model-product-loop-not-at-or-disabled-user-evidence"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "engine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "const": "axe-core"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "beforeAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engine",
+        "failed",
+        "ruleIds"
+      ],
+      "properties": {
+        "engine": {
+          "$ref": "#/$defs/engine"
+        },
+        "failed": {
+          "const": 2
+        },
+        "ruleIds": {
+          "const": [
+            "button-name",
+            "image-alt"
+          ]
+        }
+      }
+    },
+    "afterAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engine",
+        "failed",
+        "ruleIds"
+      ],
+      "properties": {
+        "engine": {
+          "$ref": "#/$defs/engine"
+        },
+        "failed": {
+          "const": 0
+        },
+        "ruleIds": {
+          "const": []
+        }
+      }
+    }
+  }
+}

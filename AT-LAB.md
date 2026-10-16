@@ -8,7 +8,7 @@ Protocol: `dsh-at-lab/1.0.0-draft`
 
 Tracking: [VoiceOver #2](https://github.com/omdsh-dev/dsh-accessibility/issues/2), [NVDA #1](https://github.com/omdsh-dev/dsh-accessibility/issues/1), and [Accessible View #10](https://github.com/omdsh-dev/dsh-accessibility/issues/10)
 
-This protocol tests the `0.1.0-beta.8` companion, Accessible View, and diagnostic feedback loop on DSH `0.1.2-rc.1` plus the matching accessibility core candidate. The [DSH core AT lab](AT-CORE-LAB.md) remains the historical first-campaign protocol pinned to its exact alpha.2 revisions; results from that campaign do not transfer to rc1.
+This launcher tests the unpublished `0.1.3-rc.1` companion, Accessible View, and diagnostic feedback loop on DSH `0.2.0-rc.2` plus the matching accessibility core candidate. The [DSH core AT lab](AT-CORE-LAB.md) and [live-announcement lab](AT-LIVE-LAB.md) cover separate core tasks. The first human campaign, older compatibility records, and published npm `0.1.0-beta.8` retain their original revisions; none of those results transfers to this candidate.
 
 ## Purpose and evidence boundary
 
@@ -18,19 +18,19 @@ Starting the lab, inspecting the accessibility tree, or showing a VoiceOver capt
 
 ## Exact candidate setup
 
-Build the tagged DSH baseline and the candidate branch first:
+Build the matching candidate branches first:
 
 ```sh
 git clone https://github.com/omdsh-dev/deepseek-harness.git
 git clone https://github.com/omdsh-dev/dsh-accessibility.git
 
 cd deepseek-harness
-git checkout dsh-v0.1.2-rc.1-a11y.5
-pnpm install
-pnpm run build:official
+git checkout feat/a11y-core-0.2.0-rc.2
+pnpm install --frozen-lockfile
+pnpm run build
 
 cd ../dsh-accessibility
-git checkout v0.1.0-beta.8
+git checkout feat/compat-0.2.0-rc.2
 pnpm install --frozen-lockfile
 pnpm run build
 ```

@@ -22,7 +22,7 @@ Readiness JSON, Host terminal output, captions, DOM text, screenshots, and autom
 
 ## Prerequisites
 
-- local checkouts of DSH `0.1.2-alpha.2` and `@oh-my-dsh/dsh-a11y-local-preview@0.1.0-alpha.0` with dependencies installed;
+- local checkouts of DSH `0.2.0-rc.2` and `@oh-my-dsh/dsh-a11y-local-preview@0.1.0-alpha.1` with dependencies installed;
 - built DSH Web output (`pnpm run build` in the DSH checkout);
 - built local-preview output (`pnpm run build` in its checkout);
 - the Playwright Chromium binary required by local-preview; and
@@ -37,9 +37,9 @@ Before it creates state, the launcher also requires clean Git state for the DSH,
 From this repository, when the checkouts are siblings:
 
 ```sh
-pnpm run lab:at:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview verify 0
-pnpm run lab:at:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview verify-reject 0
-pnpm run lab:at:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview none 1000
+pnpm run lab:at:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview verify 0
+pnpm run lab:at:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview verify-reject 0
+pnpm run lab:at:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview none 1000
 ```
 
 These three commands are development gates, not human evidence. `verify` must report `allowed-once`, `exactRepair: true`, and the exact four-tool sequence. `verify-reject` must report `rejected`, `exactRepair: false`, `sourceUnchanged: true`, and a failed edit. The one-second `none` run proves bounded boot and cleanup without mounting the human-driven replay.
@@ -49,13 +49,13 @@ These three commands are development gates, not human evidence. `verify` must re
 VoiceOver with Safari on macOS:
 
 ```sh
-pnpm run lab:at:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview safari 0
+pnpm run lab:at:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview safari 0
 ```
 
 VoiceOver/NVDA/JAWS/Narrator/Orca with an isolated Chrome/Chromium profile on macOS, Windows, or Linux:
 
 ```sh
-pnpm run lab:at:authoring -- ../deepseek-harness-alpha2 ../dsh-a11y-local-preview chrome 0
+pnpm run lab:at:authoring -- ../deepseek-harness-alpha17 ../dsh-a11y-local-preview chrome 0
 ```
 
 Cross-platform Chrome mode finds an installed Chrome/Chromium executable, creates a fresh temporary profile, disables background networking, blocks non-loopback host resolution, closes the isolated browser on exit, and removes the profile. It is the preferred Windows NVDA/JAWS/Narrator and Linux Orca route. Safari can reuse its existing browser context, so use it only with a dedicated clean profile and stop immediately if personal UI appears. Use `none 0` only when an isolated Chrome/Chromium executable is unavailable, then copy the separately printed one-use sign-in URL into a dedicated clean browser profile and never publish it. `system 0` may be used when the default browser is the intended browser and already has a dedicated clean profile.
@@ -128,3 +128,7 @@ The tester still controls the machine and browser. Prefer isolated `chrome`; use
 - Passing VoiceOver and NVDA rows remains insufficient for the project goal until disabled developers complete representative authoring tasks independently, effectively, and safely.
 
 Use [RESEARCH.md](RESEARCH.md) for consent, de-identification, severity, assistance, and disabled-user study rules. Use [RFC-A11Y-AUTHORING.md](RFC-A11Y-AUTHORING.md) for the authority and provider architecture.
+
+## Historical evidence and current candidate
+
+Historical `0.1.2-alpha.2` evidence and its original schema are preserved; they do not prove this candidate passes. Current launchers require DSH `0.2.0-rc.2`, local-preview `0.1.0-alpha.1`, and lab `0.1.3-rc.1`, rejecting old combinations. Publication metadata is not authorization to create public repositories or npm packages; publication must satisfy current visibility authorization and all release gates.

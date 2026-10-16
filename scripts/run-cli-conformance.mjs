@@ -5,6 +5,7 @@ import { arch, platform, release, tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { exactGitRevision } from './lab-source-state.mjs'
+import { assertCompanionBaseline } from './verify-assembled-baseline.mjs'
 
 const rawArguments = process.argv.slice(2)
 const launcherArguments = rawArguments[0] === '--' ? rawArguments.slice(1) : rawArguments
@@ -20,14 +21,7 @@ const invocationCwd = process.cwd()
 const dshRoot = resolve(invocationCwd, dshArgument)
 const dshManifest = JSON.parse(await readFile(join(dshRoot, 'package.json'), 'utf8'))
 const labManifest = JSON.parse(await readFile(join(invocationCwd, 'package.json'), 'utf8'))
-if (dshManifest.version !== '0.1.2-alpha.2') {
-  throw new Error(
-    `CLI accessibility conformance requires DSH 0.1.2-alpha.2, received ${String(dshManifest.version)}`,
-  )
-}
-if (labManifest.name !== '@oh-my-dsh/dsh-accessibility') {
-  throw new Error('CLI accessibility lab must run from the @oh-my-dsh/dsh-accessibility checkout')
-}
+assertCompanionBaseline(dshManifest, labManifest)
 const dshRevision = exactGitRevision(dshRoot, 'DSH checkout')
 const labRevision = exactGitRevision(invocationCwd, 'Accessibility lab checkout')
 

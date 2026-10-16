@@ -51,13 +51,11 @@ function result(callId, isError = false, text = 'ok') {
     type: 'tool/result',
     data: {
       message: {
+        role: 'tool',
         source: { kind: 'tool', callId },
-        content: [{
-          type: 'tool-result',
-          toolCallId: callId,
-          content: [{ type: 'text', text }],
-          isError,
-        }],
+        toolCallId: callId,
+        content: [{ type: 'text', text }],
+        isError,
       },
     },
   }
@@ -117,6 +115,45 @@ describe('authoring agent lab evidence', () => {
       : event)
     expect(() => validateModelVisibleA11yReports(promotedOutcome, injectionLikeSubject))
       .toThrow('promoted an unobserved outcome')
+  })
+
+  it('retains the historical V3 tool-result envelope without confusing it with V4', () => {
+    const historicalEvents = validEvents.map(event => event.type !== 'tool/result' ? event : {
+      ...event,
+      data: {
+        message: {
+          source: event.data.message.source,
+          content: [{
+            type: 'tool-result',
+            toolCallId: event.data.message.toolCallId,
+            content: event.data.message.content,
+            isError: false,
+          }],
+        },
+      },
+    })
+    expect(validateModelVisibleA11yReports(historicalEvents, injectionLikeSubject)
+      .untrustedReportFraming.auditResultsValidated).toBe(2)
+    const ambiguous = historicalEvents.map(event => event.type !== 'tool/result' ? event : {
+      ...event, data: { message: { ...event.data.message, role: 'tool', toolCallId: event.data.message.source.callId, isError: false } },
+    })
+    expect(() => validateModelVisibleA11yReports(ambiguous, injectionLikeSubject))
+      .toThrow('must contain rendered text')
+  })
+
+  it.each([
+    [{ toolCallId: 'wrong' }, 'message call id'],
+    [{ isError: undefined }, 'explicitly report success'],
+    [{ isError: true }, 'explicitly report success'],
+    [{ content: undefined }, 'content is invalid'],
+    [{ content: [] }, 'one rendered content block'],
+    [{ content: [{ type: 'text', text: framedAuditResult }, { type: 'text', text: 'extra' }] }, 'one rendered content block'],
+    [{ content: [{ type: 'image', data: 'not-text' }] }, 'must contain rendered text'],
+  ])('rejects malformed V4 accessibility tool results', (patch, message) => {
+    const invalid = validEvents.map(event => event !== validEvents[1] ? event : {
+      ...event, data: { message: { ...event.data.message, ...patch } },
+    })
+    expect(() => validateModelVisibleA11yReports(invalid, injectionLikeSubject)).toThrow(message)
   })
 
   it('ships a machine-readable schema for the exact evidence protocol', () => {

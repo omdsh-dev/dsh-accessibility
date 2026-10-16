@@ -3,6 +3,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { spawn } from 'node:child_process'
 import { join, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
+import { assertAuthoringBaseline } from './authoring-baseline.mjs'
 import { exactGitRevision } from './lab-source-state.mjs'
 import { installAuthoringPackageConsumer, packAuthoringPackages } from './authoring-package-install-lib.mjs'
 
@@ -32,13 +33,7 @@ const packageRoot = resolve(import.meta.dirname, '..')
 const dshManifest = JSON.parse(await readFile(join(dshRoot, 'package.json'), 'utf8'))
 const localPreviewManifest = JSON.parse(await readFile(join(localPreviewRoot, 'package.json'), 'utf8'))
 const labManifest = JSON.parse(await readFile(join(packageRoot, 'package.json'), 'utf8'))
-if (dshManifest.version !== '0.1.2-alpha.2') {
-  throw new Error(`authoring AT lab requires DSH 0.1.2-alpha.2, received ${String(dshManifest.version)}`)
-}
-if (localPreviewManifest.name !== '@oh-my-dsh/dsh-a11y-local-preview'
-  || localPreviewManifest.version !== '0.1.0-alpha.0') {
-  throw new Error('authoring AT lab requires @oh-my-dsh/dsh-a11y-local-preview 0.1.0-alpha.0')
-}
+assertAuthoringBaseline(dshManifest, localPreviewManifest, labManifest)
 await readFile(join(dshRoot, 'apps/web/dist/index.html'), 'utf8').catch(() => {
   throw new Error('DSH Web dist is missing; run `pnpm run build` in the DSH checkout first')
 })

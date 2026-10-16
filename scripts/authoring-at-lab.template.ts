@@ -201,7 +201,7 @@ async function closeBrowser(launched: LaunchedBrowser | undefined): Promise<void
 
 function resultIsError(event: SessionEvent): boolean {
   if (event.type !== 'tool/result') return false
-  return event.data.message.content.some(content => content.isError)
+  return event.data.message.isError
 }
 
 function callNames(events: readonly SessionEvent[]): string[] {
@@ -241,8 +241,14 @@ async function verifyProductFlow(
     const expectedSource = decision === 'allow' ? expectedHtml : initialHtml
     await expect.poll(() => readFile(htmlPath, 'utf8'), { timeout: 15_000 }).toBe(expectedSource)
     expect(callNames(sessionEvents)).toEqual(['a11y_check', 'read', 'edit', 'a11y_check'])
-    expect(sessionEvents.filter(event => event.type === 'tool/result').some(resultIsError))
-      .toBe(decision === 'reject')
+    const calls = sessionEvents.filter(event => event.type === 'tool/call')
+    const results = sessionEvents.filter(event => event.type === 'tool/result')
+    expect(results).toHaveLength(calls.length)
+    for (const call of calls) {
+      const matching = results.filter(result => result.data.message.toolCallId === call.data.callId)
+      expect(matching).toHaveLength(1)
+      expect(resultIsError(matching[0])).toBe(decision === 'reject' && call.data.name === 'edit')
+    }
     expect(JSON.stringify(sessionEvents.filter(event => event.type === 'approval/decided').at(-1)))
       .toContain(decision === 'allow' ? 'allowed-once' : 'rejected')
     await expandTurnProcesses(page)

@@ -1,8 +1,9 @@
 /** Run the external-plugin browser scenario inside an exact DSH checkout. */
 import { readFile, rm, writeFile } from 'node:fs/promises'
-import { spawn, spawnSync } from 'node:child_process'
+import { spawn } from 'node:child_process'
 import { resolve, join } from 'node:path'
 import { assertCompanionBaseline } from './verify-assembled-baseline.mjs'
+import { exactGitRevision } from './lab-source-state.mjs'
 
 const [dshArgument, pluginArgument = '.', browserArgument = 'chromium'] = process.argv.slice(2)
 if (dshArgument === undefined) {
@@ -21,12 +22,9 @@ const pluginRoot = resolve(invocationCwd, pluginArgument)
 const dshManifest = JSON.parse(await readFile(join(dshRoot, 'package.json'), 'utf8'))
 const pluginManifest = JSON.parse(await readFile(join(pluginRoot, 'package.json'), 'utf8'))
 assertCompanionBaseline(dshManifest, pluginManifest)
+const dshRevision = exactGitRevision(dshRoot, 'DSH checkout')
+const pluginRevision = exactGitRevision(pluginRoot, 'Companion checkout')
 await readFile(join(pluginRoot, 'lib/client.js'), 'utf8')
-
-function gitRevision(root) {
-  const result = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' })
-  return result.status === 0 ? String(result.stdout).trim() : 'unavailable'
-}
 
 const template = await readFile(join(pluginRoot, 'scripts/assembled-browser.e2e.template.ts'), 'utf8')
 const helper = await readFile(join(pluginRoot, 'scripts/browser-contract.e2e-helper.ts'), 'utf8')
@@ -55,8 +53,8 @@ try {
         DSH_SNAPSHOT: 'replay',
         DSH_ACCESSIBILITY_PLUGIN_ROOT: pluginRoot,
         DSH_ACCESSIBILITY_BROWSERS: browserNames.join(','),
-        DSH_ACCESSIBILITY_DSH_REVISION: gitRevision(dshRoot),
-        DSH_ACCESSIBILITY_PLUGIN_REVISION: gitRevision(pluginRoot),
+        DSH_ACCESSIBILITY_DSH_REVISION: dshRevision,
+        DSH_ACCESSIBILITY_PLUGIN_REVISION: pluginRevision,
       },
     })
     child.once('error', reject)
