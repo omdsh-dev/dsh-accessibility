@@ -9,13 +9,25 @@
 2026-10-05（Asia/Shanghai）已核验 npm 注册表与官方源码：`latest` 和 `next` 均指向 `0.2.0-rc.2`；`alpha` 指向 `0.2.1-alpha.1`。本候选仅面向 `0.2.0-rc.2`。
 
 - 官方源码：`dsh-v0.2.0-rc.2`，提交 `639ed015397290b3745d163aafe02ffee4aa3f84`。
-- 核心分支：`feat/a11y-core-0.2.0-rc.2`，候选提交 `9efb40006952158d75fbdce459a0c4958f4e02be`。较早的 `ecef752eb2`、`7042120c03`、`1001be8032`、`19ea4ee861`、`6b879fc9ff` 和 `1d321f2053` 结果继续绑定各自原提交。插件组装 CI 固定到新的精确核心 SHA，不使用移动分支。
-- 插件分支：`feat/compat-0.2.0-rc.2`，版本 `0.1.3-rc.1`。
+- 核心整合已合入 `baseline/dsh-v0.2.0-rc.2`；Windows 夹具后续修复分支为 `fix/rc2-windows-acl-fixtures`，提交 `54fec68d0e141fba0d7451f33acad78d388674d0`。包括 `9efb400069` 在内的历史结果继续绑定原提交；组装 CI 固定到后续修复的精确 SHA，不使用移动分支。
+- 插件整合已合入 `main`；最终组合验证分支为 `fix/rc2-final-core-pair`，版本 `0.1.3-rc.1`。
 - 所有 DSH 开发依赖与 peer 均精确固定到 `0.2.0-rc.2`。Cordis 保持 `~4.0.4`，开发运行时为 `4.0.4`，group 插件为 `1.0.4`。
 
 历史 [0.1.7-rc.2 结果](COMPATIBILITY-0.1.7-rc.2.zh.md)、已发布 npm `0.1.0-beta.8`、自动化归档与首轮真人活动继续保留各自版本和提交边界。历史通过结果不会转移到本候选。
 
 ## 验证记录
+
+### 合并后的精确组合验证：2026-10-17
+
+[核心 #6](https://github.com/omdsh-dev/deepseek-harness/pull/6) 与[插件 #30](https://github.com/omdsh-dev/dsh-accessibility/pull/30) 已合并。核心合并提交为 `67e684646452b9f94c404b288d6c57374359011b`；插件 squash 合并提交为 `1096126d982a2fc676a1558c06dcb8b59ed2187a`，原源码分支保留。这是开发整合，不代表发布或完整无障碍验收。
+
+干净核心 `54fec68d0e141fba0d7451f33acad78d388674d0`／插件 `8a3d42fe4298a6b1b7b862c04bf5c82c5517bc5d` 已通过 17 项精确提交预检、插件构建、5 项 Chromium／Firefox／WebKit 组装契约，以及 1 项覆盖 6 个进程场景的 CLI 契约测试（帮助、非法格式、accessible／JSON 完成及错误）。复现命令为 `pnpm exec vitest run tests/assembled-baseline.spec.mjs`、`pnpm run build`、`pnpm run test:assembled ../deepseek-harness-alpha17 . chromium,firefox,webkit`、`pnpm run lab:cli ../deepseek-harness-alpha17 automated`，按实际位置替换干净精确核心目录。浏览器环境记录包含双方完整提交号。这不是新一轮完整核心、已安装 tarball 或 AT 结果。
+
+[核心 #7](https://github.com/omdsh-dev/deepseek-harness/pull/7) 使用自有受保护 DACL 和原生权限前置检查替换含糊夹具，并将 Windows coverage 纳入最终汇总。本地门禁检查有 46 项通过，31 项原生 Windows 用例在 macOS 上跳过；删除汇总依赖的负向对照按预期失败。原生 Windows CI 仍待验证，本地跳过或 GitHub 未创建运行均不能算通过。没有放宽产品 ACL 策略或安全断言。
+
+插件后续修复的 30 个文件、284 项单元测试，以及 host/client 类型和 peer 校验均通过。真人记录仍为零，26 项真人覆盖要求尚未满足；格式有效的模板不是证据。单元日志有 npm 依赖 sourcemap 缺失警告，测试未因此失败。
+
+最新版 alpha 迁移单独处理。对官方 `dsh-v0.2.1-alpha.5`（`1517a4dbca0a2789ff1d41ba439600f8547d23fa`）的未提交试合并遇到 104 个冲突，已完整撤回。本记录不声明 alpha.5 兼容，rc.2 启动器也不接纳该版本。真人台账保持为空，下方记录的 macOS 可选依赖打包限制没有因此豁免。
 
 ### 当前内容创作家族迁移：2026-10-06
 
