@@ -10,13 +10,13 @@ describe('browser bundle registration', () => {
     const versions = [...packages.matchAll(/^  '@deepseek-ai\/dsh(?:-[^@']+)?@([^']+)':/gm)]
       .map(match => match[1])
     expect(versions.length).toBeGreaterThan(200)
-    expect(new Set(versions)).toEqual(new Set(['0.2.0-rc.2']))
+    expect(new Set(versions)).toEqual(new Set(['0.2.1-alpha.5']))
     const cordisVersions = [...packages.matchAll(/^  '@deepseek-ai\/cordis@([^']+)':/gm)]
       .map(match => match[1])
-    expect(new Set(cordisVersions)).toEqual(new Set(['4.0.4']))
+    expect(new Set(cordisVersions)).toEqual(new Set(['4.0.5-alpha.2']))
     const groupVersions = [...packages.matchAll(/^  '@deepseek-ai\/cordis-plugin-group@([^']+)':/gm)]
       .map(match => match[1])
-    expect(new Set(groupVersions)).toEqual(new Set(['1.0.4']))
+    expect(new Set(groupVersions)).toEqual(new Set(['1.0.5-alpha.2']))
   })
 
   it('registers the scoped npm package id expected by the DSH module loader', () => {
@@ -54,22 +54,26 @@ describe('browser bundle registration', () => {
     expect(manifest.scripts?.['lab:cli']).toBe('node scripts/run-cli-conformance.mjs')
   })
 
-  it('pins the exact DSH 0.2.0-rc.2 client graph and excludes the retired runtime package', () => {
+  it('pins the exact held DSH 0.2.1-alpha.5 client graph and excludes the retired runtime package', () => {
     const manifestPath = fileURLToPath(new URL('../package.json', import.meta.url))
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as {
       version?: string
+      private?: boolean
+      engines?: Record<string, string>
       peerDependencies?: Record<string, string>
       dsh?: { client?: { inject?: string[] } }
     }
 
-    expect(manifest.version).toBe('0.1.3-rc.1')
-    expect(manifest.peerDependencies?.['@deepseek-ai/cordis']).toBe('~4.0.4')
+    expect(manifest.version).toBe('0.1.4-alpha.1')
+    expect(manifest.private).toBe(true)
+    expect(manifest.engines?.dsh).toBe('0.2.1-alpha.5')
+    expect(manifest.peerDependencies?.['@deepseek-ai/cordis']).toBe('~4.0.5-alpha.2')
     expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-runtime']).toBeUndefined()
-    expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-chat']).toBe('0.2.0-rc.2')
-    expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-session']).toBe('0.2.0-rc.2')
+    expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-chat']).toBe('0.2.1-alpha.5')
+    expect(manifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-session']).toBe('0.2.1-alpha.5')
     expect(Object.entries(manifest.peerDependencies ?? {})
       .filter(([name]) => name.startsWith('@deepseek-ai/dsh-client-'))
-      .every(([, version]) => version === '0.2.0-rc.2')).toBe(true)
+      .every(([, version]) => version === '0.2.1-alpha.5')).toBe(true)
     expect(manifest.dsh?.client?.inject).not.toContain('@deepseek-ai/dsh-client-runtime')
     expect(manifest.dsh?.client?.inject).toEqual(expect.arrayContaining([
       '@deepseek-ai/dsh-client-ui-chat',

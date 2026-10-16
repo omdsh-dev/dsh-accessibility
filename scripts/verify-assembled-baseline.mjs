@@ -11,6 +11,13 @@ export function assertCompanionBaseline(dshManifest, pluginManifest) {
   if (typeof expected !== 'string' || expected !== pluginManifest.peerDependencies?.['@deepseek-ai/dsh-client-ui-chat']) {
     throw new Error('assembled baseline requires matching exact DSH development and client targets')
   }
+  if (pluginManifest.engines !== undefined) {
+    const engines = pluginManifest.engines
+    if (engines === null || typeof engines !== 'object' || Array.isArray(engines)
+      || (Object.hasOwn(engines, 'dsh') && engines.dsh !== expected)) {
+      throw new Error('assembled baseline requires readable engines with an exact matching engines.dsh target')
+    }
+  }
   if (dshManifest.version !== expected) {
     throw new Error(`assembled baseline requires DSH ${expected}, received ${String(dshManifest.version)}`)
   }

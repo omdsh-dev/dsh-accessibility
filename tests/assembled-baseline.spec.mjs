@@ -29,7 +29,23 @@ function expectNativeWindowsGate(workflow) {
   expect(normalized).toContain('test "$WINDOWS_ACL_RESULT" = success')
 }
 
+function expectEarlyIntegrationPreflight(workflow) {
+  const preflight = workflow.indexOf('run: node scripts/verify-assembled-baseline.mjs .assembled/dsh .')
+  expect(preflight).toBeGreaterThanOrEqual(0)
+  expect(preflight).toBeLessThan(workflow.indexOf('name: Install and build companion'))
+  expect(preflight).toBeLessThan(workflow.indexOf('name: Install and build DSH baseline'))
+}
+
 describe('assembled baseline preflight', () => {
+  it('rejects a held or mismatched CI integration before installing and building the two graphs', () => {
+    expectEarlyIntegrationPreflight(readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8'))
+  })
+
+  it('rejects removing the early integration preflight', () => {
+    const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')
+      .replace('run: node scripts/verify-assembled-baseline.mjs .assembled/dsh .', 'run: true')
+    expect(() => expectEarlyIntegrationPreflight(workflow)).toThrow()
+  })
   it.each(['\n', '\r\n'])('requires an independent native Windows fixture verdict with %j line endings', (lineEnding) => {
     const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')
     expectNativeWindowsGate(workflow.replaceAll('\r\n', '\n').replaceAll('\n', lineEnding))
@@ -76,5 +92,26 @@ describe('assembled baseline preflight', () => {
   it('admits a matching target after the explicit hold is removed', () => {
     expect(() => assertCompanionBaseline({ version: '0.2.0-rc.2' }, companion()))
       .not.toThrow()
+  })
+
+  it.each([null, '0.2.0-rc.2', [], { dsh: undefined }, { dsh: '*' }, { dsh: '0.2.1-alpha.5' }])('rejects malformed or overriding engines %j before creating lab state', (engines) => {
+    expect(() => assertCompanionBaseline({ version: '0.2.0-rc.2' }, { ...companion(), engines }))
+      .toThrow('exact matching engines.dsh target')
+  })
+
+  it('admits the consistent primary compatibility declaration but retains the publication hold', () => {
+    const candidate = { ...companion(), engines: { node: '^22.19.0 || >=24.0.0', dsh: '0.2.0-rc.2' } }
+    expect(() => assertCompanionBaseline({ version: '0.2.0-rc.2' }, candidate)).not.toThrow()
+    expect(() => assertCompanionBaseline({ version: '0.2.0-rc.2' }, { ...candidate, private: true }))
+      .toThrow('Companion integration is blocked')
+  })
+
+  it('keeps the actual alpha migration manifest closed even on its exact target', () => {
+    const manifest = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
+    expect(manifest.engines.dsh).toBe('0.2.1-alpha.5')
+    expect(() => assertCompanionBaseline({ version: '0.2.1-alpha.5' }, manifest))
+      .toThrow('Companion integration is blocked')
+    expect(() => assertCompanionBaseline({ version: '0.2.0-rc.2' }, manifest))
+      .toThrow('requires DSH 0.2.1-alpha.5')
   })
 })

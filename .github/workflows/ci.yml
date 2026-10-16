@@ -49,6 +49,8 @@ jobs:
           repository: omdsh-dev/deepseek-harness
           ref: bc345ae4124f35560276b3666130d7e6dd6ee19a
           path: .assembled/dsh
+      - name: Reject mismatched or held integration before installing either graph
+        run: node scripts/verify-assembled-baseline.mjs .assembled/dsh .
       - uses: pnpm/action-setup@v6
         with:
           version: 11.7.0
