@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.4-alpha.1 (held, unpublished)
+
+- Begin the exact DSH `0.2.1-alpha.5` dependency/API migration with the matching Cordis prerelease graph and explicit `dsh-client-store` type dependency.
+- Declare the new primary `engines.dsh` target and reject inconsistent lab manifests; retain the private publication/integration hold until the patched core and assembled validation exist.
+- Consolidate exact dependency-age exceptions into one version union per package, retaining lifecycle-script policy and negative controls against duplicate entries and wildcards.
+- Keep rc.2, historical browser, and human-campaign records version-scoped. This candidate does not claim complete compatibility or real assistive-technology validation.
+
 ## 0.1.3-rc.1 (unpublished)
 
 - Migrate exact DSH dependencies and current browser/CLI labs to `0.2.0-rc.2`; reject older releases and the separate `0.2.1-alpha.1` preview at preflight.
