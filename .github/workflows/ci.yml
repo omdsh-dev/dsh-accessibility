@@ -74,16 +74,40 @@ jobs:
       - name: Smoke-test disposable AT lab startup and cleanup
         run: pnpm run lab:at .assembled/dsh . none 500
 
+  core-windows-acl:
+    name: Core Windows ACL fixture contract
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out exact patched DSH baseline
+        uses: actions/checkout@v7
+        with:
+          repository: omdsh-dev/deepseek-harness
+          ref: 54fec68d0e141fba0d7451f33acad78d388674d0
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.7.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.x
+          cache: pnpm
+      - name: Install exact core graph
+        run: pnpm install --frozen-lockfile
+      - name: Run native ACL fixture contract (not full core coverage)
+        run: pnpm exec vitest run packages/sandbox/sandbox-windows-acl/tests/diagnose-script.spec.ts --maxWorkers=2
+
   ci:
     name: CI gate
     if: always()
-    needs: [validate, assembled-browser]
+    needs: [validate, assembled-browser, core-windows-acl]
     runs-on: ubuntu-latest
     steps:
       - name: Require every matrix job
         env:
           VALIDATE_RESULT: ${{ needs.validate.result }}
           ASSEMBLED_RESULT: ${{ needs.assembled-browser.result }}
+          WINDOWS_ACL_RESULT: ${{ needs.core-windows-acl.result }}
         run: |
           test "$VALIDATE_RESULT" = success
           test "$ASSEMBLED_RESULT" = success
+          test "$WINDOWS_ACL_RESULT" = success
