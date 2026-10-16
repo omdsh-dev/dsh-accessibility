@@ -17,7 +17,9 @@ The npm registry was checked on 2026-10-17 (Asia/Shanghai): `latest` / `next` re
 
 ## Verification and remaining acceptance
 
-On the alpha.5 dependency graph, the normal install/prepare build, host/client strict type checks, all 302 unit tests in 31 files (including both early-CI preflight controls), peer checks, and the final production build passed locally on macOS arm64 with Node 24.3.0 and pnpm 11.7.0. The original source-map-file warnings from official npm bundles remain warnings, not test failures. These are local candidate checks, not assembled-core or assistive-technology acceptance.
+On the alpha.5 dependency graph, the normal install/prepare build, host/client strict type checks, all 305 unit tests in 31 files (including both early-CI preflight controls and LF/CRLF policy controls), peer checks, and the final production build passed locally on macOS arm64 with Node 24.3.0 and pnpm 11.7.0. The original source-map-file warnings from official npm bundles remain warnings, not test failures. These are local candidate checks, not assembled-core or assistive-technology acceptance.
+
+The first alpha.5 Windows Node 22 job failed in the newly added policy test because section extraction assumed LF checkout line endings. A local CRLF regression reproduced the failure before repair; extraction now normalizes line endings, with all six LF/CRLF positive and negative policy controls passing. No policy assertion, version bound, timeout, retry, or platform check was removed. The original failed CI remains a separate result, not an inferred native pass for the new revision.
 
 The current CI intentionally keeps the last verified rc.2 core pin, `bc345ae4124f35560276b3666130d7e6dd6ee19a`, until a migrated patched core exists. Its new early preflight must fail before installation/build rather than report an alpha.5 assembled pass against that old core. The native Windows lane still verifies that exact rc.2 foundation, not alpha.5. This draft must not be merged as complete or published while the integration gate is blocked.
 
