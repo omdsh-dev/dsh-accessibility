@@ -2,7 +2,7 @@
 
 English | [简体中文](COMPATIBILITY-0.2.0-rc.2.zh.md)
 
-Status: migration and verification in progress; unpublished. Real VoiceOver/NVDA and disabled-developer task evidence remain pending.
+Status: rc.2 development integration and the focused native Windows follow-up are merged; unpublished and not full-accessibility acceptance. This record describes the rc.2 graph, not the separate alpha.5 candidate. Real VoiceOver/NVDA and disabled-developer task evidence remain pending.
 
 ## Exact targets
 
@@ -16,6 +16,12 @@ The npm registry and official source were checked on 2026-10-05 (Asia/Shanghai):
 Historical [0.1.7-rc.2 results](COMPATIBILITY-0.1.7-rc.2.md), published npm `0.1.0-beta.8`, automated archives, and the first human campaign retain their original version and revision boundaries. No historical pass transfers to this candidate.
 
 ## Verification record
+
+### Final focused native verdict and follow-up merges, 2026-10-17
+
+Exact core `bc345ae4124f35560276b3666130d7e6dd6ee19a` / companion `6aaeb6c8fd1e36b1d158226c07bf82bba239c5c6` passed all nine jobs in [run 38934875420](https://github.com/omdsh-dev/dsh-accessibility/actions/runs/38934875420): six OS/Node matrix jobs, assembled browser contracts, independent native Windows ACLs, and the aggregate. The [native job](https://github.com/omdsh-dev/dsh-accessibility/actions/runs/38934875420/job/117087741122) passed all 32 tests, including the display-normalization regression. Local checks on that pair passed 289 companion unit tests in 30 files, strict types, peers, five three-engine assembled checks, and one CLI contract covering six process scenarios.
+
+Core #7 merged as `ab394664c3150cadee8de879022fc44f8b20ffbf`; companion #31 squash-merged as `93c0b325a307c3d0ab590fc090db016f485f2600`. The core repository did not create a fresh CI run for #7: this is an independent focused native verdict, not a fresh full-core coverage pass. Earlier failed runs and skips below remain historical results, not outstanding verdicts for this exact focused pair. The macOS optional-dependency consumer failure and real AT/user acceptance remain unresolved; none is waived by development integration.
 
 ### Post-merge exact-pair verification, 2026-10-17
 
